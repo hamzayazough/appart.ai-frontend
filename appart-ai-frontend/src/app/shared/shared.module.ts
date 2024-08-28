@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImageSliderComponent } from './image-slider/image-slider.component';
-import { GradientButtonComponent } from './gradient-button/gradient-button.component';
+import { ImageSliderComponent } from './components/image-slider/image-slider.component';
+import { GradientButtonComponent } from './components/gradient-button/gradient-button.component';
 
 @NgModule({
   declarations: [ImageSliderComponent, GradientButtonComponent],

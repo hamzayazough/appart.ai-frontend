@@ -9,7 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing/landing-page/landing-page.component';
 import { LandingHeaderComponent } from './pages/landing/landing-header/landing-header.component';
-import { share } from 'rxjs';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
