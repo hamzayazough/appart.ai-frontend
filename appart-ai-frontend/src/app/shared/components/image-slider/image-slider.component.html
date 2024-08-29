@@ -14,6 +14,7 @@
           (activeImageIndex - 2 + this.images.length) % this.images.length,
         hideright: i === (activeImageIndex + 2) % this.images.length
       }"
+      (click)="stopAutoSwitch()"
     >
       <img
         [src]="image.src"

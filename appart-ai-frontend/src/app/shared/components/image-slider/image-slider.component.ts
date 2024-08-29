@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IntervalUtil } from '../../utils/interval.util';
-import { Subject } from 'rxjs';
+import { race, Subject, take, takeUntil, timer } from 'rxjs';
 
 export interface Image {
   src: string;
@@ -15,11 +15,13 @@ export interface Image {
 export class ImageSliderComponent {
   @Input() images: Image[] = [];
 
-  @Input() delayBetweenSwitches = 5000;
+  @Input() delayBetweenSwitches = 0;
 
   protected activeImageIndex = 0;
 
   private destroyed$ = new Subject<void>();
+
+  private stopAutoSwitch$ = new Subject<void>();
 
   showPrevious(i: number) {
     this.activeImageIndex = (i - 1 + this.images.length) % this.images.length;
@@ -29,16 +31,25 @@ export class ImageSliderComponent {
     this.activeImageIndex = (i + 1) % this.images.length;
   }
 
-  startAutoSwitch() {
+  private startAutoSwitch() {
     if (this.delayBetweenSwitches > 0) {
       IntervalUtil.setInterval(
         this.delayBetweenSwitches,
         () => {
           this.showNext(this.activeImageIndex);
         },
-        this.destroyed$
+        race(this.stopAutoSwitch$, this.destroyed$)
       );
     }
+  }
+
+  protected stopAutoSwitch() {
+    this.stopAutoSwitch$.next();
+    timer(this.delayBetweenSwitches * 10)
+      .pipe(take(1), takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.startAutoSwitch();
+      });
   }
 
   ngOnInit() {
