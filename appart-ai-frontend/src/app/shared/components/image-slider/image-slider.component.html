@@ -20,8 +20,8 @@
         [src]="image.src"
         [alt]="image.alt"
         class="slider-image"
-        (panright)="showPrevious(i)"
-        (panleft)="showNext(i)"
+        (panright)="stopAutoSwitch(); showPrevious(i)"
+        (panleft)="stopAutoSwitch(); showNext(i)"
       />
     </div>
   </div>
