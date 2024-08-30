@@ -1,5 +1,16 @@
-<button>
-  <p class="dm-serif-display-regular-italic inside-text">
-    <ng-content></ng-content>
-  </p>
-</button>
+
+<ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+  <button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
+    <p class="dm-serif-display-regular-italic inside-text">
+      Log out
+    </p>
+  </button>
+</ng-container>
+
+<ng-template #loggedOut>
+  <button (click)="auth.loginWithRedirect()">
+    <p class="dm-serif-display-regular-italic inside-text">
+      Sign in
+    </p>
+  </button>
+</ng-template>
