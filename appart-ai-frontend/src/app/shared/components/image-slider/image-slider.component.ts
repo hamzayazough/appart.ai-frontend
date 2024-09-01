@@ -14,8 +14,9 @@ export interface Image {
 })
 export class ImageSliderComponent {
   @Input() images: Image[] = [];
-
   @Input() delayBetweenSwitches = 0;
+  @Input() height = 600;
+  @Input() width = 1200;
 
   protected activeImageIndex = 0;
 

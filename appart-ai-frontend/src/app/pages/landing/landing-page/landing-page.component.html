@@ -1,7 +1,17 @@
 <div class="container">
   <app-landing-header></app-landing-header>
+  <div class="center-text">
+    <h1 class="poppins-black-title huge no-margin">Finding that apartment</h1>
+    <div class="flex row end">
+      <h1 class="poppins-black-title huge no-margin">with &nbsp;</h1>
+      <h1 class="poppins-black-title huge colored no-margin">AI</h1>
+    </div>
+    <app-gradient-button id="get-started">Get started</app-gradient-button>
+  </div>
   <app-image-slider
     [images]="images"
     [delayBetweenSwitches]="5000"
+    [height]="300"
+    [width]="600"
   ></app-image-slider>
 </div>

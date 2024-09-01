@@ -9,3 +9,17 @@
 .child {
   margin: 30px;
 }
+
+.header-item {
+  text-decoration: none;
+  color: black;
+  font-size: medium;
+}
+
+.header-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  width: 33%;
+}

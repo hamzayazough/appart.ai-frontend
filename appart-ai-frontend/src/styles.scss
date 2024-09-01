@@ -15,8 +15,27 @@ body {
   font-style: italic;
 }
 
+.poppins-black-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
 .small {
   font-size: 40px;
+}
+
+.huge {
+  font-size: 5rem;
+}
+
+h1.no-margin {
+  margin: 0;
 }
 
 .flex {
