@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
 
-const modules = [MatTabsModule];
+const modules = [MatTabsModule, MatSliderModule];
 @NgModule({
   imports: [...modules],
   exports: [...modules],
