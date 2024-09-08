@@ -1,17 +1,20 @@
 import { UserInfo } from "./user.interface";
 
-export interface ContactRequestCreation {
-    senderId: string;
-    receiverId: string;
-    relationType: string;
-}
 
 export interface ContactRequest {
     id: string,
-    user: UserInfo, // la personne qu'on veut ajouter en contact
-    status: string,
-    relationType: RelationType
+    sender: UserInfo,
+    receiver: UserInfo, 
+    date: Date,
+    relationTypeName: RelationType,
+    status: string
 }
+
+export interface ContactRequestCreation {
+    senderId: string;
+    receiverId: string;
+    relationTypeName: string;
+  }
 
 export interface Contact {
     id: string, // id du contact

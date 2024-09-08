@@ -1,9 +1,26 @@
 <div class="flex row end container">
   <p class="dm-serif-display-regular-italic small">appart.ai</p>
   <div class="header-group">
-    <a class="poppins-thin header-item" href="https://google.com">Home</a>
-    <a class="poppins-thin header-item">Browse</a>
-    <a class="poppins-thin header-item">About us</a>
+    <a 
+      class="poppins-thin header-item"
+      [ngClass]="{ 'selected': selected === selectedHeader.home }"
+      (click)="goToHomePage()">Home</a>
+
+    <a 
+      class="poppins-thin header-item"
+      [ngClass]="{ 'selected': selected === selectedHeader.browse }"
+      (click)="selected = selectedHeader.browse">Browse</a>
+
+    <a 
+      class="poppins-thin header-item"
+      [ngClass]="{ 'selected': selected === selectedHeader.aboutUs }"
+      (click)="selected = selectedHeader.aboutUs">About us</a>
+
+    <a 
+      class="poppins-thin header-item"
+      [ngClass]="{ 'selected': selected === selectedHeader.myProfile }"
+      (click)="goToProfile()">My profile</a>
   </div>
-  <app-gradient-button>sign in</app-gradient-button>
+
+  <app-auth-button></app-auth-button>
 </div>
