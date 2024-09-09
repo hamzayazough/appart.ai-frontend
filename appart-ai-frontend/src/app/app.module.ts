@@ -10,10 +10,17 @@ import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing/landing-page/landing-page.component';
 import { LandingHeaderComponent } from './pages/landing/landing-header/landing-header.component';
 import { SharedModule } from './shared/shared.module';
+import { MapModule } from './pages/map/map.module';
 
 @NgModule({
   declarations: [AppComponent, LandingPageComponent, LandingHeaderComponent],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, HammerModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    HammerModule,
+    MapModule,
+  ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],
 })

@@ -1,9 +1,21 @@
 <div class="flex row end container">
   <p class="dm-serif-display-regular-italic small">appart.ai</p>
   <div class="header-group">
-    <a class="poppins-thin header-item" href="https://google.com">Home</a>
-    <a class="poppins-thin header-item">Browse</a>
-    <a class="poppins-thin header-item">About us</a>
+    <a href="https://google.com" class="header-item"
+      ><app-gradient-button [styleOnHover]="true">Home</app-gradient-button></a
+    >
+    <a class="header-item"
+      ><app-gradient-button [styleOnHover]="true"
+        >Browse</app-gradient-button
+      ></a
+    >
+    <a class="header-item"
+      ><app-gradient-button [styleOnHover]="true"
+        >About us</app-gradient-button
+      ></a
+    >
   </div>
-  <app-gradient-button>sign in</app-gradient-button>
+  <app-gradient-button [width]="150" [styleOnHover]="true"
+    >Sign in</app-gradient-button
+  >
 </div>
