@@ -1,21 +1,40 @@
 <div class="flex row end container">
   <p class="dm-serif-display-regular-italic small">appart.ai</p>
   <div class="header-group">
-    <a href="https://google.com" class="header-item"
+    <a
+      class="poppins-thin header-item"
+      [ngClass]="{ selected: selected === selectedHeader.home }"
+      (click)="goToHomePage()"
       ><app-gradient-button [styleOnHover]="true">Home</app-gradient-button></a
     >
-    <a class="header-item"
+
+    <a
+      class="poppins-thin header-item"
+      [ngClass]="{ selected: selected === selectedHeader.browse }"
+      (click)="selected = selectedHeader.browse"
       ><app-gradient-button [styleOnHover]="true"
         >Browse</app-gradient-button
       ></a
     >
-    <a class="header-item"
+
+    <a
+      class="poppins-thin header-item"
+      [ngClass]="{ selected: selected === selectedHeader.aboutUs }"
+      (click)="selected = selectedHeader.aboutUs"
       ><app-gradient-button [styleOnHover]="true" [width]="150"
         >About us</app-gradient-button
       ></a
     >
+
+    <a
+      class="poppins-thin header-item"
+      [ngClass]="{ selected: selected === selectedHeader.myProfile }"
+      (click)="goToProfile()"
+      ><app-gradient-button [styleOnHover]="true" [width]="200"
+        >My profile</app-gradient-button
+      ></a
+    >
   </div>
-  <app-gradient-button [width]="150" [styleOnHover]="true"
-    >Sign in</app-gradient-button
-  >
+
+  <app-auth-button></app-auth-button>
 </div>

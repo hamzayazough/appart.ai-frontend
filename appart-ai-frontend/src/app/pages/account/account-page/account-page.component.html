@@ -1,0 +1,41 @@
+<div class="container">
+    <app-landing-header [selected]="selectedHeader"></app-landing-header>
+    <div class="account-page-container">
+        <section class="user-info-section">
+        <h2>User Information</h2>
+        <div class="user-info">
+            <label for="username">Username:</label>
+            <input id="username" [(ngModel)]="user.username" placeholder="Username" />
+    
+            <label for="firstName">First Name:</label>
+            <input id="firstName" [(ngModel)]="user.firstName" placeholder="First Name" />
+    
+            <label for="lastName">Last Name:</label>
+            <input id="lastName" [(ngModel)]="user.lastName" placeholder="Last Name" />
+    
+            <label for="email">Email:</label>
+            <input id="email" [(ngModel)]="user.email" placeholder="Email" readonly />
+    
+            <label for="phone">Phone:</label>
+            <input id="phone" [(ngModel)]="user.phone" placeholder="Phone" />
+    
+            <button (click)="updateUserInfo()">Update Information</button>
+        </div>
+        </section>
+    
+        <section class="user-section" (click)="toggleSection(display.Contact)">
+            <h2>{{display.Contact}}</h2>
+        </section>
+
+        <section class="user-section" (click)="toggleSection(display.Hobbies)">
+            <h2>{{display.Hobbies}}</h2>
+        </section>
+
+        
+        <section class="user-section" (click)="toggleSection(display.MySavedAccommodations)">
+            <h2>{{display.MySavedAccommodations}}</h2>
+        </section>
+    
+        <app-gradient-button id="get-started">Get started</app-gradient-button>
+    </div>
+</div>

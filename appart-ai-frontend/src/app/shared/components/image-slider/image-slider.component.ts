@@ -47,7 +47,7 @@ export class ImageSliderComponent {
   protected stopAutoSwitch() {
     this.stopAutoSwitch$.next();
     timer(this.delayBetweenSwitches * 10)
-      .pipe(take(1), takeUntil(this.destroyed$))
+      .pipe(take(1), takeUntil(race(this.stopAutoSwitch$, this.destroyed$)))
       .subscribe(() => {
         this.startAutoSwitch();
       });
