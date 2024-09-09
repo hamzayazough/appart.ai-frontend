@@ -4,9 +4,10 @@ import { MapPageComponent } from './map-page/map-page.component';
 import { ApartmentCardComponent } from './apartment-card/apartment-card.component';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { accessToken } from '../../../assets/tokens/maps';
+import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
 
 @NgModule({
-  declarations: [MapPageComponent, ApartmentCardComponent],
+  declarations: [MapPageComponent, ApartmentCardComponent, MapSidebarComponent],
   imports: [
     CommonModule,
     NgxMapboxGLModule.withConfig({

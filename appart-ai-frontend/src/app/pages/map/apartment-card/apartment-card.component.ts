@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Apartment } from '../../../shared/types/apartment';
+import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
 
 @Component({
   selector: 'app-apartment-card',
@@ -7,5 +8,5 @@ import { Apartment } from '../../../shared/types/apartment';
   styleUrl: './apartment-card.component.scss',
 })
 export class ApartmentCardComponent {
-  @Input() apartment: Apartment | undefined = undefined;
+  @Input() data: Apartment | undefined;
 }
