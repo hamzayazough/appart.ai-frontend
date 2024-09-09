@@ -11,8 +11,9 @@ export interface AppUser {
 }
 
 export interface UserInfo {
+    id?: string;
     phone: string,
     username: string,
-    fistName: string,
+    firstName: string,
     lastName: string
 }

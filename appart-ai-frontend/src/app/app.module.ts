@@ -4,10 +4,7 @@ import {
   HammerModule,
   provideClientHydration,
 } from '@angular/platform-browser';
-
 import { AuthModule } from '@auth0/auth0-angular';
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing/landing-page/landing-page.component';
@@ -19,10 +16,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { AccountPageComponent } from './pages/account/account-page/account-page.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MaterialModule } from './material/material.module';
+import { AccountPersonalInfoComponent } from './pages/account/account-page/shared-components/account-personal-info/account-personal-info.component';
+import { AccountContactsComponent } from './pages/account/account-page/shared-components/account-contacts/account-contacts.component';
+import { AccountHobbiesComponent } from './pages/account/account-page/shared-components/account-hobbies/account-hobbies.component';
+import { ConversationsPageComponent } from './pages/conversations-page/conversations-page.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent, LandingHeaderComponent, AuthButtonComponent, AccountPageComponent],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, HammerModule, MaterialModule,
+  declarations: [AppComponent, LandingPageComponent, LandingHeaderComponent, AuthButtonComponent, AccountPageComponent, AccountPersonalInfoComponent, AccountContactsComponent, AccountHobbiesComponent, ConversationsPageComponent],
+  imports: [BrowserModule, AppRoutingModule, SharedModule, HammerModule, MaterialModule, FormsModule,
     CommonModule,
     AuthModule.forRoot({
     domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
@@ -35,4 +37,5 @@ import { MaterialModule } from './material/material.module';
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
+
 export class AppModule {}

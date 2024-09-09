@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppUser, UserInfo } from '../../intefaces/user.interface';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthenticationService } from '../auth/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,9 @@ export class UserService {
   private apiUrl = '/protected/api/user'
   private baseUrl: string = environment.apiUrl + this.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+   }
+
 
   public createUserIfDontExist(user: AppUser, token: string): Observable<AppUser> {
     const url = `${this.baseUrl}/create-user-if-not-exist`;
@@ -31,7 +34,16 @@ export class UserService {
     return this.http.get<boolean>(url, { headers });
   }
 
+  public getStoredUser(): AppUser | null {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  }
+
+
+
   private getAuthHeaders(token: string): HttpHeaders {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
+
+
 }

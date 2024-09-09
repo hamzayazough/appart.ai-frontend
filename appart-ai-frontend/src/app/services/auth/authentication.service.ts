@@ -3,6 +3,7 @@ import { AuthService, User } from '@auth0/auth0-angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUser } from '../../intefaces/user.interface';
 import { UserService } from '../user-service/user.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,16 @@ export class AuthenticationService {
         username: this.user.nickname || tempUsername,
         auth0Id: this.user.sub
       };
-      this.userService.createUserIfDontExist(userInfo, this.token.value ).subscribe((user: AppUser) => {
-        this.loggedUser.next(user);
+      this.userService.createUserIfDontExist(userInfo, this.token.value ).subscribe({
+        next: (user: AppUser) => {
+          this.loggedUser.next(user);
+          localStorage.setItem("user", JSON.stringify(user));
+        },
+        error: (error) => {
+          console.error('Erreur lors de la création de l\'utilisateur :', error);
+          alert('Une erreur est survenue lors de la création de l\'utilisateur.');
+        },
+
       });
     }
   }
