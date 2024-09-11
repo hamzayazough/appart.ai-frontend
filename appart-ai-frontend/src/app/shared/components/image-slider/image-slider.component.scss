@@ -12,7 +12,7 @@
 
       .slider-item {
         position: absolute;
-        z-index: 0;
+        z-index: 11;
         left: 0;
         right: 0;
         width: 100%;
@@ -39,7 +39,7 @@
         }
 
         &.prev {
-          z-index: 1;
+          z-index: 12;
 
           .slider-image {
             transform: translateX(-25%) scale(0.8);
@@ -48,7 +48,7 @@
         }
 
         &.active {
-          z-index: 2;
+          z-index: 13;
 
           .slider-image {
             transform: translateX(0%) scale(1);
@@ -58,7 +58,7 @@
         }
 
         &.next {
-          z-index: 1;
+          z-index: 12;
           .slider-image {
             transform: translateX(25%) scale(0.8);
             opacity: 0.8;

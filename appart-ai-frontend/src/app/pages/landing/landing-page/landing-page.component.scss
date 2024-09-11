@@ -11,8 +11,7 @@
   flex-direction: column;
 }
 
-h1.colored {
-  font-size: 72px;
+.colored {
   background: -webkit-linear-gradient(#02c39a, #05668d);
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -20,4 +19,9 @@ h1.colored {
 
 #get-started {
   margin: 1rem;
+  text-decoration: none;
+}
+
+.no-underline {
+  text-decoration: none;
 }

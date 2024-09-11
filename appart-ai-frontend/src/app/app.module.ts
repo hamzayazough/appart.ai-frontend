@@ -21,21 +21,39 @@ import { AccountContactsComponent } from './pages/account/account-page/shared-co
 import { AccountHobbiesComponent } from './pages/account/account-page/shared-components/account-hobbies/account-hobbies.component';
 import { ConversationsPageComponent } from './pages/conversations-page/conversations-page.component';
 import { FormsModule } from '@angular/forms';
+import { MapModule } from './pages/map/map.module';
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent, LandingHeaderComponent, AuthButtonComponent, AccountPageComponent, AccountPersonalInfoComponent, AccountContactsComponent, AccountHobbiesComponent, ConversationsPageComponent],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, HammerModule, MaterialModule, FormsModule,
+  declarations: [
+    AppComponent,
+    LandingPageComponent,
+    LandingHeaderComponent,
+    AuthButtonComponent,
+    AccountPageComponent,
+    AccountPersonalInfoComponent,
+    AccountContactsComponent,
+    AccountHobbiesComponent,
+    ConversationsPageComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    HammerModule,
+    MapModule,
+    MaterialModule,
+    FormsModule,
     CommonModule,
     AuthModule.forRoot({
-    domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
-    clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
-    authorizationParams: {
-      redirect_uri: window.location.origin
-    }
-  }),
-  HttpClientModule],
+      domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
+      clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
+      authorizationParams: {
+        redirect_uri: window.location.origin,
+      },
+    }),
+    HttpClientModule,
+  ],
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
-
 export class AppModule {}

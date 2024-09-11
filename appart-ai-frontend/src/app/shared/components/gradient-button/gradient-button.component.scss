@@ -1,11 +1,27 @@
-button {
+.on-hover,
+.standard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.on-hover:hover,
+.standard {
   background: linear-gradient(45deg, #02c39a, #05668d);
-  height: 75px;
-  width: 225px;
   border-radius: 55px;
   padding: 0;
   border: none;
   cursor: pointer;
+}
+
+.on-hover:not(:hover) {
+  background: none;
+  border: none;
+  transition: all 1s ease;
+  p {
+    opacity: 1;
+    color: black;
+  }
 }
 
 .inside-text {

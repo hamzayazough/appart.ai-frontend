@@ -3,10 +3,17 @@
   <div class="center-text">
     <h1 class="poppins-black-title huge no-margin">Finding that apartment</h1>
     <div class="flex row end">
-      <h1 class="poppins-black-title huge no-margin">with &nbsp;</h1>
-      <h1 class="poppins-black-title huge colored no-margin">AI</h1>
+      <h1 class="poppins-black-title huge no-margin">
+        with
+        <span class="colored">AI</span>
+      </h1>
     </div>
-    <app-gradient-button id="get-started">Get started</app-gradient-button>
+    <!-- should we use roter instead of hrefs? -->
+    <a href="/map" class="no-underline">
+      <app-gradient-button id="get-started" [width]="200" [height]="75"
+        >Get started</app-gradient-button
+      >
+    </a>
   </div>
   <app-image-slider
     [images]="images"
