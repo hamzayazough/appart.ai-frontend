@@ -6,6 +6,7 @@ import { parseGeoJson } from '../../../shared/utils/geoJson.util';
 import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
 
 import { PinClass } from './pinClass';
+import { Recommendation } from '../../../shared/types/recommendation';
 
 @Component({
   selector: 'app-map-page',
@@ -14,7 +15,8 @@ import { PinClass } from './pinClass';
 })
 export class MapPageComponent {
   map?: mapboxgl.Map;
-  apartments: Apartment[];
+  apartments: Recommendation<Apartment>[];
+  sidebarOpened = true;
 
   pinClasses: PinClass[] = [
     {
@@ -42,11 +44,12 @@ export class MapPageComponent {
     this.pinClasses.forEach(
       (cl) =>
         (cl.features = parseGeoJson(
-          this.apartments.filter(
-            (a: Apartment) =>
-              cl.bounds.low < a.recommendationScore &&
-              a.recommendationScore <= cl.bounds.high
-          )
+          this.apartments
+            .filter(
+              (a: Recommendation<Apartment>) =>
+                cl.bounds.low < a.score && a.score <= cl.bounds.high
+            )
+            .map((x) => x.value)
         ))
     );
   }

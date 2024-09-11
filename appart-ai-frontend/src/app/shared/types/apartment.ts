@@ -1,13 +1,12 @@
 import { Position } from 'geojson';
 import { LngLat } from 'mapbox-gl';
-
+import { Image } from '../types/Image';
 interface MinMax<T> {
   min?: T;
   max?: T;
 }
 
 interface ApartmentChild {
-  recommendationScore: number;
   id: string;
   title: string;
   price: MinMax<number>;
@@ -23,10 +22,8 @@ interface coordinates {
 
 export interface Apartment extends ApartmentChild {
   contact?: { phone: string; email: string };
-  image_urls?: {
-    uri: string;
-    alt: string;
-  }[];
+  address: string;
+  image_urls?: Image[];
   children?: ApartmentChild[];
   coords: coordinates;
 }

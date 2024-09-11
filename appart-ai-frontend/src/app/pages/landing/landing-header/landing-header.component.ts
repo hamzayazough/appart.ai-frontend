@@ -6,20 +6,23 @@ import { SelectedHeader } from '../../../enums/selected-header.enum';
 @Component({
   selector: 'app-landing-header',
   templateUrl: './landing-header.component.html',
-  styleUrl: './landing-header.component.scss'
+  styleUrl: './landing-header.component.scss',
 })
 export class LandingHeaderComponent {
   @Input() public selected: SelectedHeader = SelectedHeader.home;
   public selectedHeader = SelectedHeader;
-  public userId: string | undefined =  undefined;
-  
-  constructor(private router: Router, private authService: AuthenticationService) {
+  public userId: string | undefined = undefined;
+
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) {
     this.subscribeToLoggedUser();
   }
-  
+
   public goToProfile(): void {
-    if(!this.userId){
-      alert("Vous devez vous connecter pour accéder à votre profil");
+    if (!this.userId) {
+      alert('Vous devez vous connecter pour accéder à votre profil');
       return;
     }
     this.router.navigate([`/account/${this.userId}`]);
@@ -40,6 +43,4 @@ export class LandingHeaderComponent {
       this.userId = undefined;
     });
   }
-
-
 }

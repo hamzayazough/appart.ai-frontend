@@ -41,7 +41,6 @@ import { MapModule } from './pages/map/map.module';
     SharedModule,
     HammerModule,
     MapModule,
-    ,
     MaterialModule,
     FormsModule,
     CommonModule,

@@ -10,9 +10,9 @@ const routes: Routes = [
   { path: 'account/:id', component: AccountPageComponent },
   { path: 'account/:id/contacts', component: AccountContactsComponent },
   { path: 'account/:id/hobbies', component: AccountHobbiesComponent },
+  { path: 'map', component: MapPageComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' },
-  { path: 'map', component: MapPageComponent },
 ];
 
 @NgModule({

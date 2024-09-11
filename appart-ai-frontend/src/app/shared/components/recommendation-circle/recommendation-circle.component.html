@@ -1,0 +1,12 @@
+<div
+  [ngClass]="['container', getClass()]"
+  [style.width.px]="size"
+  [style.height.px]="size"
+>
+  <mat-spinner
+    [value]="value"
+    [mode]="'determinate'"
+    [diameter]="size"
+  ></mat-spinner>
+  <p class="text poppins-black-title">{{ value }}%</p>
+</div>

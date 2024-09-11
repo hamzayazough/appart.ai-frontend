@@ -1,0 +1,29 @@
+.text {
+  position: absolute;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.red {
+  .mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: #ff6464;
+  }
+}
+
+.yellow {
+  .mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: #ffa722;
+  }
+}
+
+.green {
+  .mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: #02c39a;
+  }
+}

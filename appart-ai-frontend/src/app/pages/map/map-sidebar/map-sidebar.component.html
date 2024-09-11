@@ -1,4 +1,21 @@
-<div class="sidebar active">
+<!-- <div class="sidebar active">
   <app-apartment-card *ngFor="let card of data" [data]="card">
   </app-apartment-card>
-</div>
+</div> -->
+
+<mat-drawer #drawer class="sidebar" mode="over" [opened]="opened">
+  <app-apartment-card
+    *ngFor="let apartment of data"
+    [data]="apartment"
+  ></app-apartment-card>
+</mat-drawer>
+
+<button
+  mat-fab
+  class="toggle-button"
+  (click)="drawer.toggle()"
+  [ngStyle]="{ left: '1vw' }"
+  *ngIf="!drawer.opened"
+>
+  <mat-icon>home</mat-icon>
+</button>

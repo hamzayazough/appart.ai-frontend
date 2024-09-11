@@ -8,8 +8,9 @@ import { DOCUMENT } from '@angular/common';
 })
 export class GradientButtonComponent {
   @Input() message: string = 'Se connecter';
-  constructor(@Inject(DOCUMENT) public document: Document) {}
   @Input() styleOnHover = false;
   @Input() height = 50;
   @Input() width = 100;
+
+  constructor(@Inject(DOCUMENT) public document: Document) {}
 }

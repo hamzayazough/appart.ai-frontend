@@ -1,13 +1,24 @@
 .sidebar {
   height: 90vh;
-  background: white;
   position: absolute;
   top: 0px;
   z-index: 10;
   border-radius: 10px;
   margin: 5vh;
+  width: 30vw;
 }
 
-.active {
-  width: 30vw;
+#drawer {
+  left: 200px;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 50vh;
+  z-index: 9;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
 }
