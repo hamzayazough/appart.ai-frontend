@@ -3,11 +3,13 @@ import { UserService } from '../../../services/user-service/user.service';
 import { AppUser, UserInfo } from '../../../intefaces/user.interface';
 import { Router } from '@angular/router';
 import { SelectedHeader } from '../../../enums/selected-header.enum';
+import { UserType } from '../../../enums/user-type.enum';
 
 enum Display {
   Contact = "My Contact",
   Hobbies = "My Hobbies",
-  MySavedAccommodations = "My saved accommodations"
+  MySavedAccommodations = "My saved accommodations",
+  AccommodationManagement = "Accommodations management (landlord feature)"
 }
 
 @Component({
@@ -19,6 +21,7 @@ enum Display {
 
 export class AccountPageComponent {
   public user: AppUser = {} as AppUser;
+  public userType = UserType;
   private token: string = '';
   public display = Display;
   public selectedHeader = SelectedHeader.myProfile;
@@ -75,13 +78,16 @@ export class AccountPageComponent {
   }
 
   public toggleSection(section: Display): void {
-    if (section === this.display.Contact) {
-      this.router.navigate([`/account/${this.user.id}/contacts`]);
-    } else if (section === this.display.Hobbies) {
-      this.router.navigate([`/account/${this.user.id}/hobbies`]);
-    }
-    if (section === this.display.MySavedAccommodations) {
-      this.router.navigate([`/account/${this.user.id}/saved-accommodations`]);
+    const routes = {
+      [this.display.Contact]: 'contacts',
+      [this.display.Hobbies]: 'hobbies',
+      [this.display.MySavedAccommodations]: 'saved-accommodations',
+      [this.display.AccommodationManagement]: 'accommodations-manager'
+    };
+    
+    const route = routes[section];
+    if (route) {
+      this.router.navigate([`/account/${this.user.id}/${route}`]);
     }
   }
 

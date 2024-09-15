@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUser } from '../../intefaces/user.interface';
 import { UserService } from '../user-service/user.service';
 import { Router } from '@angular/router';
+import { UserType } from '../../enums/user-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,8 @@ export class AuthenticationService {
         firstName: this.user.given_name || "",
         lastName: this.user.family_name || "",
         username: this.user.nickname || tempUsername,
-        auth0Id: this.user.sub
+        auth0Id: this.user.sub,
+        type: UserType.CLIENT
       };
       this.userService.createUserIfDontExist(userInfo, this.token.value ).subscribe({
         next: (user: AppUser) => {
