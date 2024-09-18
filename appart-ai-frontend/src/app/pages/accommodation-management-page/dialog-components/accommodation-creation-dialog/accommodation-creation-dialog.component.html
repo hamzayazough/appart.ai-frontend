@@ -1,0 +1,115 @@
+<h2 mat-dialog-title>{{ data.isNew ? 'Add Accommodation' : 'Edit Accommodation' }}</h2>
+
+<mat-dialog-content [formGroup]="accommodationForm">
+  <section>
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Rent Price</mat-label>
+      <input matInput type="number" formControlName="rentPrice">
+    </mat-form-field>
+  </section>
+
+  <section class="description-section">
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Number of Beds</mat-label>
+      <input matInput type="number" formControlName="numBeds">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Number of Bathrooms</mat-label>
+      <input matInput type="number" formControlName="numBathrooms">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Square Footage</mat-label>
+      <input matInput type="number" formControlName="squareFootage">
+    </mat-form-field>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="availability-section">
+    <mat-form-field>
+      <mat-label>Available From</mat-label>
+      <input matInput type="date" formControlName="availableFrom">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Lease Duration (months)</mat-label>
+      <input matInput type="number" formControlName="leaseDuration">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Floor Number</mat-label>
+      <input matInput type="number" formControlName="floorNumber">
+    </mat-form-field>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="upload-section">
+    <mat-label>Upload Images</mat-label>
+    <input type="file" (change)="onFileSelected($event)" multiple>
+    <div class="image-preview-container">
+      <div *ngFor="let img of imagePreviews" class="image-preview">
+        <img [src]="img" alt="Accommodation image" width="100" height="100">
+        <button mat-icon-button color="warn" (click)="removeImage(img)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section>
+    <h3>Address</h3>
+    <app-address-autocomplete 
+      [initialPlaceName]="accommodationForm.get('address.placeName')?.value || ''" 
+      [initialApartmentNumber]="accommodationForm.get('address.apartmentNumber')?.value || ''"
+      (addressSelected)="onAddressSelected($event)">
+    </app-address-autocomplete>
+  </section>
+  
+
+  <mat-divider></mat-divider>
+
+  <section class="features-section">
+    <h3>Features</h3>
+    <div class="features-grid">
+      <mat-checkbox formControlName="airConditioning">Air Conditioning</mat-checkbox>
+      <mat-checkbox formControlName="dishwasher">Dishwasher</mat-checkbox>
+      <mat-checkbox formControlName="stainlessSteelAppliances">Stainless Steel Appliances</mat-checkbox>
+      <mat-checkbox formControlName="patio">Patio</mat-checkbox>
+      <mat-checkbox formControlName="balcony">Balcony</mat-checkbox>
+      <mat-checkbox formControlName="refrigerator">Refrigerator</mat-checkbox>
+      <mat-checkbox formControlName="petsAllowed">Pets Allowed</mat-checkbox>
+      <mat-checkbox formControlName="smokingAllowed">Smoking Allowed</mat-checkbox>
+      <mat-checkbox formControlName="gym">Gym</mat-checkbox>
+      <mat-checkbox formControlName="parkingIncluded">Parking Included</mat-checkbox>
+      <mat-checkbox formControlName="roommateAccepted">Roommate Accepted</mat-checkbox>
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="additional-info-section">
+    <h3>Additional Information</h3>
+    <mat-checkbox formControlName="furnished">Furnished</mat-checkbox>
+    <mat-checkbox formControlName="utilitiesIncluded">Utilities Included</mat-checkbox>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

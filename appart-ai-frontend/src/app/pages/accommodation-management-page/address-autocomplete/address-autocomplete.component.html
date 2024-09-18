@@ -1,0 +1,16 @@
+<div class="address-autocomplete-wrapper">
+    <input matInput type="text" [formControl]="addressControl" placeholder="Enter an address" class="form-control">
+    <ul *ngIf="suggestions.length > 0" class="address-suggestions">
+      <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+        {{ suggestion.place_name }}
+      </li>
+    </ul>
+</div>
+
+<div class="apartment-number-wrapper">
+    <mat-form-field>
+      <mat-label>Number</mat-label>
+      <input matInput type="text" (input)="setApartmentNumber($event)">
+    </mat-form-field>
+  </div>
+  

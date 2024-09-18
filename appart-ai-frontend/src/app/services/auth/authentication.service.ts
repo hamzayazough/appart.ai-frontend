@@ -3,14 +3,12 @@ import { AuthService, User } from '@auth0/auth0-angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUser } from '../../intefaces/user.interface';
 import { UserService } from '../user-service/user.service';
-import { Router } from '@angular/router';
 import { UserType } from '../../enums/user-type.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 
-//service utilisé dans lequel on garde les infos du user et on fait la gestion de son authentification
 export class AuthenticationService {
   public user: User = {};
   public loggedUser: BehaviorSubject<AppUser> = new BehaviorSubject<AppUser>({} as AppUser);
