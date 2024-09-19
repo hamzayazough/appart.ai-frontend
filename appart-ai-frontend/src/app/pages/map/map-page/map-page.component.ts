@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
-import { Feature, FeatureCollection, Point } from 'geojson';
+import { Component, ViewChild } from '@angular/core';
+import {
+  Feature,
+  FeatureCollection,
+  Geometry,
+  LineString,
+  Point,
+} from 'geojson';
 import { Apartment } from '../../../shared/types/apartment';
 import { PointLike } from 'mapbox-gl';
 import { parseGeoJson } from '../../../shared/utils/geoJson.util';
@@ -7,6 +13,7 @@ import { AccommodationsService } from '../../../services/accomodations/accomodat
 
 import { PinClass } from './pinClass';
 import { Recommendation } from '../../../shared/types/recommendation';
+import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
 
 @Component({
   selector: 'app-map-page',
@@ -17,6 +24,10 @@ export class MapPageComponent {
   map?: mapboxgl.Map;
   apartments: Recommendation<Apartment>[];
   sidebarOpened = true;
+  @ViewChild('sidebar') sidebar!: MapSidebarComponent;
+
+  //delete me
+  navigation: Feature;
 
   pinClasses: PinClass[] = [
     {
@@ -40,6 +51,7 @@ export class MapPageComponent {
   ];
 
   constructor(public accomodationService: AccommodationsService) {
+    this.navigation = accomodationService.getNavigations();
     this.apartments = this.accomodationService.getAccomodations();
     this.pinClasses.forEach(
       (cl) =>
@@ -63,7 +75,9 @@ export class MapPageComponent {
     const selectedFeatures = this.map?.queryRenderedFeatures(bbox, {
       layers: this.pinClasses.map((cl) => cl.iconName),
     });
-    console.log('features', selectedFeatures);
+    if (selectedFeatures?.length === 1) {
+      console.log(selectedFeatures);
+    }
   }
 
   /* apartments:

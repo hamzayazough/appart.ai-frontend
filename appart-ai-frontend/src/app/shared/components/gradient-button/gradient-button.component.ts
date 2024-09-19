@@ -1,5 +1,6 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, Output, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { EventEmitter } from 'node:stream';
 
 @Component({
   selector: 'app-gradient-button',
