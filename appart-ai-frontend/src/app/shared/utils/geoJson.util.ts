@@ -11,7 +11,7 @@ export function parseGeoJson(accomodations: Apartment[]): FeatureCollection {
           type: 'Point',
           coordinates: [accom.coords.lat, accom.coords.lng],
         },
-        properties: {},
+        properties: accom,
       };
     }),
   };
