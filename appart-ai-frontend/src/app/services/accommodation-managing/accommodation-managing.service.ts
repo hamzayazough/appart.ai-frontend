@@ -5,8 +5,6 @@ import { Accommodation } from '../../intefaces/accommodation.interface';
 import { Address } from '../../intefaces/adress.interface';
 import { environment } from '../../environments/environment';
 import { UserService } from '../user-service/user.service';
-
-
 @Injectable({
   providedIn: 'root'
 })

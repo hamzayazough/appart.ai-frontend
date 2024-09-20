@@ -39,9 +39,6 @@ export class AccommodationManagementPageComponent implements OnInit {
     });
     this.authService.token.subscribe((token: string) => {
       this.token = token;
-      if (this.user) {
-        this.loadAccommodations();
-      }
     });
   }
 
@@ -49,7 +46,6 @@ export class AccommodationManagementPageComponent implements OnInit {
     if (this.token && this.user.id) {
       this.accommodationService.getLandlordAccommodations(this.user.id, this.token)
         .subscribe((accommodation) => {
-          console.log(accommodation);
           this.accommodations = accommodation;
         }, (error) => {
           this.snackBar.open('Failed to load accommodations', 'Close', { duration: 3000 });
@@ -58,12 +54,13 @@ export class AccommodationManagementPageComponent implements OnInit {
   }
 
   public viewAccommodation(accommodation: Accommodation): void {
+    //TODO: implémenter la page d'appartement
     console.log(accommodation);
   }
 
   public addAccommodation(): void {
     const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
-      width: '400px',
+      width: '70%',
       data: { isNew: true }
     });
 
@@ -77,7 +74,7 @@ export class AccommodationManagementPageComponent implements OnInit {
 
   public editAccommodation(accommodation: Accommodation): void {
     const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
-      width: '400px',
+      width: '70%',
       data: { accommodation }
     });
 

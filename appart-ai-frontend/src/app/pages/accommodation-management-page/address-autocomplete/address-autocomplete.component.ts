@@ -41,7 +41,6 @@ export class AddressAutocompleteComponent implements OnInit {
   }
 
   selectSuggestion(suggestion: any) {
-    console.log(suggestion);
     const address: Address = {
       placeName: suggestion.place_name,
       apartmentNumber: this.initialApartmentNumber || '',
@@ -50,8 +49,6 @@ export class AddressAutocompleteComponent implements OnInit {
     };
     this.address = address;
     this.addressControl.setValue(suggestion.place_name);
-    console.log("heho", address);
-
     this.addressSelected.emit(address);
     this.suggestions = [];
   }

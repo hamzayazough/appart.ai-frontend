@@ -97,7 +97,6 @@ export class AccommodationCreationDialogComponent {
       }
       this.accommodationService.addAccommodation(accommodation, this.selectedFiles, token).subscribe(
         (accommodation: Accommodation) => {
-          console.log('Accommodation created successfully:', accommodation.id);
           this.snackBar.open('Accommodation created successfully', 'Close', { duration: 3000 });
           this.dialogRef.close(accommodation);
         },
