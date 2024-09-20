@@ -1,6 +1,7 @@
 <div id="container">
   <mat-drawer-container>
     <app-map-sidebar
+      #sidebar
       [opened]="sidebarOpened"
       [data]="apartments"
     ></app-map-sidebar>
@@ -17,6 +18,24 @@
         [id]="pinData.id"
         [data]="pinData.features"
       ></mgl-geojson-source>
+
+      <mgl-geojson-source id="symbols-source" [data]="navigation">
+      </mgl-geojson-source>
+
+      <mgl-layer
+        id="nav"
+        type="line"
+        [source]="'symbols-source'"
+        [layout]="{
+          'line-join': 'round',
+          'line-cap': 'round'
+        }"
+        [paint]="{
+          'line-color': '#888',
+          'line-width': 8
+        }"
+      >
+      </mgl-layer>
 
       <mgl-layer
         *ngFor="let pinData of pinClasses"
