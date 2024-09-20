@@ -1,4 +1,4 @@
-<ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+<ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut"></ng-container>
     <button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
       <p class="poppins-black-title inside-text">
         Log out

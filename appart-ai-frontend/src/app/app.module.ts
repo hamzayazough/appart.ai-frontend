@@ -4,7 +4,10 @@ import {
   HammerModule,
   provideClientHydration,
 } from '@angular/platform-browser';
+
 import { AuthModule } from '@auth0/auth0-angular';
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing/landing-page/landing-page.component';
