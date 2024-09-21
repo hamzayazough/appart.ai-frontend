@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { IntervalUtil } from '../../utils/interval.util';
 import { race, Subject, take, takeUntil, timer } from 'rxjs';
-import { Image } from '../../types/Image';
+import { Image } from '../../../intefaces/image.interface';
 
 @Component({
   selector: 'app-image-slider',

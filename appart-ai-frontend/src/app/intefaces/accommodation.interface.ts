@@ -1,6 +1,5 @@
-import { Image } from "../shared/types/Image";
 import { Address } from "./adress.interface";
-import { ImageUrl } from "./image.interface";
+import { Image } from "./image.interface";
 
 export interface AccommodationCreation {
   id: string;

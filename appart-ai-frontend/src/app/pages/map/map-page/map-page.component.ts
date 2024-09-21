@@ -1,18 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  Feature,
-  FeatureCollection,
-  Geometry,
-  LineString,
-  Point,
-} from 'geojson';
-import { Apartment } from '../../../shared/types/apartment';
+import { Feature } from 'geojson';
 import { PointLike } from 'mapbox-gl';
 import { parseGeoJson } from '../../../shared/utils/geoJson.util';
 import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
-
 import { PinClass } from './pinClass';
-import { Recommendation } from '../../../shared/types/recommendation';
 import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
 import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
 
