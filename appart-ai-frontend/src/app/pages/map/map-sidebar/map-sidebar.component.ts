@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Apartment } from '../../../shared/types/apartment';
 import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
 import { Recommendation } from '../../../shared/types/recommendation';
+import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
 @Component({
   selector: 'app-map-sidebar',
   templateUrl: './map-sidebar.component.html',
@@ -9,6 +10,6 @@ import { Recommendation } from '../../../shared/types/recommendation';
 })
 export class MapSidebarComponent {
   constructor(public accommodationService: AccommodationsService) {}
-  @Input() data: Recommendation<Apartment>[] = [];
+  @Input() data: AccommodationMatchingDTO[] = [];
   @Input() opened: boolean = true;
 }

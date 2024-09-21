@@ -2,13 +2,31 @@ import { Injectable } from '@angular/core';
 import { Apartment } from '../../shared/types/apartment';
 import { Recommendation } from '../../shared/types/recommendation';
 import { Feature } from 'geojson';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Accommodation, AccommodationMatchingDTO } from '../../intefaces/accommodation.interface';
+import { Observable } from 'rxjs';
 
 //for testing purposes
 @Injectable({
   providedIn: 'root',
 })
 export class AccommodationsService {
-  constructor() {}
+  private url = '/public/api/accommodations';
+  private apiUrl: string = environment.apiUrl + this.url;
+
+  constructor(private http: HttpClient) { }
+
+
+  getAccommodations(): Observable<Accommodation[]> {
+    return this.http.get<Accommodation[]>(`${this.apiUrl}`);
+  }
+
+  getAccommodationsInBoundingBox(minLat: number, minLong: number, maxLat: number, maxLong: number): Observable<AccommodationMatchingDTO[]> {
+    return this.http.get<AccommodationMatchingDTO[]>(
+      `${this.apiUrl}/in-bounding-box?minLat=${minLat}&minLong=${minLong}&maxLat=${maxLat}&maxLong=${maxLong}`
+    );
+  }
 
   getNavigations(): Feature {
     return {

@@ -1,15 +1,15 @@
 import { FeatureCollection } from 'geojson';
-import { Apartment } from '../../shared/types/apartment';
+import { AccommodationMatchingDTO } from '../../intefaces/accommodation.interface';
 
-export function parseGeoJson(accomodations: Apartment[]): FeatureCollection {
+export function parseGeoJson(accomodations: AccommodationMatchingDTO[]): FeatureCollection {
   return {
     type: 'FeatureCollection',
-    features: accomodations.map((accom: Apartment) => {
+    features: accomodations.map((accom: AccommodationMatchingDTO) => {
       return {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [accom.coords.lat, accom.coords.lng],
+          coordinates: [accom.value.address.location[0], accom.value.address.location[1]],
         },
         properties: accom,
       };

@@ -1,3 +1,4 @@
+import { Image } from "../shared/types/Image";
 import { Address } from "./adress.interface";
 import { ImageUrl } from "./image.interface";
 
@@ -71,5 +72,21 @@ export interface Accommodation {
     gym: boolean;
     parkingIncluded: boolean;
     roommateAccepted: boolean;
-    imageUrls: ImageUrl[];
+    imageUrls: Image[];
+  }
+
+  export interface AccommodationMatchingDTO {
+    pros: string[];
+    cons: string[];
+    score: number;
+    value: AccommodationBaseDTO;
+  }
+  export interface AccommodationBaseDTO {
+    id: string;
+    title: string;
+    bedrooms: number;
+    bathrooms: number;
+    price: number;
+    address: Address;
+    imageUrls: Image[];
   }
