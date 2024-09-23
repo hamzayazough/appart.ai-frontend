@@ -1,18 +1,14 @@
 <div class="container" [style.height.px]="height" [style.width.px]="width">
-  <div class="slider-container">
+  <div class="slider-container" *ngIf="images.length && images.length > 0">
     <div
       class="slider-item"
       *ngFor="let image of images; let i = index"
       [ngClass]="{
         active: i === activeImageIndex,
-        prev:
-          i ===
-          (activeImageIndex - 1 + this.images.length) % this.images.length,
-        next: i === (activeImageIndex + 1) % this.images.length,
-        hideleft:
-          i ===
-          (activeImageIndex - 2 + this.images.length) % this.images.length,
-        hideright: i === (activeImageIndex + 2) % this.images.length
+        prev: images.length > 1 && i === (activeImageIndex - 1 + this.images.length) % this.images.length,
+        next: images.length > 1 && i === (activeImageIndex + 1) % this.images.length,
+        hideleft: images.length > 1 && i === (activeImageIndex - 2 + this.images.length) % this.images.length,
+        hideright: images.length > 1 && i === (activeImageIndex + 2) % this.images.length
       }"
       (click)="stopAutoSwitch()"
     >

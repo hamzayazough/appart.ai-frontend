@@ -1,0 +1,90 @@
+mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    color: #4A4A4A;
+  }
+  
+  mat-divider {
+    margin: 24px 0;
+  }
+  
+  .image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .image-preview {
+    position: relative;
+  }
+  
+  .image-preview img {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .mat-checkbox {
+    margin-bottom: 8px;
+  }
+  
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 16px;
+  }
+  
+  button {
+    padding: 8px 16px;
+  }
+  
+  button[mat-button] {
+    color: #FF6F61;
+    font-weight: bold;
+  }
+  
+  button[mat-raised-button] {
+    background-color: #1976D2;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  button[mat-raised-button]:hover {
+    background-color: #155A9C;
+  }
+  
+  .additional-info-section {
+    margin-bottom: 20px;
+  }
+  
+  .description-section, .availability-section, .upload-section {
+    margin-bottom: 24px;
+  }
+  
+  .mat-form-field input, .mat-form-field textarea {
+    background-color: #FAFAFA;
+  }
+  
+  .mat-form-field.mat-focused {
+    background-color: #FFF;
+  }
+  
+  .mat-form-field-label {
+    color: #3F51B5;
+  }
+  

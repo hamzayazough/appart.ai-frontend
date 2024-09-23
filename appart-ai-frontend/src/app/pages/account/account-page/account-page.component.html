@@ -22,6 +22,10 @@
             <button (click)="updateUserInfo()">Update Information</button>
         </div>
         </section>
+
+        <section *ngIf="user.type === userType.LANDLORD " class="user-section" (click)="toggleSection(display.AccommodationManagement)">
+            <h2>{{display.AccommodationManagement}}</h2>
+        </section>
     
         <section class="user-section" (click)="toggleSection(display.Contact)">
             <h2>{{display.Contact}}</h2>

@@ -4,7 +4,10 @@ import {
   HammerModule,
   provideClientHydration,
 } from '@angular/platform-browser';
+
 import { AuthModule } from '@auth0/auth0-angular';
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing/landing-page/landing-page.component';
@@ -22,6 +25,21 @@ import { AccountHobbiesComponent } from './pages/account/account-page/shared-com
 import { ConversationsPageComponent } from './pages/conversations-page/conversations-page.component';
 import { FormsModule } from '@angular/forms';
 import { MapModule } from './pages/map/map.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AccommodationManagementPageComponent } from './pages/accommodation-management-page/accommodation-management-page.component';
+import { AccommodationCreationDialogComponent } from './pages/accommodation-management-page/dialog-components/accommodation-creation-dialog/accommodation-creation-dialog.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { AddressAutocompleteComponent } from './pages/accommodation-management-page/address-autocomplete/address-autocomplete.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -34,6 +52,9 @@ import { MapModule } from './pages/map/map.module';
     AccountContactsComponent,
     AccountHobbiesComponent,
     ConversationsPageComponent,
+    AccommodationManagementPageComponent,
+    AccommodationCreationDialogComponent,
+    AddressAutocompleteComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,8 +63,21 @@ import { MapModule } from './pages/map/map.module';
     HammerModule,
     MapModule,
     MaterialModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatDialogModule,
+    MatInputModule,
     FormsModule,
     CommonModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatOptionModule,
+    MatGridListModule,
+    MatDividerModule,
     AuthModule.forRoot({
       domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
       clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',

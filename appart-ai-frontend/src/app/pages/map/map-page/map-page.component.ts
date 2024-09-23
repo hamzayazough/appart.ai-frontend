@@ -1,19 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  Feature,
-  FeatureCollection,
-  Geometry,
-  LineString,
-  Point,
-} from 'geojson';
-import { Apartment } from '../../../shared/types/apartment';
+import { Feature } from 'geojson';
 import { PointLike } from 'mapbox-gl';
 import { parseGeoJson } from '../../../shared/utils/geoJson.util';
 import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
-
 import { PinClass } from './pinClass';
-import { Recommendation } from '../../../shared/types/recommendation';
 import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
+import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
 
 @Component({
   selector: 'app-map-page',
@@ -22,7 +14,7 @@ import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
 })
 export class MapPageComponent {
   map?: mapboxgl.Map;
-  apartments: Recommendation<Apartment>[];
+  public apartments: AccommodationMatchingDTO[] = [];
   sidebarOpened = true;
   @ViewChild('sidebar') sidebar!: MapSidebarComponent;
 
@@ -50,20 +42,8 @@ export class MapPageComponent {
     },
   ];
 
-  constructor(public accomodationService: AccommodationsService) {
-    this.navigation = accomodationService.getNavigations();
-    this.apartments = this.accomodationService.getAccomodations();
-    this.pinClasses.forEach(
-      (cl) =>
-        (cl.features = parseGeoJson(
-          this.apartments
-            .filter(
-              (a: Recommendation<Apartment>) =>
-                cl.bounds.low < a.score && a.score <= cl.bounds.high
-            )
-            .map((x) => x.value)
-        ))
-    );
+  constructor(public accommodationService: AccommodationsService) {
+    this.navigation = accommodationService.getNavigations();
   }
 
   onMapClick(event: any) {
@@ -95,6 +75,7 @@ export class MapPageComponent {
   }
 
   onMapLoaded(map: mapboxgl.Map) {
+    this.map = map;
     this.pinClasses.forEach((item) => {
       this.loadImageFromUrl(
         map,
@@ -102,5 +83,47 @@ export class MapPageComponent {
         item.iconName
       );
     });
+  
+    // Get the current bounding box of the map when it's loaded
+    const bounds = this.map.getBounds();
+    if(bounds) {
+      const bbox: [PointLike, PointLike] = [
+        [bounds.getSouthWest().lng, bounds.getSouthWest().lat], // South-West
+        [bounds.getNorthEast().lng, bounds.getNorthEast().lat]  // North-East
+      ];
+      // Fetch accommodations within this bounding box
+      this.getAccommodationsInBoundingBox(bbox);
+    }
+  
   }
+  
+
+  private getAccommodationsInBoundingBox(bbox: [PointLike, PointLike]) {
+    let swLng, swLat, neLng, neLat;
+  
+    if (Array.isArray(bbox[0])) {
+      // If PointLike is an array
+      [swLng, swLat] = bbox[0] as [number, number]; // South-West corner
+      [neLng, neLat] = bbox[1] as [number, number]; // North-East corner
+    } else {
+      // If PointLike is an object
+      const sw = bbox[0] as { x: number, y: number };
+      const ne = bbox[1] as { x: number, y: number };
+      swLng = sw.x;
+      swLat = sw.y;
+      neLng = ne.x;
+      neLat = ne.y;
+    }
+  
+    this.accommodationService.getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
+      .subscribe((accommodations: AccommodationMatchingDTO[]) => {
+        this.apartments = accommodations;
+        this.pinClasses.forEach(
+          (cl) => cl.features = parseGeoJson(this.apartments)
+        );
+      });
+  }
+  
+
+  
 }

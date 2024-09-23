@@ -8,6 +8,7 @@ export interface AppUser {
     username: string,
     firstName: string,
     lastName: string,
+    type: string
 }
 
 export interface UserInfo {
