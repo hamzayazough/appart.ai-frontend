@@ -24,15 +24,7 @@
         <div class="accommodation-stats">
             <span>{{ accommodation.numViews }} Views</span> | 
             <a (click)="showInterestedPeople()" class="interested-link">{{ numPeopleInterested }} Interested</a>
-            <button class="favorite-btn" *ngIf="!isInUserPrivateInterests; else isInFavorite" (click)="addToFavorites(accommodation.id)">
-                <mat-icon>favorite_border</mat-icon>
-            </button>
 
-            <ng-template #isInFavorite>
-                <button class="favorite-btn" (click)="addToFavorites(accommodation.id)">
-                    <mat-icon>favorite</mat-icon>
-                </button>
-            </ng-template>
             <button class="interest-btn" *ngIf="!isInUserPublicInterests; else isInPublic" (click)="expressMyInterestPublicly(accommodation.id)">
                  <mat-icon>favorite_border</mat-icon>
             </button>
@@ -40,6 +32,16 @@
             <ng-template #isInPublic>
                 <button class="interest-btn" (click)="expressMyInterestPublicly(accommodation.id)">
                     <mat-icon>favorite</mat-icon>
+                </button>
+            </ng-template>
+            
+            <button class="favorite-btn" *ngIf="!isInUserPrivateInterests; else isInFavorite" (click)="addToFavorites(accommodation.id)">
+                <mat-icon>bookmark_border</mat-icon>
+            </button>
+
+            <ng-template #isInFavorite>
+                <button class="favorite-btn" (click)="addToFavorites(accommodation.id)">
+                    <mat-icon>bookmark</mat-icon>
                 </button>
             </ng-template>
             <button class="colocation-btn" (click)="createColocationInterest(accommodation.id)">

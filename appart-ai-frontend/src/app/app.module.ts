@@ -41,13 +41,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
 import { AccommodationPageComponent } from './pages/accommodation-page/accommodation-page.component';
 import { InterestedPeopleDialogComponent } from './dialogs/interested-people-dialog/interested-people-dialog.component';
-import { MapPageComponent } from './pages/map/map-page/map-page.component';
-import { ApartmentCardComponent } from './pages/map/apartment-card/apartment-card.component';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { accessToken } from '../assets/tokens/maps';
-import { MapSidebarComponent } from './pages/map/map-sidebar/map-sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccommodationMapComponent } from './pages/accommodation-page/accommodation-map/accommodation-map.component';
+import { MapModule } from './pages/accommodation-page/map.module';
 
 @NgModule({
   declarations: [
@@ -66,9 +64,6 @@ import { AccommodationMapComponent } from './pages/accommodation-page/accommodat
     AccommodationPageComponent,
     InterestedPeopleDialogComponent,
     AccommodationMapComponent,
-    MapPageComponent,
-    ApartmentCardComponent,
-    MapSidebarComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,6 +86,7 @@ import { AccommodationMapComponent } from './pages/accommodation-page/accommodat
     MatOptionModule,
     MatGridListModule,
     MatDividerModule,
+    MapModule,
     AuthModule.forRoot({
       domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
       clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
