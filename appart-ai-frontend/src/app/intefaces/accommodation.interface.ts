@@ -1,5 +1,5 @@
 import { Address } from "./adress.interface";
-import { Image } from "./image.interface";
+import { Image, ImageUrl } from "./image.interface";
 
 export interface AccommodationCreation {
   id: string;
@@ -71,7 +71,7 @@ export interface Accommodation {
     gym: boolean;
     parkingIncluded: boolean;
     roommateAccepted: boolean;
-    imageUrls: Image[];
+    imageUrls: ImageUrl[];
   }
 
   export interface AccommodationMatchingDTO {

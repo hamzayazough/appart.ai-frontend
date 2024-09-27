@@ -1,0 +1,11 @@
+<h1>Location</h1>
+<div id="map-container">
+  <mgl-map
+    [style]="'mapbox://styles/mapbox/streets-v9'"
+    [zoom]="[16]"
+    [center]="accommodation.address.location"
+    (mapCreate)="onMapLoaded($event)"
+    class="map-container"
+  >
+  </mgl-map>
+</div>

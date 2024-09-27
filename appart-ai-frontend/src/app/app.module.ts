@@ -24,7 +24,6 @@ import { AccountContactsComponent } from './pages/account/account-page/shared-co
 import { AccountHobbiesComponent } from './pages/account/account-page/shared-components/account-hobbies/account-hobbies.component';
 import { ConversationsPageComponent } from './pages/conversations-page/conversations-page.component';
 import { FormsModule } from '@angular/forms';
-import { MapModule } from './pages/map/map.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -40,6 +39,15 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
+import { AccommodationPageComponent } from './pages/accommodation-page/accommodation-page.component';
+import { InterestedPeopleDialogComponent } from './dialogs/interested-people-dialog/interested-people-dialog.component';
+import { MapPageComponent } from './pages/map/map-page/map-page.component';
+import { ApartmentCardComponent } from './pages/map/apartment-card/apartment-card.component';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { accessToken } from '../assets/tokens/maps';
+import { MapSidebarComponent } from './pages/map/map-sidebar/map-sidebar.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { AccommodationMapComponent } from './pages/accommodation-page/accommodation-map/accommodation-map.component';
 
 @NgModule({
   declarations: [
@@ -55,13 +63,18 @@ import { MatDividerModule } from '@angular/material/divider';
     AccommodationManagementPageComponent,
     AccommodationCreationDialogComponent,
     AddressAutocompleteComponent,
+    AccommodationPageComponent,
+    InterestedPeopleDialogComponent,
+    AccommodationMapComponent,
+    MapPageComponent,
+    ApartmentCardComponent,
+    MapSidebarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SharedModule,
     HammerModule,
-    MapModule,
     MaterialModule,
     MatFormFieldModule,
     MatSnackBarModule,
@@ -84,6 +97,10 @@ import { MatDividerModule } from '@angular/material/divider';
       authorizationParams: {
         redirect_uri: window.location.origin,
       },
+    }),
+    MatSidenavModule,
+    NgxMapboxGLModule.withConfig({
+      accessToken: accessToken,
     }),
     HttpClientModule,
   ],

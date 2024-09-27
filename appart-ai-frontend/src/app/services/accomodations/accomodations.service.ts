@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Accommodation, AccommodationMatchingDTO } from '../../intefaces/accommodation.interface';
 import { Observable } from 'rxjs';
+import { AppUser } from '../../intefaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +16,41 @@ export class AccommodationsService {
   constructor(private http: HttpClient) { }
 
 
-  getAccommodations(): Observable<Accommodation[]> {
+  public getAccommodations(): Observable<Accommodation[]> {
     return this.http.get<Accommodation[]>(`${this.apiUrl}`);
   }
 
-  getAccommodationsInBoundingBox(minLat: number, minLong: number, maxLat: number, maxLong: number): Observable<AccommodationMatchingDTO[]> {
+  public getAccommodationsInBoundingBox(minLat: number, minLong: number, maxLat: number, maxLong: number): Observable<AccommodationMatchingDTO[]> {
     return this.http.get<AccommodationMatchingDTO[]>(
       `${this.apiUrl}/in-bounding-box?minLat=${minLat}&minLong=${minLong}&maxLat=${maxLat}&maxLong=${maxLong}`
     );
+  }
+
+  public getAccommodationById(id: string): Observable<Accommodation> {
+    return this.http.get<Accommodation>(`${this.apiUrl}/${id}`);
+  }
+
+  public getInterestedPeople(accommodationId: string): Observable<AppUser[]> {
+    return this.http.get<AppUser[]>(`${this.apiUrl}/${accommodationId}/interested-people`);
+  }
+  public getUserInterest(accommodationId: string, userId: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/${accommodationId}/${userId}/user-interest`, { responseType: 'text' as 'json' });
+  }
+
+  public expressMyInterest(accommodationId: string, userId: string): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}/${accommodationId}/${userId}/express-interest`, {});
+  }
+
+  public addToFavorites(accommodationId: string, userId: string): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}/${accommodationId}/${userId}/add-to-favorites`, {});
+  }
+
+  public incrementViews(accommodationId: string, userId: string): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}/${accommodationId}/${userId}/increment-views`, {});
+  }
+
+  public contactLandlord(ownerId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/contact-landlord/${ownerId}`, {});
   }
 
   // TODO: à supprimer par Antoine

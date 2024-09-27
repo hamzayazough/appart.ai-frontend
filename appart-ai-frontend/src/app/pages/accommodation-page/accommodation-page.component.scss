@@ -1,0 +1,266 @@
+.container {
+  background-color: #e6f2e6;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.accommodation-container {
+  display: flex;
+  border-radius: 15px;
+  flex-direction: column;
+  background-color: #f3f9f3;
+  padding-left: 5%;
+  padding-right: 5%;
+  align-items: center;
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+.accommodation-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 1rem 2%;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 96%;
+  margin-top: 1%;
+}
+
+.info-text {
+  font-size: 1.1rem;
+}
+
+.info-text h1 {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.info-text p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.price-info {
+  font-size: 1.8rem;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+
+.accommodation-gallery {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2%;
+  width: 96%;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.accommodation-stats {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 1.2rem;
+  color: #34495e;
+}
+
+.accommodation-stats .interested-link {
+  color: #3498db;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.accommodation-stats .favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #e74c3c;
+}
+
+.accommodation-stats .favorite-btn:hover {
+  color: #c0392b;
+}
+
+.accommodation-stats .interest-btn {
+  background: none !important;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #00adb9 !important;
+}
+
+
+
+button.mat-icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.accommodation-stats .interest-btn, .colocation-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.accommodation-stats .interest-btn:hover, .colocation-btn:hover {
+  background-color: #2980b9;
+}
+
+.accommodation-stats .colocation-btn {
+  background-color: #2ecc71;
+}
+
+.accommodation-stats .colocation-btn:hover {
+  background-color: #27ae60;
+}
+.accommodation-description {
+  margin-top: 3%;
+  width: 100%;
+}
+
+.accommodation-description h3 {
+  margin-left: 1%;
+  margin-bottom: 1rem;
+}
+
+.accommodation-description p {
+  font-size: 1.2rem;
+  color: #34495e;
+}
+
+.accommodation-details {
+  margin-top: 3%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: space-between;
+  background-color: #ecf0f1;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detail {
+  flex: 1 1 45%;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.accommodation-pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  background-color: #f7f9fa;
+  border-radius: 15px;  
+  padding: 2%;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  width: 96%;
+}
+
+.pros, .cons {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pros:hover, .cons:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pros-header {
+  background-color: #5ed680;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.cons-header {
+  background-color: #ff8b8b;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.accommodation-pros-cons h3 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.pros-list ul, .cons-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pros-list li, .cons-list li {
+  font-size: 1.2rem;
+  padding: 0.6rem 0;
+  color: #34495e;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.pros-list li:last-child, .cons-list li:last-child {
+  border-bottom: none;
+}
+
+
+.accommodation-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3%;
+}
+
+.accommodation-actions button {
+  background-color: #3498db;
+  color: white;
+  font-size: 1.1rem;
+  padding: 0.9rem 2.5rem;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.accommodation-actions button:hover {
+  background-color: #2ecc71;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.accommodation-actions button:active {
+  background-color: #27ae60;
+  box-shadow: none;
+}
+
+.accommodation-actions button:focus {
+  box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.4);
+}

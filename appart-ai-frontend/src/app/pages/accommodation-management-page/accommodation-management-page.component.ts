@@ -47,6 +47,9 @@ export class AccommodationManagementPageComponent implements OnInit {
       this.accommodationService.getLandlordAccommodations(this.user.id, this.token)
         .subscribe((accommodation) => {
           this.accommodations = accommodation;
+          this.accommodations.forEach((acc) => {
+            console.log(acc.imageUrls);
+            });
           console.log(accommodation);
         }, (error) => {
           this.snackBar.open('Failed to load accommodations', 'Close', { duration: 3000 });

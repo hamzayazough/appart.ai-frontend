@@ -6,6 +6,7 @@ import { AccountHobbiesComponent } from './pages/account/account-page/shared-com
 import { AccountContactsComponent } from './pages/account/account-page/shared-components/account-contacts/account-contacts.component';
 import { MapPageComponent } from './pages/map/map-page/map-page.component';
 import { AccommodationManagementPageComponent } from './pages/accommodation-management-page/accommodation-management-page.component';
+import { AccommodationPageComponent } from './pages/accommodation-page/accommodation-page.component';
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
   { path: 'account/:id', component: AccountPageComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'account/:id/accommodations-manager', component: AccommodationManagementPageComponent },
   { path: 'account/:id/hobbies', component: AccountHobbiesComponent },
   { path: 'map', component: MapPageComponent },
+  { path: 'accommodation/:accommodationId', component: AccommodationPageComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' },
 ];
