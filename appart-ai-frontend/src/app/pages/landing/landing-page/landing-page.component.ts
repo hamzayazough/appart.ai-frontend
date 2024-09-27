@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Image } from '../../../intefaces/image.interface';
 
 @Component({
   selector: 'app-landing-page',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent {
-  images = [
+  images: Image[] = [
     {
       src: 'assets/images/appart1.png',
       alt: 'appart1',

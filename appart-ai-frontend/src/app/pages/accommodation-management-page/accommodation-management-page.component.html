@@ -1,0 +1,40 @@
+<div class="container">
+  <app-landing-header [selected]="selectedHeader"></app-landing-header>
+
+  <div class="page-title">
+    <h1>My properties</h1>
+  </div>
+  <div class="accommodation-list" *ngIf="accommodations.length > 0; else noAccommodation">
+    <mat-grid-list cols="2" rowHeight="2:1" gutterSize="15px">
+      <mat-grid-tile *ngFor="let accommodation of accommodations" class="accommodation-card">
+        <mat-card (click)="viewAccommodation(accommodation)">
+          <mat-card-header>
+            <img mat-card-avatar *ngIf="accommodation.imageUrls && accommodation.imageUrls.length > 0" 
+                 [src]="accommodation.imageUrls[0]" alt="{{ accommodation.title }}">
+            <div class="title-subtitle">
+              <mat-card-title>{{ accommodation.title }}</mat-card-title>
+              <mat-card-subtitle>{{ accommodation.address.placeName }}, {{ accommodation.rentPrice | currency }}</mat-card-subtitle>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ accommodation.description }}</p>
+            <p><strong>Beds:</strong> {{ accommodation.numBeds }} | <strong>Bathrooms:</strong> {{ accommodation.numBathrooms }}</p>
+            <p><strong>Views:</strong> {{ accommodation.numViews }} | <strong>Interested Public:</strong> {{ accommodation.numInterestedPublic }}</p>
+          </mat-card-content>
+          <mat-card-actions class="actions">
+            <button mat-stroked-button color="accent" (click)="editAccommodation(accommodation)">Edit</button>
+            <button mat-stroked-button color="warn" (click)="deleteAccommodation(accommodation.id)">Delete</button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <ng-template #noAccommodation>
+    <div class="no-accommodation">
+      <p>You have not added any accommodation yet.</p>
+    </div>
+  </ng-template>
+
+  <button mat-raised-button color="primary" class="add-btn" (click)="addAccommodation()">Add New Accommodation</button>
+</div>

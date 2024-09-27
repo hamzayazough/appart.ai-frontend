@@ -1,16 +1,10 @@
-
-<ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
-  <button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
-    <p class="dm-serif-display-regular-italic inside-text">
-      Log out
-    </p>
-  </button>
-</ng-container>
-
-<ng-template #loggedOut>
-  <button (click)="auth.loginWithRedirect()">
-    <p class="dm-serif-display-regular-italic inside-text">
-      Sign in
-    </p>
-  </button>
-</ng-template>
+<button
+  #button
+  [style.height.px]="height"
+  [style.width.px]="width"
+  [ngClass]="styleOnHover ? ['on-hover'] : ['standard']"
+>
+  <p class="poppins-black-title inside-text">
+    <ng-content></ng-content>
+  </p>
+</button>

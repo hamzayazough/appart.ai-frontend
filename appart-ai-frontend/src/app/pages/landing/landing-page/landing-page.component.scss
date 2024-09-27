@@ -1,5 +1,27 @@
 .container {
   width: 100vw;
   height: 100vh;
-  background-color: #d9d9d9;
+  background-color: #e6f2e6;
+}
+
+.center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.colored {
+  background: -webkit-linear-gradient(#02c39a, #05668d);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#get-started {
+  margin: 1rem;
+  text-decoration: none;
+}
+
+.no-underline {
+  text-decoration: none;
 }

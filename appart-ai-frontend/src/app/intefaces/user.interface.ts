@@ -8,13 +8,13 @@ export interface AppUser {
     username: string,
     firstName: string,
     lastName: string,
+    type: string
 }
 
-export interface Contact {
-    id: string, // id du contact
-    userName: string, // le username du contact (ou)
+export interface UserInfo {
+    id?: string;
+    phone: string,
+    username: string,
     firstName: string,
-    lastName: string,
-    contactDate: Date,
-    relationType: string
+    lastName: string
 }

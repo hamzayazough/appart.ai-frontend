@@ -1,32 +1,17 @@
-import { Component, Input, Inject, OnInit } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
+import { Component, Input, Inject, Output, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { AuthenticationService } from '../../../services/auth/authentication.service';
+import { EventEmitter } from 'node:stream';
 
 @Component({
   selector: 'app-gradient-button',
   templateUrl: './gradient-button.component.html',
-  styleUrl: './gradient-button.component.scss'
+  styleUrl: './gradient-button.component.scss',
 })
-export class GradientButtonComponent implements OnInit {
-
+export class GradientButtonComponent {
   @Input() message: string = 'Se connecter';
-  constructor(@Inject(DOCUMENT) public document: Document, public auth: AuthService, private authenticateService: AuthenticationService) {}
-  ngOnInit(): void {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      if (isAuthenticated) {
-        this.auth.idTokenClaims$.subscribe(claims => {
-          if(claims){
-          const token = claims.__raw;
-          this.authenticateService.setToken(token);
-          }
-        });
-      }
-    });
-    this.auth.user$.subscribe(user => {
-      if (user){
-        this.authenticateService.user = user;
-      }
-    });
-  }
+  @Input() styleOnHover = false;
+  @Input() height = 50;
+  @Input() width = 100;
+
+  constructor(@Inject(DOCUMENT) public document: Document) {}
 }
