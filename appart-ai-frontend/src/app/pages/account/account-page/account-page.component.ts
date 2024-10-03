@@ -7,7 +7,7 @@ import { UserType } from '../../../enums/user-type.enum';
 
 enum Display {
   Contact = "My Contact",
-  Hobbies = "My Hobbies",
+  Preferences = "My Preferences",
   MySavedAccommodations = "My saved accommodations",
   AccommodationManagement = "Accommodations management (landlord feature)"
 }
@@ -80,7 +80,7 @@ export class AccountPageComponent {
   public toggleSection(section: Display): void {
     const routes = {
       [this.display.Contact]: 'contacts',
-      [this.display.Hobbies]: 'hobbies',
+      [this.display.Preferences]: 'preferences',
       [this.display.MySavedAccommodations]: 'saved-accommodations',
       [this.display.AccommodationManagement]: 'accommodations-manager'
     };
