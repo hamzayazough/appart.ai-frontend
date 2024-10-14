@@ -7,10 +7,12 @@ import { AccountContactsComponent } from './pages/account/account-page/shared-co
 import { MapPageComponent } from './pages/map/map-page/map-page.component';
 import { AccommodationManagementPageComponent } from './pages/accommodation-management-page/accommodation-management-page.component';
 import { AccommodationPageComponent } from './pages/accommodation-page/accommodation-page.component';
+import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
   { path: 'account/:id', component: AccountPageComponent },
   { path: 'account/:id/contacts', component: AccountContactsComponent },
+  { path: 'account/:id/saved-accommodations', component: MySavedAccommodationsComponent},
   { path: 'account/:id/accommodations-manager', component: AccommodationManagementPageComponent },
   { path: 'account/:id/hobbies', component: AccountHobbiesComponent },
   { path: 'map', component: MapPageComponent },

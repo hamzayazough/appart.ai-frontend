@@ -46,6 +46,7 @@ import { accessToken } from '../assets/tokens/maps';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccommodationMapComponent } from './pages/accommodation-page/accommodation-map/accommodation-map.component';
 import { MapModule } from './pages/accommodation-page/map.module';
+import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { MapModule } from './pages/accommodation-page/map.module';
     AccommodationPageComponent,
     InterestedPeopleDialogComponent,
     AccommodationMapComponent,
+    MySavedAccommodationsComponent,
   ],
   imports: [
     BrowserModule,

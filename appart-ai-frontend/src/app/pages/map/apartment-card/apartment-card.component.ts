@@ -13,7 +13,6 @@ export class ApartmentCardComponent {
   constructor(private route: Router) {}
 
   public selectAccommodation() {
-    console.log('selected accommodation', this.data);
     this.route.navigate([`accommodation/${this.data.value.id}`]);
   }
 }

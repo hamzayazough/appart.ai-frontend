@@ -14,7 +14,6 @@ export class AccommodationMapComponent implements OnInit {
 
   ngOnInit() {
     if (this.accommodation) {
-      console.log('Accommodation', this.accommodation);
     }
   }
 

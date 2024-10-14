@@ -48,9 +48,7 @@ export class AccommodationManagementPageComponent implements OnInit {
         .subscribe((accommodation) => {
           this.accommodations = accommodation;
           this.accommodations.forEach((acc) => {
-            console.log(acc.imageUrls);
             });
-          console.log(accommodation);
         }, (error) => {
           this.snackBar.open('Failed to load accommodations', 'Close', { duration: 3000 });
         });
@@ -59,7 +57,6 @@ export class AccommodationManagementPageComponent implements OnInit {
 
   public viewAccommodation(accommodation: Accommodation): void {
     //TODO: implémenter la page d'appartement
-    console.log(accommodation);
   }
 
   public addAccommodation(): void {
@@ -70,7 +67,6 @@ export class AccommodationManagementPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: Accommodation) => {
       if (result && this.token) {
-        console.log(result);
         this.accommodations.push(result);
       }
     });

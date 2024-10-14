@@ -106,8 +106,6 @@ export class AccommodationPageComponent implements OnInit {
     );
   }
   public expressMyInterestPublicly(accommodationId: string): void {
-    console.log('Showing my interests');
-
     if (!this.user || !this.user.id) {
         alert('Please login to show your interest');
         return;
@@ -136,7 +134,6 @@ export class AccommodationPageComponent implements OnInit {
     this.accommodationsService.incrementViews(accommodationId, this.user.id).subscribe(
       (numViews) => {
         this.accommodation.numViews = numViews;
-        console.log('View count incremented');
       },
       (error) => {
         console.error('Error incrementing views', error);
@@ -148,7 +145,6 @@ export class AccommodationPageComponent implements OnInit {
   public contactLandlord(ownerId: string): void {
     this.accommodationsService.contactLandlord(ownerId).subscribe(
       () => {
-        console.log('Contact request sent to landlord');
       },
       (error) => {
         console.error('Error contacting landlord', error);
@@ -180,7 +176,6 @@ export class AccommodationPageComponent implements OnInit {
           default:
             break;
         }
-        console.log(this.isInUserPrivateInterests, this.isInUserPublicInterests);
       },
       (error: Error) => {
         console.error('Error fetching user interest', error);

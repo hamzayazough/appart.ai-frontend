@@ -50,10 +50,7 @@ export class ImageSliderComponent {
   }
 
   ngOnInit() {
-    console.log('images', this.images);
     this.images.forEach((image, index) => {
-      console.log('image', image.src);
-      console.log('index', index);
     });
     this.startAutoSwitch();
   }

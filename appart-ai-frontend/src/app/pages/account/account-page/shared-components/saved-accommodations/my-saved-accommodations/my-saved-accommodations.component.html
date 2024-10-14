@@ -1,0 +1,30 @@
+<div class="container">
+
+    <app-landing-header></app-landing-header>
+
+    <div class="accommodations-container" *ngIf="savedAccommodations.length > 0; else noAccommodations">
+        <div class="accommodation-card" *ngFor="let accommodation of savedAccommodations">
+        <mat-card class="accommodation-card__mat">
+            <div class="accommodation-image">
+            <img [src]="accommodation.imageUrls[0].src || 'assets/default-image.jpg'" alt="Accommodation image">
+            </div>
+            <div class="accommodation-details">
+            <mat-card-title>{{ accommodation.title }}</mat-card-title>
+            <mat-card-subtitle>{{ accommodation.address.placeName }}, Apartment {{ accommodation.address.apartmentNumber }}</mat-card-subtitle>
+            <p>Price: ${{ accommodation.price }}</p>
+            <p>Bedrooms: {{ accommodation.bedrooms }} | Bathrooms: {{ accommodation.bathrooms }}</p>
+            <mat-card-actions>
+                <button mat-button [routerLink]="['/accommodation', accommodation.id]">View Details</button>
+            </mat-card-actions>
+            </div>
+        </mat-card>
+        </div>
+    </div>
+    
+    <ng-template #noAccommodations>
+        <div class="no-accommodations">
+        <p>No saved accommodations found.</p>
+        </div>
+    </ng-template>
+
+</div>

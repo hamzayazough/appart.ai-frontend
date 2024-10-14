@@ -40,8 +40,7 @@ export class UserService {
   }
 
 
-
-  private getAuthHeaders(token: string): HttpHeaders {
+  public getAuthHeaders(token: string): HttpHeaders {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
