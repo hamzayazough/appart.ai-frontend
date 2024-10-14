@@ -21,7 +21,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MaterialModule } from './material/material.module';
 import { AccountPersonalInfoComponent } from './pages/account/account-page/shared-components/account-personal-info/account-personal-info.component';
 import { AccountContactsComponent } from './pages/account/account-page/shared-components/account-contacts/account-contacts.component';
-import { AccountHobbiesComponent } from './pages/account/account-page/shared-components/account-hobbies/account-hobbies.component';
 import { ConversationsPageComponent } from './pages/conversations-page/conversations-page.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -46,6 +45,7 @@ import { accessToken } from '../assets/tokens/maps';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccommodationMapComponent } from './pages/accommodation-page/accommodation-map/accommodation-map.component';
 import { MapModule } from './pages/accommodation-page/map.module';
+import { AccountPreferencesComponent } from './pages/account/account-page/shared-components/account-preferences/account-preferences.component';
 import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 
 @NgModule({
@@ -57,7 +57,6 @@ import { MySavedAccommodationsComponent } from './pages/account/account-page/sha
     AccountPageComponent,
     AccountPersonalInfoComponent,
     AccountContactsComponent,
-    AccountHobbiesComponent,
     ConversationsPageComponent,
     AccommodationManagementPageComponent,
     AccommodationCreationDialogComponent,
@@ -65,6 +64,7 @@ import { MySavedAccommodationsComponent } from './pages/account/account-page/sha
     AccommodationPageComponent,
     InterestedPeopleDialogComponent,
     AccommodationMapComponent,
+    AccountPreferencesComponent,
     MySavedAccommodationsComponent,
   ],
   imports: [
