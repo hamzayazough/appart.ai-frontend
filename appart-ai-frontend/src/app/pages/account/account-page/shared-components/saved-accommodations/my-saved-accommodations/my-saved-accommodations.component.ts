@@ -21,7 +21,6 @@ export class MySavedAccommodationsComponent implements OnInit {
       if (token && this.userId) {
         this.accommodationService.getSavedAccommodations(this.userId, token).subscribe((accommodations: AccommodationBaseDTO[]) => {
           this.savedAccommodations = accommodations;
-          console.log(accommodations);
         });
       }
     });

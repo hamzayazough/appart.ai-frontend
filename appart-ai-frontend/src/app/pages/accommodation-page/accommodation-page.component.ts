@@ -76,7 +76,6 @@ export class AccommodationPageComponent implements OnInit {
   public createColocationInterest(accommodationId: string): void {
     // this.accommodationsService.createColocationInterest(accommodationId).subscribe(
     //   () => {
-    //     console.log('Colocation interest created');
     //   },
     //   (error) => {
     //     console.error('Error creating colocation interest', error);

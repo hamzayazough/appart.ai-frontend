@@ -82,15 +82,12 @@ export class AccountPreferencesComponent implements OnInit {
       (data: UserPreferences) => {
         if (data) {
           this.userPreferences = data;
-          console.log('User preferences found:', this.userPreferences);
         } else {
-          console.log('No user preferences found');
           alert('No preferences found for this user. Please create new preferences.');
         }
       },
       (error) => {
         if (error.status === 404) {
-          console.log('User preferences not found, error 404');
           alert('User preferences not found. Please create preferences.');
         } else {
           console.error('Error fetching user preferences:', error);
@@ -107,7 +104,6 @@ export class AccountPreferencesComponent implements OnInit {
     }
     this.userService.updateUserPreferences(this.userId, this.userPreferences, this.token).subscribe(
       (data: UserPreferences) => {
-        console.log('Preferences updated successfully', data);
       },
       (error) => {
         console.error('Error updating preferences', error);
@@ -120,14 +116,10 @@ export class AccountPreferencesComponent implements OnInit {
       return;
     }
       
-    console.log("userId", this.userId);
-    console.log("token", this.token);
   
-    console.log(this.userPreferences);
     this.userService.createUserPreferences(this.userPreferences, this.userId, this.token).subscribe(
       (data: UserPreferences) => {
         this.userPreferences = data;
-        console.log('Preferences created successfully', data);
       },
       (error) => {
         console.error('Error creating preferences', error);
