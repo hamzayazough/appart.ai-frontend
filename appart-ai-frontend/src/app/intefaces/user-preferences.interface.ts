@@ -1,9 +1,10 @@
+import { Address } from "./adress.interface";
+
 export interface UserPreferences {
   occupation: string;
-  budget: number;
   pets: boolean;
-  schoolAddress: [number, number];
-  workAddress: [number, number];
+  schoolAddress: Address;
+  workAddress: Address;
   workAddressWeight: number;
   schoolAddressWeight: number;
   minBudget: number;

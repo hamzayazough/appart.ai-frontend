@@ -48,12 +48,14 @@ export class UserService {
   public createUserPreferences(preferences: UserPreferences, userId: string, token: string): Observable<UserPreferences> {
     const url = `${this.baseUrl}/user-preferences/create/${userId}`;
     const headers = this.getAuthHeaders(token);
+    console.log(preferences);
     return this.http.post<UserPreferences>(url, preferences, { headers });
   }
 
   public updateUserPreferences(userId: string, preferences: UserPreferences, token: string): Observable<UserPreferences> {
     const url = `${this.baseUrl}/user-preferences/update/${userId}`;
     const headers = this.getAuthHeaders(token);
+    console.log(preferences);
     return this.http.put<UserPreferences>(url, preferences, { headers });
   }
 

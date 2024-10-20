@@ -5,6 +5,7 @@ import { AppUser } from '../../../../../intefaces/user.interface';
 import { FormControl } from '@angular/forms';
 import { MapBoxService } from '../../../../../services/map-box-service/map-box.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Address } from '../../../../../intefaces/adress.interface';
 
 @Component({
   selector: 'app-account-preferences',
@@ -28,7 +29,6 @@ export class AccountPreferencesComponent implements OnInit {
     this.getUser();
     this.getUserPreferences();
 
-    // Setup address autocomplete for school
     this.schoolAddressControl.valueChanges
       .pipe(
         debounceTime(300),
@@ -38,13 +38,13 @@ export class AccountPreferencesComponent implements OnInit {
         if (value) {
           this.mapboxService.searchPlace(value).subscribe((response: any) => {
             this.schoolAddressSuggestions = response.features;
+            console.log(this.schoolAddressControl);
           });
         } else {
           this.schoolAddressSuggestions = [];
         }
       });
 
-    // Setup address autocomplete for work
     this.workAddressControl.valueChanges
       .pipe(
         debounceTime(300),
@@ -62,17 +62,23 @@ export class AccountPreferencesComponent implements OnInit {
   }
   
 
-  public selectSchoolAddress(suggestion: any) {
-    this.userPreferences.schoolAddress = suggestion.geometry.coordinates;
-    this.schoolAddressControl.setValue(suggestion.place_name);
-    this.schoolAddressSuggestions = [];
+  public selectAddress(suggestion: any, addressType: 'school' | 'work') {
+    const address: Address = {
+      placeName: suggestion.place_name,
+      location: [suggestion.geometry.coordinates[0], suggestion.geometry.coordinates[1]]
+    };
+  
+    if (addressType === 'school') {
+      this.userPreferences.schoolAddress = address;
+      this.schoolAddressControl.setValue(address.placeName);
+      this.schoolAddressSuggestions = [];
+    } else if (addressType === 'work') {
+      this.userPreferences.workAddress = address;
+      this.workAddressControl.setValue(address.placeName);
+      this.workAddressSuggestions = [];
+    }
   }
-
-  public selectWorkAddress(suggestion: any) {
-    this.userPreferences.workAddress = suggestion.geometry.coordinates;
-    this.workAddressControl.setValue(suggestion.place_name);
-    this.workAddressSuggestions = [];
-  }
+  
 
   private getUserPreferences(): void {
     if (!this.userId || !this.token) {
