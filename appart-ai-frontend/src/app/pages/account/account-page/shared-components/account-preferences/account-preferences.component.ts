@@ -18,6 +18,8 @@ export class AccountPreferencesComponent implements OnInit {
   public workAddressControl = new FormControl();
   schoolAddressSuggestions: any[] = [];
   workAddressSuggestions: any[] = [];
+  public showSchoolSuggestions: boolean = false;
+  public showWorkSuggestions: boolean = false;
   private token: string = '';
   private  userId: string | null = null;
 
@@ -28,7 +30,6 @@ export class AccountPreferencesComponent implements OnInit {
   ngOnInit() {
     this.getUser();
     this.getUserPreferences();
-
     this.schoolAddressControl.valueChanges
       .pipe(
         debounceTime(300),
@@ -61,6 +62,17 @@ export class AccountPreferencesComponent implements OnInit {
       });
   }
   
+  hideSchoolSuggestions() {
+    setTimeout(() => {
+      this.showSchoolSuggestions = false;
+    }, 200);
+  }
+
+  hideWorkSuggestions() {
+    setTimeout(() => {
+      this.showWorkSuggestions = false;
+    }, 200);
+  }
 
   public selectAddress(suggestion: any, addressType: 'school' | 'work') {
     const address: Address = {
@@ -88,6 +100,14 @@ export class AccountPreferencesComponent implements OnInit {
       (data: UserPreferences) => {
         if (data) {
           this.userPreferences = data;
+          if (this.userPreferences.schoolAddress) {
+            this.schoolAddressControl.setValue(this.userPreferences.schoolAddress.placeName);
+          }
+        
+          if (this.userPreferences.workAddress) {
+            this.workAddressControl.setValue(this.userPreferences.workAddress.placeName);
+          }
+
         } else {
           alert('No preferences found for this user. Please create new preferences.');
         }

@@ -28,8 +28,15 @@
   
       <div class="form-group">
         <label for="schoolAddress">School Address:</label>
-        <input matInput type="text" [formControl]="schoolAddressControl" placeholder="Enter school address" />
-        <ul *ngIf="schoolAddressSuggestions.length > 0" class="address-suggestions">
+        <input 
+        matInput 
+        type="text" 
+        [formControl]="schoolAddressControl" 
+        placeholder="Enter school address" 
+        (focus)="showSchoolSuggestions = true"
+        (blur)="hideSchoolSuggestions()"
+      />
+        <ul *ngIf="schoolAddressSuggestions.length > 0 && showSchoolSuggestions" class="address-suggestions">
           <li *ngFor="let suggestion of schoolAddressSuggestions" (click)="selectAddress(suggestion, 'school')">
             {{ suggestion.place_name }}
           </li>
@@ -38,8 +45,15 @@
 
       <div class="form-group">
         <label for="workAddress">Work Address:</label>
-        <input matInput type="text" [formControl]="workAddressControl" placeholder="Enter work address" />
-        <ul *ngIf="workAddressSuggestions.length > 0" class="address-suggestions">
+        <input 
+        matInput 
+        type="text" 
+        [formControl]="workAddressControl" 
+        placeholder="Enter work address"
+        (focus)="showWorkSuggestions = true"
+        (blur)="hideWorkSuggestions()"
+      />
+        <ul *ngIf="workAddressSuggestions.length > 0 && showWorkSuggestions" class="address-suggestions">
           <li *ngFor="let suggestion of workAddressSuggestions" (click)="selectAddress(suggestion, 'work')">
             {{ suggestion.place_name }}
           </li>
