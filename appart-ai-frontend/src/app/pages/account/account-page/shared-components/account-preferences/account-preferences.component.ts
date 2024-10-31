@@ -6,6 +6,8 @@ import { FormControl } from '@angular/forms';
 import { MapBoxService } from '../../../../../services/map-box-service/map-box.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Address } from '../../../../../intefaces/adress.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-account-preferences',
@@ -23,7 +25,7 @@ export class AccountPreferencesComponent implements OnInit {
   private token: string = '';
   private  userId: string | null = null;
 
-  constructor(private userService: UserService, private mapboxService: MapBoxService) {
+  constructor(private userService: UserService, private mapboxService: MapBoxService, private dialog: MatDialog) {
   }
 
 
@@ -130,6 +132,7 @@ export class AccountPreferencesComponent implements OnInit {
     }
     this.userService.updateUserPreferences(this.userId, this.userPreferences, this.token).subscribe(
       (data: UserPreferences) => {
+        this.showSuccessDialog();
       },
       (error) => {
         console.error('Error updating preferences', error);
@@ -146,6 +149,7 @@ export class AccountPreferencesComponent implements OnInit {
     this.userService.createUserPreferences(this.userPreferences, this.userId, this.token).subscribe(
       (data: UserPreferences) => {
         this.userPreferences = data;
+        this.showSuccessDialog();
       },
       (error) => {
         console.error('Error creating preferences', error);
@@ -161,5 +165,13 @@ export class AccountPreferencesComponent implements OnInit {
     }
     this.token = token;
     this.userId = storedUser.id ?? '';
+  }
+
+  private showSuccessDialog(): void {
+    const dialogRef = this.dialog.open(SuccessDialogComponent);
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, 3000);
   }
 }
