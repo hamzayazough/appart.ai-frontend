@@ -74,8 +74,8 @@
   <section>
     <h3>Address</h3>
     <app-address-autocomplete 
-      [initialPlaceName]="accommodationForm.get('address.placeName')?.value || ''" 
-      [initialApartmentNumber]="accommodationForm.get('address.apartmentNumber')?.value || ''"
+      [initialPlaceName]="getPlaceName()" 
+      [initialApartmentNumber]="getApartmentNumber()"
       (addressSelected)="onAddressSelected($event)">
     </app-address-autocomplete>
   </section>

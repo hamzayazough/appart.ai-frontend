@@ -73,6 +73,7 @@ export class AccommodationManagementPageComponent implements OnInit {
   }
 
   public editAccommodation(accommodation: Accommodation): void {
+    console.log(accommodation);
     const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
       width: '70%',
       data: { accommodation }

@@ -20,6 +20,7 @@ export class AccommodationCreationDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder, private accommodationService: AccommodationManagingService, private snackBar: MatSnackBar
   ) {
+
     this.accommodationForm = this.fb.group({
       title: [data.accommodation?.title || '', Validators.required],
       rentPrice: [data.accommodation?.rentPrice || '', Validators.required],
@@ -33,9 +34,9 @@ export class AccommodationCreationDialogComponent {
       availabilityStatus: [data.accommodation?.availabilityStatus || 'Available', Validators.required],
 
       address: this.fb.group({
-        placeName: ['', Validators.required],
-        apartmentNumber: [''],
-        location: ['', Validators.required]
+        placeName: [data.accommodation.address.placeName, Validators.required],
+        apartmentNumber: [data.accommodation.address.apartmentNumber ||''],
+        location: [data.accommodation.address.location, Validators.required]
       }),
 
       airConditioning: [data.accommodation?.airConditioning || false],
@@ -54,7 +55,7 @@ export class AccommodationCreationDialogComponent {
     });
   }
 
-  onAddressSelected(address: any): void {
+  public onAddressSelected(address: any): void {
     this.accommodationForm.patchValue({
       address: {
         placeName: address.placeName,
@@ -64,7 +65,7 @@ export class AccommodationCreationDialogComponent {
     });
   }
 
-  onFileSelected(event: any): void {
+  public onFileSelected(event: any): void {
     const files = event.target.files;
 
     for (let i = 0; i < files.length; i++) {
@@ -78,14 +79,26 @@ export class AccommodationCreationDialogComponent {
     }
   }
 
-  removeImage(imagePreview: string): void {
+  public removeImage(imagePreview: string): void {
     const index = this.imagePreviews.indexOf(imagePreview);
     if (index > -1) {
       this.imagePreviews.splice(index, 1);
       this.selectedFiles.splice(index, 1);
     }
   }
-  save(): void {
+
+  public getPlaceName(): string {
+    const placeName = this.accommodationForm.get('address.placeName')?.value;
+    return placeName || '';
+  }
+  
+  public getApartmentNumber(): string {
+    const apartmentNumber = this.accommodationForm.get('address.apartmentNumber')?.value; // Corrected spelling here
+    return apartmentNumber || '';
+  }
+  
+
+  public save(): void {
     if (this.accommodationForm.valid) {
       const accommodation = this.accommodationForm.value;
       const userId: string = localStorage.getItem('userId') || '';
@@ -109,7 +122,7 @@ export class AccommodationCreationDialogComponent {
   }
   
 
-  cancel(): void {
+  public cancel(): void {
     this.dialogRef.close();
   }
 }

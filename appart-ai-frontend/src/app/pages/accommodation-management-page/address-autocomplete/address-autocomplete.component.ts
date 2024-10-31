@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MapBoxService } from '../../../services/map-box-service/map-box.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -13,15 +13,26 @@ export class AddressAutocompleteComponent implements OnInit {
   @Input() initialPlaceName: string | null = '';
   @Input() initialApartmentNumber: string | null = '';
   @Output() addressSelected = new EventEmitter<Address>();
+
   private address: Address = {} as Address;
   addressControl = new FormControl();
+  apartmentNumberControl = new FormControl();
+
   suggestions: any[] = [];
 
   constructor(private mapboxService: MapBoxService) {}
 
   ngOnInit() {
+
     if (this.initialPlaceName) {
       this.addressControl.setValue(this.initialPlaceName);
+      this.address.placeName = this.initialPlaceName;
+    }
+
+    if (this.initialApartmentNumber) {
+      console.log(this.apartmentNumberControl);
+      this.apartmentNumberControl.setValue(this.initialApartmentNumber);
+      this.address.apartmentNumber = this.initialApartmentNumber;
     }
 
     this.addressControl.valueChanges
@@ -39,6 +50,7 @@ export class AddressAutocompleteComponent implements OnInit {
         }
       });
   }
+
 
   selectSuggestion(suggestion: any) {
     const address: Address = {
