@@ -79,4 +79,10 @@ export class PrivateAccommodationService {
     return this.http.get<AccommodationBaseDTO[]>(url, {headers})
   }
 
+  public removeSavedAccommodation(userId: string, accommodationId: string, token: string): Observable<void> {
+    const url = `${this.baseUrl}/saved-accommodations/${userId}`;
+    const headers = this.getAuthHeaders(token);
+    return this.http.delete<void>(`${url}/saved/${accommodationId}`, { headers });
+  }
+
 }

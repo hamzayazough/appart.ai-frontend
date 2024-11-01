@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './my-saved-accommodations.component.scss'
 })
 export class MySavedAccommodationsComponent implements OnInit {
-  public savedAccommodations: AccommodationBaseDTO[] = []
+  public savedAccommodations: AccommodationBaseDTO[] = [];
   private userId: string = "";
 
   constructor(private route: ActivatedRoute, private accommodationService: PrivateAccommodationService){}
@@ -24,5 +24,15 @@ export class MySavedAccommodationsComponent implements OnInit {
         });
       }
     });
+  }
+
+  removeAccommodation(accommodationId: string): void {
+    const token: string | null = localStorage.getItem('token');
+    if (token && this.userId) {
+      this.accommodationService.removeSavedAccommodation(this.userId, accommodationId, token).subscribe(() => {
+        // Mettre à jour la liste des hébergements sauvegardés localement après suppression
+        this.savedAccommodations = this.savedAccommodations.filter(a => a.id !== accommodationId);
+      });
+    }
   }
 }
