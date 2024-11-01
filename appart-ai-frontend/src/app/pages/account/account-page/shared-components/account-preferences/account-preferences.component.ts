@@ -41,7 +41,6 @@ export class AccountPreferencesComponent implements OnInit {
         if (value) {
           this.mapboxService.searchPlace(value).subscribe((response: any) => {
             this.schoolAddressSuggestions = response.features;
-            console.log(this.schoolAddressControl);
           });
         } else {
           this.schoolAddressSuggestions = [];

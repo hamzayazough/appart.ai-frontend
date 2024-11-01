@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppUser } from '../../intefaces/user.interface';
-import { AccommodationCreation, Accommodation } from '../../intefaces/accommodation.interface';
+import { Accommodation } from '../../intefaces/accommodation.interface';
 import { AccommodationManagingService } from '../../services/accommodation-managing/accommodation-managing.service';
 import { AuthenticationService } from '../../services/auth/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -73,7 +73,6 @@ export class AccommodationManagementPageComponent implements OnInit {
   }
 
   public editAccommodation(accommodation: Accommodation): void {
-    console.log(accommodation);
     const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
       width: '70%',
       data: { accommodation }

@@ -30,7 +30,6 @@ export class AddressAutocompleteComponent implements OnInit {
     }
 
     if (this.initialApartmentNumber) {
-      console.log(this.apartmentNumberControl);
       this.apartmentNumberControl.setValue(this.initialApartmentNumber);
       this.address.apartmentNumber = this.initialApartmentNumber;
     }
