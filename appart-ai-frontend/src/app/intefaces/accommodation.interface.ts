@@ -16,7 +16,10 @@ export interface Accommodation {
     numInterestedPublic: number;
     address: Address;
     ownerId: string;
-      
+    ownerName: string;
+    ownerEmail: string;
+    ownerPhone: string;
+
     floorNumber?: number;
     availabilityStatus: string;
     availableFrom: string;

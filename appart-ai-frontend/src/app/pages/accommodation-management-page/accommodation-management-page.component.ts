@@ -60,21 +60,24 @@ export class AccommodationManagementPageComponent implements OnInit {
   }
 
   public addAccommodation(): void {
-    const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
-      width: '70%',
-      data: { isNew: true }
-    });
-
-    dialogRef.afterClosed().subscribe((result: Accommodation) => {
-      if (result && this.token) {
-        this.accommodations.push(result);
-      }
-    });
+    if (this.isProfileValid()){
+      const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
+        width: '70%',
+        data: { isNew: true }
+      });
+  
+      dialogRef.afterClosed().subscribe((result: Accommodation) => {
+        if (result && this.token) {
+          this.accommodations.push(result);
+        }
+      });
+    }
   }
 
   public editAccommodation(accommodation: Accommodation): void {
     const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
       width: '70%',
+      height: '80%',
       data: { accommodation }
     });
 
@@ -101,5 +104,21 @@ export class AccommodationManagementPageComponent implements OnInit {
           this.snackBar.open('Failed to delete accommodation', 'Close', { duration: 3000 });
         });
     }
+  }
+
+  private isProfileValid(): boolean {
+    if (!this.user || !this.user.id) {
+      this.snackBar.open('Please login to create an accommodation', 'Close', { duration: 3000 });
+      return false;
+    }
+    if(this.user.type !== 'landlord') {
+      this.snackBar.open('You must be a landlord to create an accommodation', 'Close', { duration: 3000 });
+      return false;
+    }
+    if(!this.user.phone || !this.user.email) {
+      this.snackBar.open('Please update your profile with a phone number and email to create an accommodation', 'Close', { duration: 3000 });
+      return false;
+    }
+    return true;
   }
 }

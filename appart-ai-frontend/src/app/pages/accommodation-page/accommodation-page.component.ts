@@ -4,10 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { AccommodationsService } from '../../services/accomodations/accomodations.service';
 import { Image, ImageUrl } from '../../intefaces/image.interface';
 import { UserService } from '../../services/user-service/user.service';
-import { AppUser } from '../../intefaces/user.interface';
+import { AppUser, LandlordInfo } from '../../intefaces/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { InterestedPeopleDialogComponent } from '../../dialogs/interested-people-dialog/interested-people-dialog.component';
+import { ContactLandLordComponent } from '../accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 
 
 @Component({
@@ -73,15 +74,6 @@ export class AccommodationPageComponent implements OnInit {
   }
 
 
-  public createColocationInterest(accommodationId: string): void {
-    // this.accommodationsService.createColocationInterest(accommodationId).subscribe(
-    //   () => {
-    //   },
-    //   (error) => {
-    //     console.error('Error creating colocation interest', error);
-    //   }
-    // );
-  }
 
   public addToFavorites(accommodationId: string): void {
     if (!this.user || !this.user.id) {
@@ -140,15 +132,17 @@ export class AccommodationPageComponent implements OnInit {
     );
   }
 
-  // TODO: Antoine
-  public contactLandlord(ownerId: string): void {
-    this.accommodationsService.contactLandlord(ownerId).subscribe(
-      () => {
-      },
-      (error) => {
-        console.error('Error contacting landlord', error);
-      }
-    );
+  public contactLandlord(): void {
+    const landlordInfo: LandlordInfo = {
+      landlordName: this.accommodation.ownerName,
+      landlordEmail: this.accommodation.ownerEmail,
+      landlordPhone: this.accommodation.ownerPhone,
+    };
+    this.dialog.open(ContactLandLordComponent, {
+      data: landlordInfo,
+    });
+  
+    
   }
 
   private getUser(): void {

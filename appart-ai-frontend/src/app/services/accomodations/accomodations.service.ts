@@ -48,10 +48,6 @@ export class AccommodationsService {
     return this.http.post<number>(`${this.apiUrl}/${accommodationId}/${userId}/increment-views`, {});
   }
 
-  public contactLandlord(ownerId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/contact-landlord/${ownerId}`, {});
-  }
-
 
   // TODO: à supprimer par Antoine
   // getNavigations(): Feature {

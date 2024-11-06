@@ -48,6 +48,7 @@ import { MapModule } from './pages/accommodation-page/map.module';
 import { AccountPreferencesComponent } from './pages/account/account-page/shared-components/account-preferences/account-preferences.component';
 import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/success-dialog.component';
+import { ContactLandLordComponent } from './pages/accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/s
     AccountPreferencesComponent,
     MySavedAccommodationsComponent,
     SuccessDialogComponent,
+    ContactLandLordComponent,
   ],
   imports: [
     BrowserModule,

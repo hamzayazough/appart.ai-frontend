@@ -21,6 +21,8 @@
                 </app-image-slider>
             </ng-container>
         </div>
+        <div class="sharethis-inline-share-buttons"></div>
+
         <div class="accommodation-stats">
             <span>{{ accommodation.numViews }} Views</span> | 
             <a (click)="showInterestedPeople()" class="interested-link">{{ numPeopleInterested }} Interested</a>
@@ -44,9 +46,6 @@
                     <mat-icon>bookmark</mat-icon>
                 </button>
             </ng-template>
-            <button class="colocation-btn" (click)="createColocationInterest(accommodation.id)">
-                Share
-            </button>
         </div>
         
         
@@ -132,7 +131,7 @@
         </div>
 
         <div class="accommodation-actions">
-            <button mat-raised-button color="primary" (click)="contactLandlord(accommodation.ownerId)">Contact Landlord</button>
+            <button mat-raised-button color="primary" (click)="contactLandlord()">Contact Landlord</button>
         </div>
     </div>
 </div>  

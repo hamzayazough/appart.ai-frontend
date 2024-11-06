@@ -18,3 +18,9 @@ export interface UserInfo {
     firstName: string,
     lastName: string
 }
+
+export interface LandlordInfo {
+    landlordName: string;
+    landlordEmail: string;
+    landlordPhone: string;
+}
