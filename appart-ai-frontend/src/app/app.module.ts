@@ -49,6 +49,8 @@ import { AccountPreferencesComponent } from './pages/account/account-page/shared
 import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/success-dialog.component';
 import { ContactLandLordComponent } from './pages/accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
+import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,7 @@ import { ContactLandLordComponent } from './pages/accommodation-management-page/
     MySavedAccommodationsComponent,
     SuccessDialogComponent,
     ContactLandLordComponent,
+    RoomatesPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ import { ContactLandLordComponent } from './pages/accommodation-management-page/
     MatGridListModule,
     MatDividerModule,
     MapModule,
+    MatPaginatorModule,
     AuthModule.forRoot({
       domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
       clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',

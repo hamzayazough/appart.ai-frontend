@@ -8,9 +8,13 @@ import { AccommodationManagementPageComponent } from './pages/accommodation-mana
 import { AccommodationPageComponent } from './pages/accommodation-page/accommodation-page.component';
 import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 import { AccountPreferencesComponent } from './pages/account/account-page/shared-components/account-preferences/account-preferences.component';
+import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
+  { path: 'r', component: RoomatesPageComponent },
+  { path: 'r/:id', component: RoomatesPageComponent },
   { path: 'account/:id', component: AccountPageComponent },
+  { path: 'account/:id/r', component: AccountContactsComponent },
   { path: 'account/:id/contacts', component: AccountContactsComponent },
   { path: 'account/:id/saved-accommodations', component: MySavedAccommodationsComponent},
   { path: 'account/:id/accommodations-manager', component: AccommodationManagementPageComponent },

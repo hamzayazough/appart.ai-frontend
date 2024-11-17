@@ -18,13 +18,21 @@
     >
 
     <a
+    class="poppins-thin header-item"
+    [ngClass]="{ selected: selected === selectedHeader.roomates }"
+    (click)="selected = selectedHeader.roomates"  href="/r"
+    ><app-gradient-button [styleOnHover]="true"
+      >Find Roomates</app-gradient-button
+    ></a
+  >
+
+    <!--a
       class="poppins-thin header-item"
       [ngClass]="{ selected: selected === selectedHeader.aboutUs }"
       (click)="selected = selectedHeader.aboutUs"
       ><app-gradient-button [styleOnHover]="true" [width]="150"
         >About us</app-gradient-button
-      ></a
-    >
+      ></a-->
 
     <a
       class="poppins-thin header-item"
