@@ -1,11 +1,20 @@
-<h2>Location</h2>
-<div id="map-container">
+<h2 *ngIf="accommodation">Location</h2>
+<h3 *ngIf="!accommodation">Preference Map</h3>
+<div id="map-container" class="map-container">
   <mgl-map
     [style]="'mapbox://styles/mapbox/streets-v9'"
-    [zoom]="[16]"
-    [center]="accommodation.address.location"
+    [zoom]="accommodation ? [16] : [10]"
+    [center]="accommodation ? accommodation.address.location : [-73.567253, 45.50169]"
     (mapCreate)="onMapLoaded($event)"
     class="map-container"
   >
+    <mgl-draw
+      *ngIf="!accommodation"
+      [draw]="draw"
+      (create)="onDrawCreate($event)"
+      (update)="onDrawUpdate($event)"
+      (delete)="onDrawDelete($event)"
+    ></mgl-draw>
   </mgl-map>
 </div>
+

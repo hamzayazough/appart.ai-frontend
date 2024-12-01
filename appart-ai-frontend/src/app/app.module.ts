@@ -15,7 +15,7 @@ import { LandingHeaderComponent } from './pages/landing/landing-header/landing-h
 import { SharedModule } from './shared/shared.module';
 import { AuthButtonComponent } from './pages/landing/landing-header/components/auth-button/auth-button.component';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AccountPageComponent } from './pages/account/account-page/account-page.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MaterialModule } from './material/material.module';
@@ -51,68 +51,60 @@ import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/s
 import { ContactLandLordComponent } from './pages/accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { PreferenceMapComponent } from './pages/account/account-page/shared-components/account-preferences/preference-map/preference-map.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LandingPageComponent,
-    LandingHeaderComponent,
-    AuthButtonComponent,
-    AccountPageComponent,
-    AccountPersonalInfoComponent,
-    AccountContactsComponent,
-    ConversationsPageComponent,
-    AccommodationManagementPageComponent,
-    AccommodationCreationDialogComponent,
-    AddressAutocompleteComponent,
-    AccommodationPageComponent,
-    InterestedPeopleDialogComponent,
-    AccommodationMapComponent,
-    AccountPreferencesComponent,
-    MySavedAccommodationsComponent,
-    SuccessDialogComponent,
-    ContactLandLordComponent,
-    RoomatesPageComponent,
-    PreferenceMapComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    SharedModule,
-    HammerModule,
-    MaterialModule,
-    MatFormFieldModule,
-    MatSnackBarModule,
-    MatCardModule,
-    MatDialogModule,
-    MatInputModule,
-    FormsModule,
-    CommonModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatIconModule,
-    MatCheckboxModule,
-    MatOptionModule,
-    MatGridListModule,
-    MatDividerModule,
-    MapModule,
-    MatPaginatorModule,
-    AuthModule.forRoot({
-      domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
-      clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
-      authorizationParams: {
-        redirect_uri: window.location.origin,
-      },
-    }),
-    MatSidenavModule,
-    NgxMapboxGLModule.withConfig({
-      accessToken: accessToken,
-    }),
-    HttpClientModule,
-  ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [provideClientHydration(), provideAnimationsAsync()],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LandingPageComponent,
+        LandingHeaderComponent,
+        AuthButtonComponent,
+        AccountPageComponent,
+        AccountPersonalInfoComponent,
+        AccountContactsComponent,
+        ConversationsPageComponent,
+        AccommodationManagementPageComponent,
+        AccommodationCreationDialogComponent,
+        AddressAutocompleteComponent,
+        AccommodationPageComponent,
+        InterestedPeopleDialogComponent,
+        AccommodationMapComponent,
+        AccountPreferencesComponent,
+        MySavedAccommodationsComponent,
+        SuccessDialogComponent,
+        ContactLandLordComponent,
+        RoomatesPageComponent,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        SharedModule,
+        HammerModule,
+        MaterialModule,
+        MatFormFieldModule,
+        MatSnackBarModule,
+        MatCardModule,
+        MatDialogModule,
+        MatInputModule,
+        FormsModule,
+        CommonModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatIconModule,
+        MatCheckboxModule,
+        MatOptionModule,
+        MatGridListModule,
+        MatDividerModule,
+        MapModule,
+        MatPaginatorModule,
+        AuthModule.forRoot({
+            domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
+            clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
+            authorizationParams: {
+                redirect_uri: window.location.origin,
+            },
+        }),
+        MatSidenavModule,
+        NgxMapboxGLModule.withConfig({
+            accessToken: accessToken,
+        })], providers: [provideClientHydration(), provideAnimationsAsync(), provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
