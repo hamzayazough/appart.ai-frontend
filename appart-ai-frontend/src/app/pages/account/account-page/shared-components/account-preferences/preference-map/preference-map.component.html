@@ -1,0 +1,16 @@
+<div id="map-container" class="map-container">
+    <mgl-map
+      [style]="'mapbox://styles/mapbox/streets-v9'"
+      [zoom]="[10]"
+      [center]="[-73.567253, 45.50169]"
+      (mapCreate)="onMapLoaded($event)"
+    >
+      <mgl-draw
+        [draw]="draw"
+        (create)="onDrawCreate($event)"
+        (update)="onDrawUpdate($event)"
+        (delete)="onDrawDelete($event)"
+      ></mgl-draw>
+    </mgl-map>
+  </div>
+  

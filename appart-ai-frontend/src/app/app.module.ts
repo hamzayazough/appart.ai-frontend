@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import {
   BrowserModule,
   HammerModule,
@@ -51,6 +51,7 @@ import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/s
 import { ContactLandLordComponent } from './pages/accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { PreferenceMapComponent } from './pages/account/account-page/shared-components/account-preferences/preference-map/preference-map.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     SuccessDialogComponent,
     ContactLandLordComponent,
     RoomatesPageComponent,
+    PreferenceMapComponent,
   ],
   imports: [
     BrowserModule,
@@ -109,7 +111,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
       accessToken: accessToken,
     }),
     HttpClientModule,
-  ],
+  ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [provideClientHydration(), provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
