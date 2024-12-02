@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccountHobbiesComponent } from './account-hobbies.component';
+import { SuccessDialogComponent } from './success-dialog.component';
 
-describe('AccountHobbiesComponent', () => {
-  let component: AccountHobbiesComponent;
-  let fixture: ComponentFixture<AccountHobbiesComponent>;
+describe('SuccessDialogComponent', () => {
+  let component: SuccessDialogComponent;
+  let fixture: ComponentFixture<SuccessDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AccountHobbiesComponent]
+      declarations: [SuccessDialogComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(AccountHobbiesComponent);
+    fixture = TestBed.createComponent(SuccessDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

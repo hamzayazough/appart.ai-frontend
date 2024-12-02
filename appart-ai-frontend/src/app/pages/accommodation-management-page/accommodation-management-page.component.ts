@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppUser } from '../../intefaces/user.interface';
-import { AccommodationCreation, Accommodation } from '../../intefaces/accommodation.interface';
+import { Accommodation } from '../../intefaces/accommodation.interface';
 import { AccommodationManagingService } from '../../services/accommodation-managing/accommodation-managing.service';
 import { AuthenticationService } from '../../services/auth/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -47,7 +47,8 @@ export class AccommodationManagementPageComponent implements OnInit {
       this.accommodationService.getLandlordAccommodations(this.user.id, this.token)
         .subscribe((accommodation) => {
           this.accommodations = accommodation;
-          console.log(accommodation);
+          this.accommodations.forEach((acc) => {
+            });
         }, (error) => {
           this.snackBar.open('Failed to load accommodations', 'Close', { duration: 3000 });
         });
@@ -56,26 +57,27 @@ export class AccommodationManagementPageComponent implements OnInit {
 
   public viewAccommodation(accommodation: Accommodation): void {
     //TODO: implémenter la page d'appartement
-    console.log(accommodation);
   }
 
   public addAccommodation(): void {
-    const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
-      width: '70%',
-      data: { isNew: true }
-    });
-
-    dialogRef.afterClosed().subscribe((result: Accommodation) => {
-      if (result && this.token) {
-        console.log(result);
-        this.accommodations.push(result);
-      }
-    });
+    if (this.isProfileValid()){
+      const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
+        width: '70%',
+        data: { isNew: true }
+      });
+  
+      dialogRef.afterClosed().subscribe((result: Accommodation) => {
+        if (result && this.token) {
+          this.accommodations.push(result);
+        }
+      });
+    }
   }
 
   public editAccommodation(accommodation: Accommodation): void {
     const dialogRef = this.dialog.open(AccommodationCreationDialogComponent, {
       width: '70%',
+      height: '80%',
       data: { accommodation }
     });
 
@@ -102,5 +104,21 @@ export class AccommodationManagementPageComponent implements OnInit {
           this.snackBar.open('Failed to delete accommodation', 'Close', { duration: 3000 });
         });
     }
+  }
+
+  private isProfileValid(): boolean {
+    if (!this.user || !this.user.id) {
+      this.snackBar.open('Please login to create an accommodation', 'Close', { duration: 3000 });
+      return false;
+    }
+    if(this.user.type !== 'landlord') {
+      this.snackBar.open('You must be a landlord to create an accommodation', 'Close', { duration: 3000 });
+      return false;
+    }
+    if(!this.user.phone || !this.user.email) {
+      this.snackBar.open('Please update your profile with a phone number and email to create an accommodation', 'Close', { duration: 3000 });
+      return false;
+    }
+    return true;
   }
 }

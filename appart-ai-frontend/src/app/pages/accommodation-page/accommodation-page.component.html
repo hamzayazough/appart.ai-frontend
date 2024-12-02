@@ -1,0 +1,138 @@
+<div class="container">
+    <app-landing-header></app-landing-header>
+    <div class="accommodation-container">
+        <div class="accommodation-info-header">
+            <div class="info-text">
+                <h1>{{ accommodation.title }}</h1>
+                <p>{{ accommodation.address.placeName }}</p>
+            </div>
+            <div class="price-info">
+                <strong>{{ accommodation.rentPrice }} $/mois</strong>
+            </div>
+        </div>
+    
+        <div class="accommodation-gallery">
+            <ng-container *ngIf="accommodation.imageUrls.length > 0">
+                <app-image-slider
+                    [images]="convertToImage(accommodation.imageUrls)"
+                    [delayBetweenSwitches]="5000"
+                    [height]="450"
+                    [width]="1000">
+                </app-image-slider>
+            </ng-container>
+        </div>
+        
+        <div class="sharethis-inline-share-buttons"></div>
+
+        <div class="accommodation-stats">
+            <span>{{ accommodation.numViews }} Views</span> | 
+            <a (click)="showInterestedPeople()" class="interested-link">{{ numPeopleInterested }} Interested</a>
+
+            <button class="interest-btn" *ngIf="!isInUserPublicInterests; else isInPublic" (click)="expressMyInterestPublicly(accommodation.id)">
+                 <mat-icon>favorite_border</mat-icon>
+            </button>
+
+            <ng-template #isInPublic>
+                <button class="interest-btn" (click)="expressMyInterestPublicly(accommodation.id)">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+            </ng-template>
+            
+            <button class="favorite-btn" *ngIf="!isInUserPrivateInterests; else isInFavorite" (click)="addToFavorites(accommodation.id)">
+                <mat-icon>bookmark_border</mat-icon>
+            </button>
+
+            <ng-template #isInFavorite>
+                <button class="favorite-btn" (click)="addToFavorites(accommodation.id)">
+                    <mat-icon>bookmark</mat-icon>
+                </button>
+            </ng-template>
+        </div>
+        
+        
+        <div class="accommodation-details">
+            <div class="detail">
+                <strong>Number of Bedrooms:</strong> {{ accommodation.numBeds }}
+            </div>
+            <div class="detail">
+                <strong>Number of Bathrooms:</strong> {{ accommodation.numBathrooms }}
+            </div>
+            <div class="detail">
+                <strong>Square Footage:</strong> {{ accommodation.squareFootage }} sq ft
+            </div>
+            <div class="detail">
+                <strong>Offer Date:</strong> {{ accommodation.offerDate }}
+            </div>
+            <div class="detail">
+                <strong>Availability Status:</strong> {{ accommodation.availabilityStatus }}
+            </div>
+            <div class="detail">
+                <strong>Available From:</strong> {{ accommodation.availableFrom }}
+            </div>
+        </div>
+        
+        <div class="accommodation-description">
+            <mat-card>
+                <h3>Description:</h3>
+                <mat-card-content>
+                    <p>{{ accommodation.description }}</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    
+        <div class="accommodation-pros-cons">
+            <div class="pros">
+                <div class="pros-header">
+                    <h3>Pros</h3>
+                </div>
+                <div class="pros-list">
+                    <ul>
+                        <li *ngIf="accommodation.airConditioning">Air Conditioning</li>
+                        <li *ngIf="accommodation.furnished">Furnished</li>
+                        <li *ngIf="accommodation.utilitiesIncluded">Utilities Included</li>
+                        <li *ngIf="accommodation.dishwasher">Dishwasher</li>
+                        <li *ngIf="accommodation.stainlessSteelAppliances">Stainless Steel Appliances</li>
+                        <li *ngIf="accommodation.patio">Patio</li>
+                        <li *ngIf="accommodation.balcony">Balcony</li>
+                        <li *ngIf="accommodation.refrigerator">Refrigerator</li>
+                        <li *ngIf="accommodation.petsAllowed">Pets Allowed</li>
+                        <li *ngIf="accommodation.smokingAllowed">Smoking Allowed</li>
+                        <li *ngIf="accommodation.gym">Gym</li>
+                        <li *ngIf="accommodation.parkingIncluded">Parking Included</li>
+                        <li *ngIf="accommodation.roommateAccepted">Roommate Accepted</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="cons">
+                <div class="cons-header">
+                    <h3>Cons</h3>
+                </div>
+                <div class="cons-list">
+                    <ul>
+                        <li *ngIf="!accommodation.airConditioning">No Air Conditioning</li>
+                        <li *ngIf="!accommodation.furnished">Not Furnished</li>
+                        <li *ngIf="!accommodation.utilitiesIncluded">No Utilities Included</li>
+                        <li *ngIf="!accommodation.dishwasher">No Dishwasher</li>
+                        <li *ngIf="!accommodation.stainlessSteelAppliances">No Stainless Steel Appliances</li>
+                        <li *ngIf="!accommodation.patio">No Patio</li>
+                        <li *ngIf="!accommodation.balcony">No Balcony</li>
+                        <li *ngIf="!accommodation.refrigerator">No Refrigerator</li>
+                        <li *ngIf="!accommodation.petsAllowed">No Pets Allowed</li>
+                        <li *ngIf="!accommodation.smokingAllowed">No Smoking</li>
+                        <li *ngIf="!accommodation.gym">No Gym</li>
+                        <li *ngIf="!accommodation.parkingIncluded">No Parking Included</li>
+                        <li *ngIf="!accommodation.roommateAccepted">Roommate Not Accepted</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accommodation-location">
+            <app-accommodation-map [accommodation]="accommodation"></app-accommodation-map>
+        </div>
+
+        <div class="accommodation-actions">
+            <button mat-raised-button color="primary" (click)="contactLandlord()">Contact Landlord</button>
+        </div>
+    </div>
+</div>  

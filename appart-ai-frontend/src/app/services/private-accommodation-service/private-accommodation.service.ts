@@ -3,14 +3,14 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AppUser } from '../../intefaces/user.interface';
-import { Accommodation } from '../../intefaces/accommodation.interface';
+import { Accommodation, AccommodationBaseDTO } from '../../intefaces/accommodation.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrivateAccommodationService {
 
-  private apiUrl = '/protected/api/accommodation'
+  private apiUrl: string = '/protected/api/accommodation'
   private baseUrl: string = environment.apiUrl + this.apiUrl;
 
   constructor(private http: HttpClient) { }
@@ -29,7 +29,6 @@ export class PrivateAccommodationService {
       );
   }
 
-  // faut que je me rappel d'incrémenter le nb de viewing et ajouter une relation dans bd
   public getAccommodationDetails(userId: string, accommodationId: string, token: string): Observable<Accommodation> {
     const url = `${this.baseUrl}/${userId}/accommodation/${accommodationId}`;
     const headers = this.getAuthHeaders(token);
@@ -57,7 +56,7 @@ export class PrivateAccommodationService {
   }
 
   public showAccommodationInterestedUsers(accommodationId: string, token: string): Observable<AppUser[]> {
-    const url = `${this.baseUrl}/accommodation/${accommodationId}/interested-users`;
+    const url = `${this.baseUrl}/accommodations/${accommodationId}/interested-users`;
     const headers = this.getAuthHeaders(token);
     return this.http.get<AppUser[]>(url, { headers })
       .pipe(
@@ -70,9 +69,20 @@ export class PrivateAccommodationService {
   }
 
   private handleError(error: any): Observable<never> {
-    // Tu peux personnaliser le traitement des erreurs ici
     console.error('Une erreur est survenue:', error);
     return throwError(() => new Error('Une erreur est survenue; veuillez réessayer plus tard.'));
+  }
+
+  public getSavedAccommodations(userId: string, token: string): Observable<AccommodationBaseDTO[]> {
+    const url = `${this.baseUrl}/saved-accommodations/${userId}`;
+    const headers = this.getAuthHeaders(token);
+    return this.http.get<AccommodationBaseDTO[]>(url, {headers})
+  }
+
+  public removeSavedAccommodation(userId: string, accommodationId: string, token: string): Observable<void> {
+    const url = `${this.baseUrl}/saved-accommodations/${userId}`;
+    const headers = this.getAuthHeaders(token);
+    return this.http.delete<void>(`${url}/saved/${accommodationId}`, { headers });
   }
 
 }

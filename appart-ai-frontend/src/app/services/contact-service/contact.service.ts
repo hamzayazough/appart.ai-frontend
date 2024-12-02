@@ -70,7 +70,6 @@ export class ContactService {
       receiverId: receiverId,
       relationTypeName: relationType
     };
-    console.log(requestPayload);
     return this.http.post<ContactRequest>(url, requestPayload, { headers });
   }
 

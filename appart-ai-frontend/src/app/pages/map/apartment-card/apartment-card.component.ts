@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-apartment-card',
@@ -8,4 +9,10 @@ import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.inter
 })
 export class ApartmentCardComponent {
   @Input() data: AccommodationMatchingDTO = {} as AccommodationMatchingDTO;
+
+  constructor(private route: Router) {}
+
+  public selectAccommodation() {
+    this.route.navigate([`accommodation/${this.data.value.id}`]);
+  }
 }

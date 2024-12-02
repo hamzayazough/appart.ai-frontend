@@ -1,0 +1,16 @@
+<h2>Interested People</h2>
+
+<div class="user-list">
+  <div *ngFor="let user of data.interestedPeople" class="user-card">
+    <img src="https://cdn.icon-icons.com/icons2/2506/PNG/512/user_icon_150670.png" alt="User image" class="user-image" />
+    <div class="user-info">
+      <h3>{{ user.username }}</h3>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p *ngIf="user.phone"><strong>Phone:</strong> {{ user.phone }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="dialog-actions">
+  <button mat-raised-button (click)="closeDialog()">Close</button>
+</div>

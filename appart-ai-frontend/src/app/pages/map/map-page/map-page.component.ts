@@ -19,7 +19,7 @@ export class MapPageComponent {
   @ViewChild('sidebar') sidebar!: MapSidebarComponent;
 
   //delete me
-  navigation: Feature;
+  // navigation: Feature;
 
   pinClasses: PinClass[] = [
     {
@@ -43,11 +43,10 @@ export class MapPageComponent {
   ];
 
   constructor(public accommodationService: AccommodationsService) {
-    this.navigation = accommodationService.getNavigations();
+    // this.navigation = accommodationService.getNavigations();
   }
 
   onMapClick(event: any) {
-    console.log(event);
     const bbox: [PointLike, PointLike] = [
       [event.x - 5, event.y - 5],
       [event.x + 5, event.y + 5],
@@ -56,7 +55,6 @@ export class MapPageComponent {
       layers: this.pinClasses.map((cl) => cl.iconName),
     });
     if (selectedFeatures?.length === 1) {
-      console.log(selectedFeatures);
     }
   }
 

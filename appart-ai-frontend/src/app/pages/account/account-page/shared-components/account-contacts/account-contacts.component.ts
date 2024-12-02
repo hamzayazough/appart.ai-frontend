@@ -57,7 +57,6 @@ export class AccountContactsComponent {
     this.contactService.getContactSuggestions(this.userId, this.token).subscribe(
       (suggestedUsers: UserInfo[]) => {
         this.suggestedUsers = suggestedUsers;
-        console.log('Suggested Users:', this.suggestedUsers);
       },
       (error) => {
         console.error('Error fetching suggested users:', error);
@@ -128,11 +127,9 @@ export class AccountContactsComponent {
     this.contactService.getAllUserContactRequests(this.userId, this.token).subscribe(
       (contactRequests: ContactRequest[]) => {
         this.userContactRequests = contactRequests;
-        console.log(this.userContactRequests);
       },
       (error: Error) => {
         this.userContactRequests = [];
-        console.log("No userContactRequests");
       }
   
   );
@@ -143,11 +140,9 @@ export class AccountContactsComponent {
       
       (contactRequests: ContactRequest[]) => {
         this.receivedContactRequests = contactRequests;
-        console.log(this.receivedContactRequests);
       },
       (error: Error) => {
         this.receivedContactRequests = [];
-        console.log("No receivedContactRequests");
       }
     
     );

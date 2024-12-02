@@ -1,0 +1,59 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    background-color: #e6f2e6;
+  }
+
+
+.accommodations-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .accommodation-card {
+    width: 80%;
+    display: flex;
+    gap: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.2s;
+    max-width: none;
+  }
+  
+  .accommodation-card__mat {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  
+  .accommodation-image {
+    flex: 1;
+  }
+  
+  .accommodation-image img {
+    width: 100%; 
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px 0 0 8px;
+  }
+  
+  .accommodation-details {
+    flex: 3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .no-accommodations {
+    text-align: center;
+    font-size: 1.2em;
+    color: #666;
+    margin-top: 50px;
+  }
+  

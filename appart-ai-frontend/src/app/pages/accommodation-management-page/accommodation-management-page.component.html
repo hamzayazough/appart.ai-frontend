@@ -10,7 +10,7 @@
         <mat-card (click)="viewAccommodation(accommodation)">
           <mat-card-header>
             <img mat-card-avatar *ngIf="accommodation.imageUrls && accommodation.imageUrls.length > 0" 
-                 [src]="accommodation.imageUrls[0]" alt="{{ accommodation.title }}">
+                 [src]="accommodation.imageUrls[0].imageUrl" alt="{{ accommodation.title }}">
             <div class="title-subtitle">
               <mat-card-title>{{ accommodation.title }}</mat-card-title>
               <mat-card-subtitle>{{ accommodation.address.placeName }}, {{ accommodation.rentPrice | currency }}</mat-card-subtitle>

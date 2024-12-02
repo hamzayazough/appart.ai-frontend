@@ -1,0 +1,173 @@
+<app-landing-header></app-landing-header>
+<div class="preferences-container" *ngIf="userPreferences">
+    <h1>User Preferences</h1>
+  
+    <form class="preferences-form" (ngSubmit)="updatePreferences()">
+  
+      <div class="form-group">
+        <label for="occupation">Occupation:</label>
+        <input id="occupation" [(ngModel)]="userPreferences.occupation" name="occupation" required />
+      </div>
+  
+  
+      <div class="form-group">
+        <label for="minBudget">Minimum Budget:</label>
+        <input id="minBudget" type="number" [(ngModel)]="userPreferences.minBudget" name="minBudget" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="maxBudget">Maximum Budget:</label>
+        <input id="maxBudget" type="number" [(ngModel)]="userPreferences.maxBudget" name="maxBudget" required />
+      </div>
+  
+
+      <div class="form-group">
+        <label for="car">Do you own a car?</label>
+        <input id="car" type="checkbox" [(ngModel)]="userPreferences.car" name="car" />
+      </div>
+  
+      <div class="form-group">
+        <label for="schoolAddress">School Address:</label>
+        <input 
+        matInput 
+        type="text" 
+        [formControl]="schoolAddressControl" 
+        placeholder="Enter school address" 
+        (focus)="showSchoolSuggestions = true"
+        (blur)="hideSchoolSuggestions()"
+      />
+        <ul *ngIf="schoolAddressSuggestions.length > 0 && showSchoolSuggestions" class="address-suggestions">
+          <li *ngFor="let suggestion of schoolAddressSuggestions" (click)="selectAddress(suggestion, 'school')">
+            {{ suggestion.place_name }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label for="workAddress">Work Address:</label>
+        <input 
+        matInput 
+        type="text" 
+        [formControl]="workAddressControl" 
+        placeholder="Enter work address"
+        (focus)="showWorkSuggestions = true"
+        (blur)="hideWorkSuggestions()"
+      />
+        <ul *ngIf="workAddressSuggestions.length > 0 && showWorkSuggestions" class="address-suggestions">
+          <li *ngFor="let suggestion of workAddressSuggestions" (click)="selectAddress(suggestion, 'work')">
+            {{ suggestion.place_name }}
+          </li>
+        </ul>
+      </div>
+  
+      <div class="form-group">
+        <label for="schoolAddressWeight">School Address Weight (0-10):</label>
+        <input id="schoolAddressWeight" type="number" min="0" max="10" [(ngModel)]="userPreferences.schoolAddressWeight" name="schoolAddressWeight" />
+      </div>
+  
+  
+      <div class="form-group">
+        <label for="workAddressWeight">Work Address Weight (0-10):</label>
+        <input id="workAddressWeight" type="number" min="0" max="10" [(ngModel)]="userPreferences.workAddressWeight" name="workAddressWeight" />
+      </div>
+  
+      <div class="form-group">
+        <label for="publicTransportationProximity">Public Transportation Proximity (0-10):</label>
+        <input id="publicTransportationProximity" type="number" min="0" max="10" [(ngModel)]="userPreferences.publicTransportationProximity" name="publicTransportationProximity" />
+      </div>
+  
+      <div class="form-group">
+        <label for="parking">Parking Availability (0-10):</label>
+        <input id="parking" type="number" min="0" max="10" [(ngModel)]="userPreferences.parking" name="parking" />
+      </div>
+  
+      <div class="form-group">
+        <label for="groceryStoreProximity">Grocery Store Proximity (0-10):</label>
+        <input id="groceryStoreProximity" type="number" min="0" max="10" [(ngModel)]="userPreferences.groceryStoreProximity" name="groceryStoreProximity" />
+      </div>
+  
+      <div class="form-group">
+        <label for="numBedrooms">Number of Bedrooms:</label>
+        <input id="numBedrooms" type="number" [(ngModel)]="userPreferences.numBedroomMin" name="numBedrooms" />
+      </div>
+  
+      <div class="form-group">
+        <label for="numBathrooms">Number of Bathrooms:</label>
+        <input id="numBathrooms" type="number" [(ngModel)]="userPreferences.numBathroomMin" name="numBathrooms" />
+      </div>
+  
+      <div class="form-group">
+        <label for="minAvailableDate">Minimum Available Date:</label>
+        <input id="minAvailableDate" type="date" [(ngModel)]="userPreferences.minAvailableDate" name="minAvailableDate" />
+      </div>
+  
+      <div class="form-group">
+        <label for="maxAvailableDate">Maximum Available Date:</label>
+        <input id="maxAvailableDate" type="date" [(ngModel)]="userPreferences.maxAvailableDate" name="maxAvailableDate" />
+      </div>
+  
+      <div class="form-group">
+        <label for="airConditioning">Air Conditioning:</label>
+        <input id="airConditioning" type="checkbox" [(ngModel)]="userPreferences.airConditioning" name="airConditioning" />
+      </div>
+  
+      <div class="form-group">
+        <label for="furnished">Furnished:</label>
+        <input id="furnished" type="checkbox" [(ngModel)]="userPreferences.furnished" name="furnished" />
+      </div>
+  
+      <div class="form-group">
+        <label for="utilitiesIncluded">Utilities Included:</label>
+        <input id="utilitiesIncluded" type="checkbox" [(ngModel)]="userPreferences.utilitiesIncluded" name="utilitiesIncluded" />
+      </div>
+  
+      <div class="form-group">
+        <label for="dishwasher">Dishwasher:</label>
+        <input id="dishwasher" type="checkbox" [(ngModel)]="userPreferences.dishwasher" name="dishwasher" />
+      </div>
+  
+      <div class="form-group">
+        <label for="stainlessSteelAppliances">Stainless Steel Appliances:</label>
+        <input id="stainlessSteelAppliances" type="checkbox" [(ngModel)]="userPreferences.stainlessSteelAppliances" name="stainlessSteelAppliances" />
+      </div>
+  
+      <div class="form-group">
+        <label for="patio">Patio:</label>
+        <input id="patio" type="checkbox" [(ngModel)]="userPreferences.patio" name="patio" />
+      </div>
+  
+      <div class="form-group">
+        <label for="balcony">Balcony:</label>
+        <input id="balcony" type="checkbox" [(ngModel)]="userPreferences.balcony" name="balcony" />
+      </div>
+  
+      <div class="form-group">
+        <label for="refrigerator">Refrigerator:</label>
+        <input id="refrigerator" type="checkbox" [(ngModel)]="userPreferences.refrigerator" name="refrigerator" />
+      </div>
+  
+      <div class="form-group">
+        <label for="petsAllowed">Do you have pets?</label>
+        <input id="petsAllowed" type="checkbox" [(ngModel)]="userPreferences.petsAllowed" name="petsAllowed" />
+      </div>
+  
+      <div class="form-group">
+        <label for="smokingAllowed">Do you smoke?</label>
+        <input id="smokingAllowed" type="checkbox" [(ngModel)]="userPreferences.smokingAllowed" name="smokingAllowed" />
+      </div>
+  
+      <div class="form-group">
+        <label for="gymIncluded">Gym Included:</label>
+        <input id="gymIncluded" type="checkbox" [(ngModel)]="userPreferences.gymIncluded" name="gymIncluded" />
+      </div>
+
+      <app-accommodation-map></app-accommodation-map>
+  
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Update Preferences</button>
+        <button type="button" class="btn btn-secondary" (click)="setPreferences()">Create Preferences</button>
+      </div>
+    </form>
+  </div>
+  
+  
