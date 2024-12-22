@@ -51,6 +51,9 @@ import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/s
 import { ContactLandLordComponent } from './pages/accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
+import { EditRoommateRequestComponent } from './pages/roomates-research/roomates-page/edit-roommate-request/edit-roommate-request.component';
+import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -72,6 +75,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         SuccessDialogComponent,
         ContactLandLordComponent,
         RoomatesPageComponent,
+        CreateRoommateRequestComponent,
+        EditRoommateRequestComponent,
+        RoommateSearchingComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

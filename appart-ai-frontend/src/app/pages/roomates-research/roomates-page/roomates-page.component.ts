@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoomateService } from '../../../services/roomate/roomate.service';
 import { UserService } from '../../../services/user-service/user.service';
-import { RoomateRequest, RoomateRequestSummary } from '../../../intefaces/roomate.interface';
+import { RoomatePost } from '../../../intefaces/roomate.interface';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectedHeader } from '../../../enums/selected-header.enum';
+import { RoomatePostInfo } from '../../../intefaces/roomate-post-info.interface';
 
 @Component({
   selector: 'app-roomates-page',
@@ -14,8 +15,8 @@ import { SelectedHeader } from '../../../enums/selected-header.enum';
 export class RoomatesPageComponent implements OnInit {
   public selectedHeader = SelectedHeader.roomates;
   public hasDoneARequest: boolean = false;
-  public roomateRequests: RoomateRequestSummary[] = [];
-  public myRoomateRequest: RoomateRequest | null = null;
+  public roommatePosts: RoomatePostInfo[] = [];
+  public myRoomateRequest: RoomatePost | null = null;
   private token: string | null = localStorage.getItem('token');
   private storedUser = this.userService.getStoredUser();
   public pageSize = 10;
@@ -34,7 +35,7 @@ export class RoomatesPageComponent implements OnInit {
       return;
     }
 
-    this.roomateService.getMyRoomateRequest(this.storedUser.id, this.token).subscribe((myRequest: RoomateRequest | null) => {
+    this.roomateService.getMyRoomateRequest(this.storedUser.id, this.token).subscribe((myRequest: RoomatePost | null) => {
       if (myRequest) {
         this.hasDoneARequest = true;
         this.myRoomateRequest = myRequest;
@@ -45,12 +46,13 @@ export class RoomatesPageComponent implements OnInit {
   }
 
   public loadRoomateRequests(): void {
-    if (!this.token) {
+    const userId = this.storedUser?.id;
+    if (!this.token || !userId) {
       alert("You need to be logged in to do this");
       return;
     }
-    this.roomateService.getRecentRoomateRequests(this.pageIndex, this.pageSize, this.token).subscribe((requests: RoomateRequestSummary[]) => {
-      this.roomateRequests = requests;
+    this.roomateService.getPosts(userId, this.token).subscribe((posts: RoomatePostInfo[]) => {
+      this.roommatePosts = posts;
     });
   }
 
@@ -66,8 +68,11 @@ export class RoomatesPageComponent implements OnInit {
 
   public goToMyRequest(): void {
     if (this.myRoomateRequest) {
-      this.router.navigate([`/r/${this.myRoomateRequest.id}`]);
+      this.roomateService.setMyRoomateRequest(this.myRoomateRequest);
+      this.router.navigate([`/r/${this.myRoomateRequest.userId}`]);
+      return;
     }
+    this.router.navigate([`/r/create-request`]);
   }
 
   public editRequest(): void {

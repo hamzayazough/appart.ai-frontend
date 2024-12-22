@@ -1,127 +1,69 @@
-.container-layout {
-    display: flex;
-    gap: 2rem;
-    padding: 2rem;
-  }
-  
-  .left-column {
-    width: 250px;
-  }
-  
-  .request-card {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+.roommates-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+  .header {
     text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #333;
+    }
   }
-  
-  .request-card h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
-    margin: 1rem 0;
-  }
-  
-  .request-card button {
-    margin-top: 1rem;
-    width: 100%;
-    padding: 0.75rem;
-    background: linear-gradient(45deg, #19cb16, #9bff65);
-    color: white;
-    border-radius: 8px;
-    font-weight: 600;
-  }
-  
-  .request-card button:hover {
-    background: linear-gradient(45deg, #16b014, #72bc4b);
-  }
-  
-  .main-content {
-    flex-grow: 1;
-    max-width: 90%;
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #000;
-    text-align: center;
-    margin-top: 0;
-  }
-  
-  .search-field {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1.5rem auto;
-    max-width: 85%;
-  }
-  
-  .mat-form-field {
-    width: 100%;
-  }
-  
-  .mat-icon-button {
-    color: #008080;
-  }
-  
-  .roomate-request {
-    max-width: 90%;
-    margin: 1rem auto;
-  }
-  
-  mat-card {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 1rem 0;
-    padding: 1rem;
-  }
-  
-  mat-card-title {
-    font-weight: 700;
-    font-size: 1.2rem;
-  }
-  
-  mat-card-subtitle {
-    color: #666;
-    font-size: 0.9rem;
-  }
-  
-  mat-card-content p {
-    font-size: 1rem;
-    color: #444;
-  }
-  
-  mat-button,
-  mat-raised-button {
-    background: linear-gradient(45deg, #00c6ff, #0072ff);
-    color: white;
-    font-weight: 600;
-    text-transform: capitalize;
-    margin: 0.5rem;
-  }
-  
-  mat-button:hover,
-  mat-raised-button:hover {
-    background: linear-gradient(45deg, #0072ff, #00c6ff);
-  }
-  
-  mat-paginator {
-    margin-top: 2rem;
+
+  .options-container {
     display: flex;
     justify-content: center;
+    gap: 30px;
+
+    .option-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        img {
+          transform: translateY(-5px) rotate(10deg);
+          transition: transform 0.4s ease-in-out;
+        }
+      }
+
+      img {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        color: #444;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #666;
+      }
+    }
   }
-  
-  .mat-paginator-page-size {
-    background-color: white;
-    border-radius: 6px;
-    padding: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .edit-container {
+    margin-top: 30px;
+
+    button {
+      font-size: 1rem;
+      padding: 10px 20px;
+    }
   }
-  
-  .mat-paginator-range-label {
-    color: #666;
-  }
-  
+}
