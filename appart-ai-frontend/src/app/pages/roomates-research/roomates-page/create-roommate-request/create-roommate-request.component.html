@@ -1,1 +1,81 @@
-<p>create-roommate-request works!</p>
+<div class="container">
+    <h1 class="title">Create Roommate Request</h1>
+  
+    <form (ngSubmit)="onSubmit()" #roommateForm="ngForm" class="card">
+      <h2>Roommate Request Details</h2>
+  
+      <div class="form-row">
+        <label for="description">Description:</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="roommatePost.description"
+          required
+          placeholder="Enter a brief description of your roommate request"
+          rows="4"
+          maxlength="500"
+        ></textarea>
+      </div>
+  
+      <div class="form-row readonly">
+        <label for="createdAt">Created At:</label>
+        <input
+          id="createdAt"
+          name="createdAt"
+          type="text"
+          [value]="currentDate | date: 'medium'"
+          readonly
+        />
+      </div>
+  
+      <button type="submit" mat-raised-button color="primary" [disabled]="!roommateForm.valid">
+        Submit Request
+      </button>
+    </form>
+  
+  
+    <section class="card">
+      <h2>Your Profile Information</h2>
+      <div class="info-row">
+        <span class="label">Full Name:</span>
+        <span class="value">{{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Username:</span>
+        <span class="value">{{ userInfo?.username }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Phone:</span>
+        <span class="value">{{ userInfo?.phone }}</span>
+      </div>
+    </section>
+  
+    <section class="card">
+      <h2>Your Preferences</h2>
+      <div class="info-row">
+        <span class="label">Occupation:</span>
+        <span class="value">{{ userPreferences?.occupation }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Pets:</span>
+        <span class="value">{{ userPreferences?.pets ? 'Yes' : 'No' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Budget Range:</span>
+        <span class="value">{{ userPreferences?.minBudget }} - {{ userPreferences?.maxBudget }} $</span>
+      </div>
+      <div class="info-row">
+        <span class="label">School Address:</span>
+        <span class="value">{{ userPreferences?.schoolAddress?.placeName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Work Address:</span>
+        <span class="value">{{ userPreferences?.workAddress?.placeName }}</span>
+      </div>
+      <button mat-icon-button class="preferences-btn" (click)="goToUserPreferencesPage()">
+        <mat-icon>visibility</mat-icon>
+        <span>View Full Preferences</span>
+      </button>
+    </section>
+  </div>
+  

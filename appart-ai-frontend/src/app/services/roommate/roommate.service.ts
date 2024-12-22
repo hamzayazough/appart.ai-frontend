@@ -2,40 +2,39 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { UserService } from '../user-service/user.service';
-import { RoomatePost } from '../../intefaces/roomate.interface';
+import { RoommatePost, RoommatePostInfo } from '../../intefaces/roommate.interface';
 import { Observable } from 'rxjs';
 import { UserInfo } from '../../intefaces/user.interface';
-import { RoomatePostInfo } from '../../intefaces/roomate-post-info.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoomateService {
-  private apiUrl = '/protected/api/roomate'
+export class RoommateService {
+  private apiUrl = '/protected/api/roommate'
   private baseUrl: string = environment.apiUrl + this.apiUrl;
-  private myRoomateRequest: RoomatePost | null = null;
+  private myRoommateRequest: RoommatePost | null = null;
 
   constructor(private http: HttpClient, private userService: UserService) {
    }
 
-  getMyRoomateRequest(userId: string, token: string): Observable<RoomatePost | null> {
+  getMyRoommateRequest(userId: string, token: string): Observable<RoommatePost | null> {
     const url = `${this.baseUrl}/user/${userId}/request`;
     const headers = this.userService.getAuthHeaders(token);
-    return this.http.get<RoomatePost | null>(url, { headers });
+    return this.http.get<RoommatePost | null>(url, { headers });
   }
-  addRoomateRequest(roomateRequestDTO: RoomatePost, token: string): Observable<RoomatePost> {
+  addRoommateRequest(roommateRequestDTO: RoommatePost, token: string): Observable<RoommatePost> {
     const url = `${this.baseUrl}/add-request`;
     const headers = this.userService.getAuthHeaders(token);
-    return this.http.post<RoomatePost>(url, roomateRequestDTO, { headers });
+    return this.http.post<RoommatePost>(url, roommateRequestDTO, { headers });
   }
 
-  updateRoomateRequest(requestId: string, roomateRequestDTO: RoomatePost, token: string): Observable<RoomatePost> {
+  updateRoommateRequest(requestId: string, roommateRequestDTO: RoommatePost, token: string): Observable<RoommatePost> {
     const url = `${this.baseUrl}/update-request/${requestId}`;
     const headers = this.userService.getAuthHeaders(token);
-    return this.http.patch<RoomatePost>(url, roomateRequestDTO, { headers });
+    return this.http.patch<RoommatePost>(url, roommateRequestDTO, { headers });
   }
 
-  deleteRoomateRequest(requestId: string, token: string): Observable<void> {
+  deleteRoommateRequest(requestId: string, token: string): Observable<void> {
     const url = `${this.baseUrl}/delete-request/${requestId}`;
     const headers = this.userService.getAuthHeaders(token);
     return this.http.delete<void>(url, { headers });
@@ -52,10 +51,10 @@ export class RoomateService {
     return this.http.get<UserInfo[]>(url, { headers });
   }
 
-  getPosts(userId: string, token: string, limit: number = 10, lastPostId?: string): Observable<RoomatePostInfo[]> {
+  getPosts(userId: string, token: string, limit: number = 10, lastPostId?: string): Observable<RoommatePostInfo[]> {
     const url = `${this.baseUrl}/posts?userId=${userId}&limit=${limit}${lastPostId ? `&lastPostId=${lastPostId}` : ''}`;
     const headers = this.userService.getAuthHeaders(token);
-    return this.http.get<RoomatePostInfo[]>(url, { headers });
+    return this.http.get<RoommatePostInfo[]>(url, { headers });
   }
 
   swipe(userId: string, postId: string, swipeType: string, token: string): Observable<void> {
@@ -64,14 +63,14 @@ export class RoomateService {
     return this.http.post<void>(url, null, { headers });
   }
 
-  getNextPosts(userId: string, token: string, limit: number = 10): Observable<RoomatePostInfo[]> {
+  getNextPosts(userId: string, token: string, limit: number = 10): Observable<RoommatePostInfo[]> {
     const url = `${this.baseUrl}/next-posts?userId=${userId}&limit=${limit}`;
     const headers = this.userService.getAuthHeaders(token);
-    return this.http.get<RoomatePostInfo[]>(url, { headers });
+    return this.http.get<RoommatePostInfo[]>(url, { headers });
   }
 
-  setMyRoomateRequest(myRequest: RoomatePost): void {
-    this.myRoomateRequest = myRequest;
+  setMyRoommateRequest(myRequest: RoommatePost): void {
+    this.myRoommateRequest = myRequest;
   }
   
 }

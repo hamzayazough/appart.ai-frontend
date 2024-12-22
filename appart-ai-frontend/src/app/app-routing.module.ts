@@ -8,7 +8,7 @@ import { AccommodationManagementPageComponent } from './pages/accommodation-mana
 import { AccommodationPageComponent } from './pages/accommodation-page/accommodation-page.component';
 import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 import { AccountPreferencesComponent } from './pages/account/account-page/shared-components/account-preferences/account-preferences.component';
-import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
+import { RoommatesPageComponent } from './pages/roomates-research/roomates-page/roommates-page.component';
 import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
 import { EditRoommateRequestComponent } from './pages/roomates-research/roomates-page/edit-roommate-request/edit-roommate-request.component';
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
   {
     path: 'r',
-    component: RoomatesPageComponent,
+    component: RoommatesPageComponent,
     children: [
       { path: 'create-post', component: CreateRoommateRequestComponent },
       { path: 'edit/:id', component: EditRoommateRequestComponent },
