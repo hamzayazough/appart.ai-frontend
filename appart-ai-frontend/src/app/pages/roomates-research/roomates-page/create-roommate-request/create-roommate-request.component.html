@@ -17,6 +17,30 @@
         ></textarea>
       </div>
   
+      <div class="form-row">
+        <label for="preferredNumberRoommate">Preferred Number of Roommates:</label>
+        <input
+          id="preferredNumberRoommate"
+          name="preferredNumberRoommate"
+          type="number"
+          [(ngModel)]="roommatePost.preferredNumberRoommate"
+          required
+          min="1"
+          placeholder="Enter the number of roommates you'd prefer"
+        />
+      </div>
+  
+      <div class="form-row">
+        <label for="isActive">Active Request:</label>
+        <input
+          id="isActive"
+          name="isActive"
+          type="checkbox"
+          [(ngModel)]="roommatePost.isActive"
+        />
+        <span class="checkbox-label">Mark this request as active</span>
+      </div>
+  
       <div class="form-row readonly">
         <label for="createdAt">Created At:</label>
         <input

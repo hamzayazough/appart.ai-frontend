@@ -83,7 +83,12 @@ export class CreateRoommateRequestComponent implements OnInit {
     }
     this.userService.getUserPreferences(user.id, token).subscribe(
       (preferences) => {
-        this.userPreferences = preferences;
+        if (preferences) {
+          this.userPreferences = preferences;
+        } else {
+          console.warn('No preferences found for user.');
+          this.userPreferences = null;
+        }
       },
       (error) => {
         console.error('Error fetching user preferences:', error);
