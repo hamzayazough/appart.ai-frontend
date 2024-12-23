@@ -1,1 +1,37 @@
-<p>roommate-searching works!</p>
+<div class="container">
+    <h1 class="title">Roommate Matching</h1>
+  
+    <div *ngIf="currentPost; else noPosts" class="card">
+      <div class="post-info">
+        <h2>Roommate Information</h2>
+        <p><strong>Description:</strong> {{ currentPost.roommatePost.description }}</p>
+        <p><strong>Preferred Roommates:</strong> {{ currentPost.roommatePost.numberPreferredRoommates }}</p>
+        <p><strong>Status:</strong> {{ currentPost.roommatePost.active ? 'Active' : 'Inactive' }}</p>
+        <p><strong>Created At:</strong> {{ currentPost.roommatePost.createdAt | date: 'medium' }}</p>
+      </div>
+  
+      <div class="user-info">
+        <h2>User Information</h2>
+        <p><strong>Full Name:</strong> {{ currentPost.userInfo.firstName }} {{ currentPost.userInfo.lastName }}</p>
+        <p><strong>Username:</strong> {{ currentPost.userInfo.username }}</p>
+        <p><strong>Phone:</strong> {{ currentPost.userInfo.phone }}</p>
+      </div>
+  
+      <div class="preferences-info">
+        <h2>Preferences</h2>
+        <div *ngFor="let key of preferenceKeys">
+          <p><strong>{{ key.label }}:</strong> {{ key.value }}</p>
+        </div>
+      </div>
+  
+      <div class="actions">
+        <button mat-raised-button color="warn" (click)="swipe('dislike')">Dislike</button>
+        <button mat-raised-button color="primary" (click)="swipe('like')">Like</button>
+      </div>
+    </div>
+  
+    <ng-template #noPosts>
+      <p class="no-posts">No roommate posts available.</p>
+    </ng-template>
+  </div>
+  

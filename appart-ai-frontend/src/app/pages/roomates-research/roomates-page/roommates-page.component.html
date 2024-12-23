@@ -9,7 +9,7 @@
     </div>
   
     <div class="options-container">
-      <div class="option-card" (click)="loadRoommateRequests()">
+      <div class="option-card" (click)="searchRoommates()">
         <img src="./../../../../assets/images/roommate-icon.png" alt="Search Roommates">
         <h2>Search for Roommates</h2>
         <p>Browse roommate requests and find the perfect match for you.</p>
@@ -20,10 +20,6 @@
         <h2>My Roommate Request</h2>
         <p>View or edit the request you’ve already submitted.</p>
       </div>
-    </div>
-  
-    <div *ngIf="hasDoneARequest" class="edit-container">
-      <button mat-raised-button color="primary" (click)="editRequest()">Edit My Request</button>
     </div>
   </div>  
 }

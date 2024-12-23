@@ -4,7 +4,6 @@ import { environment } from '../../environments/environment';
 import { UserService } from '../user-service/user.service';
 import { RoommatePost, RoommatePostInfo } from '../../intefaces/roommate.interface';
 import { Observable } from 'rxjs';
-import { UserInfo } from '../../intefaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,6 @@ import { UserInfo } from '../../intefaces/user.interface';
 export class RoommateService {
   private apiUrl = '/protected/api/roommate'
   private baseUrl: string = environment.apiUrl + this.apiUrl;
-  private myRoommateRequest: RoommatePost | null = null;
 
   constructor(private http: HttpClient, private userService: UserService) {
    }
@@ -53,20 +51,11 @@ export class RoommateService {
     return this.http.post<void>(url, null, { headers });
   }
 
-  getNextPosts(userId: string, token: string, limit: number = 10): Observable<RoommatePostInfo[]> {
-    const url = `${this.baseUrl}/next-posts?userId=${userId}&limit=${limit}`;
-    const headers = this.userService.getAuthHeaders(token);
-    return this.http.get<RoommatePostInfo[]>(url, { headers });
-  }
 
   updateRoommateRequestStatus(requestId: string, isActive: boolean, token: string): Observable<void> {
     const url = `${this.baseUrl}/update-status/${requestId}`;
     const headers = this.userService.getAuthHeaders(token);
     return this.http.patch<void>(url, { isActive }, { headers });
-  }
-  
-  setMyRoommateRequest(myRequest: RoommatePost): void {
-    this.myRoommateRequest = myRequest;
   }
   
 }

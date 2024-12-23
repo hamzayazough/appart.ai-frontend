@@ -18,7 +18,7 @@ const routes: Routes = [
     component: RoommatesPageComponent,
     children: [
       { path: 'create-post', component: CreateRoommateRequestComponent },
-      { path: 'research/', component: RoommateSearchingComponent },
+      { path: 'research', component: RoommateSearchingComponent },
       { path: 'research/:id', component: RoommateSearchingComponent }
     ]
   },

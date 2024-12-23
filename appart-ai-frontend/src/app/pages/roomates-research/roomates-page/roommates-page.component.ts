@@ -13,16 +13,12 @@ import { filter } from 'rxjs';
 })
 export class RoommatesPageComponent implements OnInit {
   public selectedHeader = SelectedHeader.roommates;
-  public hasDoneARequest: boolean = false;
   public hasChildRoute: boolean = false;
-  public roommatePosts: RoommatePostInfo[] = [];
-  public myRoommateRequest: RoommatePost | null = null;
   private token: string | null = localStorage.getItem('token');
   private storedUser = this.userService.getStoredUser();
 
 
   constructor(
-    private roommateService: RoommateService,
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute
@@ -41,37 +37,17 @@ export class RoommatesPageComponent implements OnInit {
     });
   }
 
-  public loadRoommateRequests(): void {
-    const userId = this.storedUser?.id;
-    if (!this.token || !userId) {
-      alert("You need to be logged in to do this");
-      return;
-    }
-    this.roommateService.getPosts(userId, this.token).subscribe((posts: RoommatePostInfo[]) => {
-      this.roommatePosts = posts;
-    });
+  public searchRoommates(): void {
+    console.log('searchRoommates');
+    this.router.navigate([`/r/research`]);
   }
 
 
   public goToMyRequest(): void {
-    if (this.myRoommateRequest) {
-      this.roommateService.setMyRoommateRequest(this.myRoommateRequest);
-      this.router.navigate([`/r/edit/${this.myRoommateRequest.userId}`]);
-      return;
-    }
     this.router.navigate([`/r/create-post`]);
   }
 
-  public editRequest(): void {
-    if(!this.token ||!this.storedUser?.id) {
-      return;
-    }
-    this.router.navigate(['/r/edit/{this.storedUser.id}']);
-  }
 
-  public viewRequestDetails(requestId: string): void {
-    this.router.navigate([`/r/${requestId}`]);
-  }
 
   private updateHasChildRoute(): void {
     this.hasChildRoute = !!this.route.firstChild;
