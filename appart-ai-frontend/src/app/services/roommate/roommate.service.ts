@@ -39,17 +39,7 @@ export class RoommateService {
     const headers = this.userService.getAuthHeaders(token);
     return this.http.delete<void>(url, { headers });
   }
-  addInterest(requestId: string, userId: string, token: string): Observable<void> {
-    const url = `${this.baseUrl}/${requestId}/interest?userId=${userId}`;
-    const headers = this.userService.getAuthHeaders(token);
-    return this.http.post<void>(url, null, { headers });
-  }
 
-  getInterestedUsers(requestId: string, token: string): Observable<UserInfo[]> {
-    const url = `${this.baseUrl}/${requestId}/interested-users`;
-    const headers = this.userService.getAuthHeaders(token);
-    return this.http.get<UserInfo[]>(url, { headers });
-  }
 
   getPosts(userId: string, token: string, limit: number = 10, lastPostId?: string): Observable<RoommatePostInfo[]> {
     const url = `${this.baseUrl}/posts?userId=${userId}&limit=${limit}${lastPostId ? `&lastPostId=${lastPostId}` : ''}`;
@@ -69,6 +59,12 @@ export class RoommateService {
     return this.http.get<RoommatePostInfo[]>(url, { headers });
   }
 
+  updateRoommateRequestStatus(requestId: string, isActive: boolean, token: string): Observable<void> {
+    const url = `${this.baseUrl}/update-status/${requestId}`;
+    const headers = this.userService.getAuthHeaders(token);
+    return this.http.patch<void>(url, { isActive }, { headers });
+  }
+  
   setMyRoommateRequest(myRequest: RoommatePost): void {
     this.myRoommateRequest = myRequest;
   }

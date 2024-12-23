@@ -52,7 +52,6 @@ import { ContactLandLordComponent } from './pages/accommodation-management-page/
 import { RoommatesPageComponent } from './pages/roomates-research/roomates-page/roommates-page.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
-import { EditRoommateRequestComponent } from './pages/roomates-research/roomates-page/edit-roommate-request/edit-roommate-request.component';
 import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
 
 @NgModule({ declarations: [
@@ -76,7 +75,6 @@ import { RoommateSearchingComponent } from './pages/roomates-research/roomates-p
         ContactLandLordComponent,
         RoommatesPageComponent,
         CreateRoommateRequestComponent,
-        EditRoommateRequestComponent,
         RoommateSearchingComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

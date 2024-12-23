@@ -1,105 +1,101 @@
 <div class="container">
-    <h1 class="title">Create Roommate Request</h1>
+  <h1 class="title">
+    {{ isEditMode ? 'Edit Roommate Request' : 'Create Roommate Request' }}
+  </h1>
   
-    <form (ngSubmit)="onSubmit()" #roommateForm="ngForm" class="card">
-      <h2>Roommate Request Details</h2>
-  
-      <div class="form-row">
-        <label for="description">Description:</label>
-        <textarea
-          id="description"
-          name="description"
-          [(ngModel)]="roommatePost.description"
-          required
-          placeholder="Enter a brief description of your roommate request"
-          rows="4"
-          maxlength="500"
-        ></textarea>
-      </div>
-  
-      <div class="form-row">
-        <label for="preferredNumberRoommate">Preferred Number of Roommates:</label>
-        <input
-          id="preferredNumberRoommate"
-          name="preferredNumberRoommate"
-          type="number"
-          [(ngModel)]="roommatePost.preferredNumberRoommate"
-          required
-          min="1"
-          placeholder="Enter the number of roommates you'd prefer"
-        />
-      </div>
-  
-      <div class="form-row">
-        <label for="isActive">Active Request:</label>
-        <input
-          id="isActive"
-          name="isActive"
-          type="checkbox"
-          [(ngModel)]="roommatePost.isActive"
-        />
-        <span class="checkbox-label">Mark this request as active</span>
-      </div>
-  
-      <div class="form-row readonly">
-        <label for="createdAt">Created At:</label>
-        <input
-          id="createdAt"
-          name="createdAt"
-          type="text"
-          [value]="currentDate | date: 'medium'"
-          readonly
-        />
-      </div>
-  
-      <button type="submit" mat-raised-button color="primary" [disabled]="!roommateForm.valid">
-        Submit Request
+  <form (ngSubmit)="onSubmit()" #roommateForm="ngForm" class="card request-form">
+    <h2>Roommate Request Details</h2>
+
+    <div class="form-row">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="roommatePost.description"
+        required
+        placeholder="Enter a brief description of your roommate request"
+        rows="4"
+        maxlength="500"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <label for="numberPreferredRoommates">Preferred Number of Roommates:</label>
+      <input
+        id="numberPreferredRoommates"
+        name="numberPreferredRoommates"
+        type="number"
+        [(ngModel)]="roommatePost.numberPreferredRoommates"
+        required
+        min="1"
+        placeholder="Enter the number of roommates you'd prefer"
+      />
+    </div>
+
+
+    <div class="form-row readonly">
+      <label for="createdAt">Created At:</label>
+      <input
+        id="createdAt"
+        name="createdAt"
+        type="text"
+        [value]="currentDate | date: 'medium'"
+        readonly
+      />
+    </div>
+
+    <div class="button-container">
+      <button
+        *ngIf="roommatePost && roommatePost.id"
+        type="button"
+        mat-raised-button
+        [color]="roommatePost.active ? 'warn' : 'primary'"
+        (click)="toggleRequestStatus()"
+        class="toggle-request-btn"
+      >
+        {{ roommatePost.active ? 'Deactivate My Request' : 'Activate My Request' }}
       </button>
-    </form>
-  
-  
-    <section class="card">
-      <h2>Your Profile Information</h2>
-      <div class="info-row">
-        <span class="label">Full Name:</span>
-        <span class="value">{{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
+      <button
+        type="submit"
+        mat-raised-button
+        [disabled]="!roommateForm.valid"
+        class="submit-request-btn"
+      >
+      {{ isEditMode ? 'Edit Request' : 'Create Request' }}
+    </button>
+    </div>
+    
+  </form>
+
+  <section class="card profile-info">
+    <h2>Your Profile Information</h2>
+    <div class="info-row">
+      <span class="label">Full Name:</span>
+      <span class="value">{{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Username:</span>
+      <span class="value">{{ userInfo?.username }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Phone:</span>
+      <span class="value">{{ userInfo?.phone }}</span>
+    </div>
+  </section>
+
+  <section class="card preferences-info">
+    <h2>Your Preferences</h2>
+    <div *ngIf="userPreferences; else noPreferences">
+      <div class="info-row" *ngFor="let pref of userPreferencesKeys">
+        <span class="label">{{ pref.label }}:</span>
+        <span class="value">{{ pref.value }}</span>
       </div>
-      <div class="info-row">
-        <span class="label">Username:</span>
-        <span class="value">{{ userInfo?.username }}</span>
+    </div>
+    <ng-template #noPreferences>
+      <div class="no-preferences">
+        <p>You haven’t set your preferences yet. Please define them for better results.</p>
+        <button mat-button color="accent" (click)="goToUserPreferencesPage()">Set Preferences</button>
       </div>
-      <div class="info-row">
-        <span class="label">Phone:</span>
-        <span class="value">{{ userInfo?.phone }}</span>
-      </div>
-    </section>
-  
-    <section class="card">
-      <h2>Your Preferences</h2>
-      <div class="info-row">
-        <span class="label">Occupation:</span>
-        <span class="value">{{ userPreferences?.occupation }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Pets:</span>
-        <span class="value">{{ userPreferences?.pets ? 'Yes' : 'No' }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Budget Range:</span>
-        <span class="value">{{ userPreferences?.minBudget }} - {{ userPreferences?.maxBudget }} $</span>
-      </div>
-      <div class="info-row">
-        <span class="label">School Address:</span>
-        <span class="value">{{ userPreferences?.schoolAddress?.placeName }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Work Address:</span>
-        <span class="value">{{ userPreferences?.workAddress?.placeName }}</span>
-      </div>
-      <button mat-icon-button class="preferences-btn" (click)="goToUserPreferencesPage()">
-        <mat-icon>visibility</mat-icon>
-        <span>View Full Preferences</span>
-      </button>
-    </section>
-  </div>
-  
+    </ng-template>
+  </section>
+</div>

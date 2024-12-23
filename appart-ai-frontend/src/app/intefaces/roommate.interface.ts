@@ -2,20 +2,17 @@ import { UserPreferences } from "./user-preferences.interface";
 import { UserInfo } from "./user.interface";
 
 export interface RoommatePostInfo {
-  id: string;
-  description: string;
-  preferredNumberRoommate: number;
-  createdAt: Date;
+  roommatePost: RoommatePost;
   userPreferences: UserPreferences;
   userInfo: UserInfo;
 }
 
 export interface RoommatePost {
-id: string;
+id?: string;
 userId: string;
 description: string;
-preferredNumberRoommate: number;
-isActive: boolean;
+numberPreferredRoommates: number;
+active: boolean;
 createdAt: Date;
 }
   

@@ -10,7 +10,6 @@ import { MySavedAccommodationsComponent } from './pages/account/account-page/sha
 import { AccountPreferencesComponent } from './pages/account/account-page/shared-components/account-preferences/account-preferences.component';
 import { RoommatesPageComponent } from './pages/roomates-research/roomates-page/roommates-page.component';
 import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
-import { EditRoommateRequestComponent } from './pages/roomates-research/roomates-page/edit-roommate-request/edit-roommate-request.component';
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
@@ -19,7 +18,7 @@ const routes: Routes = [
     component: RoommatesPageComponent,
     children: [
       { path: 'create-post', component: CreateRoommateRequestComponent },
-      { path: 'edit/:id', component: EditRoommateRequestComponent },
+      { path: 'research/', component: RoommateSearchingComponent },
       { path: 'research/:id', component: RoommateSearchingComponent }
     ]
   },
