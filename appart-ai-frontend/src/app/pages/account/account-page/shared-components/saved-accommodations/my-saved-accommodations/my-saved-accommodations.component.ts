@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AccommodationBaseDTO } from '../../../../../../intefaces/accommodation.interface';
 import { PrivateAccommodationService } from '../../../../../../services/private-accommodation-service/private-accommodation.service';
 import { ActivatedRoute } from '@angular/router';
+import { TokenService } from '../../../../../../services/token-service/token.service';
+import { of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-my-saved-accommodations',
@@ -10,29 +12,42 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class MySavedAccommodationsComponent implements OnInit {
   public savedAccommodations: AccommodationBaseDTO[] = [];
-  private userId: string = "";
+  private userId: string = '';
 
-  constructor(private route: ActivatedRoute, private accommodationService: PrivateAccommodationService){}
+  constructor(
+    private route: ActivatedRoute,
+    private accommodationService: PrivateAccommodationService,
+  ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.userId = params['id'];
-      const token: string | null = localStorage.getItem('token');
-      if (token && this.userId) {
-        this.accommodationService.getSavedAccommodations(this.userId, token).subscribe((accommodations: AccommodationBaseDTO[]) => {
-          this.savedAccommodations = accommodations;
-        });
-      }
-    });
-  }
-
-  removeAccommodation(accommodationId: string): void {
-    const token: string | null = localStorage.getItem('token');
-    if (token && this.userId) {
-      this.accommodationService.removeSavedAccommodation(this.userId, accommodationId, token).subscribe(() => {
-        // Mettre à jour la liste des hébergements sauvegardés localement après suppression
-        this.savedAccommodations = this.savedAccommodations.filter(a => a.id !== accommodationId);
+    this.route.params
+      .pipe(
+        switchMap((params) => {
+          this.userId = params['id'];
+          return this.userId ? this.accommodationService.getSavedAccommodations(this.userId) : of([]);
+        })
+      )
+      .subscribe({
+        next: (accommodations) => (this.savedAccommodations = accommodations),
+        error: (err) => {
+          console.error('Error fetching saved accommodations:', err);
+          alert('Failed to load saved accommodations. Please try again later.');
+        },
       });
-    }
+  }
+  
+  removeAccommodation(accommodationId: string): void {
+      if (this.userId) {
+        this.accommodationService.removeSavedAccommodation(this.userId, accommodationId).subscribe({
+          next: () => {
+            this.savedAccommodations = this.savedAccommodations.filter((a) => a.id !== accommodationId);
+            alert('Accommodation removed successfully.');
+          },
+          error: (err) => {
+            console.error('Error removing accommodation:', err);
+            alert('Failed to remove accommodation. Please try again.');
+          },
+        });
+      };
   }
 }

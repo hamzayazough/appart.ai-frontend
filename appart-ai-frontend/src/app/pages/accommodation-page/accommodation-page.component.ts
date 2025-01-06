@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { InterestedPeopleDialogComponent } from '../../dialogs/interested-people-dialog/interested-people-dialog.component';
 import { ContactLandLordComponent } from '../accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
+import { AuthenticationService } from '../../services/auth/authentication.service';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class AccommodationPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private accommodationsService: AccommodationsService,
-    private userService: UserService,
+    private authService: AuthenticationService,
     private snack: MatSnackBar,
     private dialog: MatDialog
   ) {}
@@ -146,7 +147,9 @@ export class AccommodationPageComponent implements OnInit {
   }
 
   private getUser(): void {
-    this.user =  this.userService.getStoredUser();
+    this.authService.loggedUser.subscribe((user) => {
+      this.user = user;
+    });
   }
 
   private getUserInterest(): void {

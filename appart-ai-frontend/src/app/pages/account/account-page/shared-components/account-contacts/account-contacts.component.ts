@@ -1,50 +1,63 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SelectedHeader } from '../../../../../enums/selected-header.enum';
 import { ContactService } from '../../../../../services/contact-service/contact.service';
 import { AppUser, UserInfo } from '../../../../../intefaces/user.interface';
 import { Contact, ContactRequest } from '../../../../../intefaces/contact.interface';
-import { error } from 'console';
+import { TokenService } from '../../../../../services/token-service/token.service';
+import { UserService } from '../../../../../services/user-service/user.service';
+import { AuthenticationService } from '../../../../../services/auth/authentication.service';
 
 @Component({
   selector: 'app-account-contacts',
   templateUrl: './account-contacts.component.html',
   styleUrls: ['./account-contacts.component.scss']
 })
-export class AccountContactsComponent {
+export class AccountContactsComponent implements OnInit {
   public selectedHeader = SelectedHeader.myProfile;
   public user: AppUser = {} as AppUser;
-  public userId: string = "";
+  public userId: string = '';
   public contacts: Contact[] = [];
   public userContactRequests: ContactRequest[] = [];
   public receivedContactRequests: ContactRequest[] = [];
   public suggestedUsers: UserInfo[] = [];
-  private token: string = '';
 
-  constructor(private contactService: ContactService){
-    this.getUser();
+  constructor(
+    private contactService: ContactService,
+    private authService: AuthenticationService
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    await this.initializeData();
+  }
+
+  private async initializeData(): Promise<void> {
+    try {
+      this.authService.loggedUser.subscribe((user) => {
+        this.user = user;
+        this.userId = user.id || '';
+        if(!this.userId){
+          alert('You must be logged in to access your contacts');
+          return;
+        }
+      });
+
+      this.loadAllContacts();
+    } catch (error) {
+      console.error('Error initializing data:', error);
+    }
+  }
+
+  private loadAllContacts(): void {
     this.getAllUserContact();
     this.getAllUserContactRequests();
     this.getReceivedContactRequests();
   }
 
-  private getUser(): void {
-    const token: string | null = localStorage.getItem('token');
-    const storedUser: AppUser | null = this.contactService.getUser();
-    if (!token || !storedUser) {
-      alert("Attention, veuillez vous identifier pour accéder à cette page!");
-      return;
-    }
-    this.token = token;
-    this.user = storedUser;
-    this.userId = this.user.id ?? "";
-  }
-
   public sendContactRequest(receiverId: string): void {
     const relationType = 'friend';
-    this.contactService.sendContactRequest(this.userId, receiverId, relationType, this.token).subscribe(
+    this.contactService.sendContactRequest(this.userId, receiverId, relationType ).subscribe(
       (contactRequest: ContactRequest) => {
-        alert(`Contact request sent successfully!', ${contactRequest.date}`);
-        //TODO: mettre à jour l'interface utilisateur
+        alert(`Contact request sent successfully! Date: ${contactRequest.date}`);
       },
       (error) => {
         console.error('Error sending contact request:', error);
@@ -54,7 +67,7 @@ export class AccountContactsComponent {
   }
 
   public discoverNewContacts(): void {
-    this.contactService.getContactSuggestions(this.userId, this.token).subscribe(
+    this.contactService.getContactSuggestions(this.userId).subscribe(
       (suggestedUsers: UserInfo[]) => {
         this.suggestedUsers = suggestedUsers;
       },
@@ -65,14 +78,13 @@ export class AccountContactsComponent {
     );
   }
 
-
   public removeContact(contactId: string): void {
     if (confirm('Are you sure you want to remove this contact?')) {
-      this.contactService.removeContact(this.userId, contactId, this.token).subscribe(
+      this.contactService.removeContact(this.userId, contactId).subscribe(
         (success: boolean) => {
           if (success) {
             alert('Contact removed successfully!');
-            this.contacts = this.contacts.filter(contact => contact.id !== contactId);
+            this.contacts = this.contacts.filter((contact) => contact.id !== contactId);
           } else {
             alert('Failed to remove the contact.');
           }
@@ -84,67 +96,88 @@ export class AccountContactsComponent {
       );
     }
   }
+
   public cancelRequest(contactRequestId: string): void {
     if (confirm('Are you sure you want to cancel this request?')) {
-      this.contactService.cancelSentContactRequest(contactRequestId, this.token).subscribe(
+      this.contactService.cancelSentContactRequest(contactRequestId).subscribe(
         (success: boolean) => {
           if (success) {
-            this.userContactRequests = this.userContactRequests.filter(request => request.id !== contactRequestId);
+            this.userContactRequests = this.userContactRequests.filter(
+              (request) => request.id !== contactRequestId
+            );
           }
+        },
+        (error) => {
+          console.error('Error cancelling contact request:', error);
         }
       );
     }
   }
 
   public acceptRequest(contactRequest: ContactRequest): void {
-    this.contactService.acceptContactRequest( contactRequest, this.token).subscribe((newContact: Contact) => {
-      alert('Contact request accepted!');
-      this.contacts.push(newContact);
-      this.receivedContactRequests = this.receivedContactRequests.filter(req => req.id !== contactRequest.id);
-    });
+    this.contactService.acceptContactRequest(contactRequest).subscribe(
+      (newContact: Contact) => {
+        alert('Contact request accepted!');
+        this.contacts.push(newContact);
+        this.receivedContactRequests = this.receivedContactRequests.filter(
+          (req) => req.id !== contactRequest.id
+        );
+      },
+      (error) => {
+        console.error('Error accepting contact request:', error);
+      }
+    );
   }
 
   public refuseRequest(contactRequest: ContactRequest): void {
     if (confirm('Are you sure you want to refuse this request?')) {
-      this.contactService.refuseContactRequest(contactRequest, this.token).subscribe(
+      this.contactService.refuseContactRequest(contactRequest).subscribe(
         (success: boolean) => {
           if (success) {
-            this.receivedContactRequests = this.receivedContactRequests.filter(req => req.id !== contactRequest.id);
+            this.receivedContactRequests = this.receivedContactRequests.filter(
+              (req) => req.id !== contactRequest.id
+            );
           }
+        },
+        (error) => {
+          console.error('Error refusing contact request:', error);
         }
       );
     }
   }
 
-  
   private getAllUserContact(): void {
-    this.contactService.getUserContacts(this.userId, this.token).subscribe((contacts: Contact[]) => {
-      this.contacts = contacts;
-    });
+    this.contactService.getUserContacts(this.userId).subscribe(
+      (contacts: Contact[]) => {
+        this.contacts = contacts;
+      },
+      (error) => {
+        console.error('Error fetching contacts:', error);
+      }
+    );
   }
 
   private getAllUserContactRequests(): void {
-    this.contactService.getAllUserContactRequests(this.userId, this.token).subscribe(
+    this.contactService.getAllUserContactRequests(this.userId).subscribe(
       (contactRequests: ContactRequest[]) => {
         this.userContactRequests = contactRequests;
       },
-      (error: Error) => {
+      (error) => {
+        console.error('Error fetching contact requests:', error);
         this.userContactRequests = [];
       }
-  
-  );
+    );
   }
 
   private getReceivedContactRequests(): void {
-    this.contactService.getReceivedContactRequests(this.userId, this.token).subscribe(
-      
+    this.contactService.getReceivedContactRequests(this.userId).subscribe(
       (contactRequests: ContactRequest[]) => {
         this.receivedContactRequests = contactRequests;
       },
-      (error: Error) => {
+      (error) => {
+        console.error('Error fetching received contact requests:', error);
         this.receivedContactRequests = [];
       }
-    
     );
   }
 }

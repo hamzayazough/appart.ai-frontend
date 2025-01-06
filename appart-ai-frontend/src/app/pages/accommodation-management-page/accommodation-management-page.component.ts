@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppUser } from '../../intefaces/user.interface';
 import { Accommodation } from '../../intefaces/accommodation.interface';
 import { AccommodationManagingService } from '../../services/accommodation-managing/accommodation-managing.service';
@@ -7,20 +7,23 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AccommodationCreationDialogComponent } from './dialog-components/accommodation-creation-dialog/accommodation-creation-dialog.component';
 import { SelectedHeader } from '../../enums/selected-header.enum';
+import { TokenService } from '../../services/token-service/token.service';
+import { combineLatest, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-accommodation-management-page',
   templateUrl: './accommodation-management-page.component.html',
   styleUrls: ['./accommodation-management-page.component.scss']
 })
-export class AccommodationManagementPageComponent implements OnInit {
+export class AccommodationManagementPageComponent implements OnInit, OnDestroy {
   user: AppUser = {} as AppUser;
-  token: string | null = null;
   accommodations: Accommodation[] = [];
   public selectedHeader = SelectedHeader.myProfile;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private authService: AuthenticationService,
+    private tokenService: TokenService,
     private accommodationService: AccommodationManagingService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -30,21 +33,28 @@ export class AccommodationManagementPageComponent implements OnInit {
     this.subscribeToUserAndToken();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   private subscribeToUserAndToken(): void {
-    this.authService.loggedUser.subscribe((user: AppUser) => {
-      this.user = user;
-      if (this.token) {
-        this.loadAccommodations();
-      }
-    });
-    this.authService.token.subscribe((token: string) => {
-      this.token = token;
-    });
+    combineLatest([
+      this.authService.loggedUser,
+      this.tokenService.getToken$()
+    ])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([user, token]) => {
+        this.user = user;
+        if (user && token) {
+          this.loadAccommodations();
+        }
+      });
   }
 
   private loadAccommodations(): void {
-    if (this.token && this.user.id) {
-      this.accommodationService.getLandlordAccommodations(this.user.id, this.token)
+    if (this.user.id) {
+      this.accommodationService.getLandlordAccommodations(this.user.id)
         .subscribe((accommodation) => {
           this.accommodations = accommodation;
           this.accommodations.forEach((acc) => {
@@ -67,7 +77,7 @@ export class AccommodationManagementPageComponent implements OnInit {
       });
   
       dialogRef.afterClosed().subscribe((result: Accommodation) => {
-        if (result && this.token) {
+        if (result) {
           this.accommodations.push(result);
         }
       });
@@ -82,8 +92,8 @@ export class AccommodationManagementPageComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && this.token) {
-        this.accommodationService.updateAccommodation(accommodation.id, result, this.token)
+      if (result) {
+        this.accommodationService.updateAccommodation(accommodation.id, result)
           .subscribe(() => {
             this.snackBar.open('Accommodation updated successfully', 'Close', { duration: 3000 });
             this.loadAccommodations();
@@ -95,15 +105,14 @@ export class AccommodationManagementPageComponent implements OnInit {
   }
 
   public deleteAccommodation(accommodationId: string): void {
-    if (this.token) {
-      this.accommodationService.deleteAccommodation(accommodationId, this.token)
-        .subscribe(() => {
-          this.snackBar.open('Accommodation deleted successfully', 'Close', { duration: 3000 });
-          this.loadAccommodations();
-        }, () => {
-          this.snackBar.open('Failed to delete accommodation', 'Close', { duration: 3000 });
-        });
-    }
+    this.accommodationService.deleteAccommodation(accommodationId)
+      .subscribe(() => {
+        this.snackBar.open('Accommodation deleted successfully', 'Close', { duration: 3000 });
+        this.loadAccommodations();
+      }, () => {
+        this.snackBar.open('Failed to delete accommodation', 'Close', { duration: 3000 });
+      });
+    
   }
 
   private isProfileValid(): boolean {

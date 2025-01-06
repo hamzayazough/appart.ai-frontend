@@ -12,47 +12,40 @@ import { UserType } from '../../enums/user-type.enum';
 export class AuthenticationService {
   public user: User = {};
   public loggedUser: BehaviorSubject<AppUser> = new BehaviorSubject<AppUser>({} as AppUser);
-  public token: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private auth0Service: AuthService, private userService: UserService) { }
+  constructor(private auth0Service: AuthService, private userService: UserService) {
+    this.auth0Service.user$.subscribe(user => {
+      this.user = user || {};
+      if (user?.email && user?.sub) {
+        const tempUsername = user.email.split('@')[0];
+        const userInfo: AppUser = {
+          email: user.email,
+          firstName: user.given_name || "",
+          lastName: user.family_name || "",
+          username: user.nickname || tempUsername,
+          auth0Id: user.sub,
+          type: UserType.CLIENT,
+        };
+        this.userService.createUserIfDontExist(userInfo).subscribe({
+          next: (user: AppUser) => {
+            this.loggedUser.next(user);
+          },
+          error: (error) => console.error("Error creating user:", error),
+        });
+      }
+    });
+   }
 
   logout() {
+    this.auth0Service.logout();
+    window.location.href = window.location.origin;
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.loggedUser.next({} as AppUser);
   }
-
+  
   get isAuthenticated$() {
     return this.auth0Service.isAuthenticated$;
   }
 
-  public setToken(token: string){
-    this.token.next(token);
-    localStorage.setItem("token", token);
-    if (this.user && this.token && this.user.email && this.user.sub){
-      const tempUsername = this.user.email.split('@')[0];
-      const userInfo: AppUser = {
-        email: this.user.email,
-        firstName: this.user.given_name || "",
-        lastName: this.user.family_name || "",
-        username: this.user.nickname || tempUsername,
-        auth0Id: this.user.sub,
-        type: UserType.CLIENT
-      };
-      this.userService.createUserIfDontExist(userInfo, this.token.value ).subscribe({
-        next: (user: AppUser) => {
-          this.loggedUser.next(user);
-          localStorage.setItem("user", JSON.stringify(user));
-        },
-        error: (error) => {
-          console.error('Erreur lors de la création de l\'utilisateur :', error);
-          alert('Une erreur est survenue lors de la création de l\'utilisateur.');
-        },
-
-      });
-    }
-  }
-
-  public isAuthenticated(): boolean {
-    const token = localStorage.getItem('authToken');
-    return !!token;
-  }
 }

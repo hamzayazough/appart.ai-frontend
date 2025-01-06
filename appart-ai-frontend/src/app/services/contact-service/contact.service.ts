@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Contact, ContactRequest, ContactRequestCreation } from '../../intefaces/contact.interface';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UserService } from '../user-service/user.service';
-import { AppUser, UserInfo } from '../../intefaces/user.interface';
+import { UserInfo } from '../../intefaces/user.interface';
+import { TokenService } from '../token-service/token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,77 +13,106 @@ export class ContactService {
   private apiUrl = '/protected/api/user';
   private baseUrl: string = environment.apiUrl + this.apiUrl;
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
-  public getUserContacts(userId: string, token: string): Observable<Contact[]> {
+  public getUserContacts(userId: string): Observable<Contact[]> {
     const url = `${this.baseUrl}/${userId}/contact`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.get<Contact[]>(url, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.get<Contact[]>(url, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public removeContact(userId: string, contactId: string, token: string): Observable<boolean> {
+  public removeContact(userId: string, contactId: string): Observable<boolean> {
     const url = `${this.baseUrl}/${userId}/contact/${contactId}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.delete<boolean>(url, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.delete<boolean>(url, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public createContactRequest(request: ContactRequestCreation, token: string): Observable<ContactRequest> {
+  public createContactRequest(request: ContactRequestCreation): Observable<ContactRequest> {
     const url = `${this.baseUrl}/contact-request`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.post<ContactRequest>(url, request, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.post<ContactRequest>(url, request, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public getAllUserContactRequests(userId: string, token: string): Observable<ContactRequest[]> {
+  public getAllUserContactRequests(userId: string): Observable<ContactRequest[]> {
     const url = `${this.baseUrl}/${userId}/sent-contact-requests`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.get<ContactRequest[]>(url, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.get<ContactRequest[]>(url, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public getReceivedContactRequests(userId: string, token: string): Observable<ContactRequest[]> {
+  public getReceivedContactRequests(userId: string): Observable<ContactRequest[]> {
     const url = `${this.baseUrl}/${userId}/received-contact-requests`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.get<ContactRequest[]>(url, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.get<ContactRequest[]>(url, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public acceptContactRequest(contactRequest: ContactRequest, token: string): Observable<Contact> {
+  public acceptContactRequest(contactRequest: ContactRequest): Observable<Contact> {
     const url = `${this.baseUrl}/received-contact-requests/accept`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.patch<Contact>(url, contactRequest, { headers });
-  }
-  
-  public refuseContactRequest( contactRequest: ContactRequest, token: string): Observable<boolean> {
-    const url = `${this.baseUrl}/received-contact-requests/refuse`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.patch<boolean>(url, contactRequest, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.patch<Contact>(url, contactRequest, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public cancelSentContactRequest(contactRequestId: string, token: string): Observable<boolean> {
-    const url = `${this.baseUrl}/sent-contact-requests/cancel/${contactRequestId}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.delete<boolean>(url, { headers });
+  public refuseContactRequest(contactRequest: ContactRequest): Observable<boolean> {
+    const url = `${this.baseUrl}/received-contact-requests/refuse`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.patch<boolean>(url, contactRequest, { headers })),
+      catchError(this.handleError)
+    );
   }
-  public sendContactRequest(senderId: string, receiverId: string, relationType: string, token: string): Observable<ContactRequest> {
+
+  public cancelSentContactRequest(contactRequestId: string): Observable<boolean> {
+    const url = `${this.baseUrl}/sent-contact-requests/cancel/${contactRequestId}`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.delete<boolean>(url, { headers })),
+      catchError(this.handleError)
+    );
+  }
+
+  public sendContactRequest(senderId: string, receiverId: string, relationType: string): Observable<ContactRequest> {
     const url = `${this.baseUrl}/contact-request`;
-    const headers = this.getAuthHeaders(token);
     const requestPayload = {
       senderId: senderId,
       receiverId: receiverId,
       relationTypeName: relationType
     };
-    return this.http.post<ContactRequest>(url, requestPayload, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.post<ContactRequest>(url, requestPayload, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public getContactSuggestions(userId: string, token: string): Observable<UserInfo[]> {
+  public getContactSuggestions(userId: string): Observable<UserInfo[]> {
     const url = `${this.baseUrl}/${userId}/suggested-contact`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.get<UserInfo[]>(url, { headers });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.get<UserInfo[]>(url, { headers })),
+      catchError(this.handleError)
+    );
   }
 
-  public getUser(): AppUser | null {
-    return this.userService.getStoredUser();
-  }
-  private getAuthHeaders(token: string): HttpHeaders {
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  private getAuthHeaders(): Observable<HttpHeaders> {
+    return this.tokenService.getToken$().pipe(
+      switchMap((token) => {
+        if (!token) {
+          throw new Error('Token is not available. Please log in.');
+        }
+        return of(new HttpHeaders().set('Authorization', `Bearer ${token}`));
+      })
+    );
   }
 
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error('An error occurred; please try again later.'));
+  }
 }

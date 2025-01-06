@@ -105,6 +105,7 @@ import { RoommateSearchingComponent } from './pages/roomates-research/roomates-p
             clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
             authorizationParams: {
                 redirect_uri: window.location.origin,
+                audience: 'https://dev-8cn4ee7fnjylxcsz.us.auth0.com/api/v2/',
             },
         }),
         MatSidenavModule,
