@@ -95,21 +95,20 @@ export class AccountPreferencesComponent implements OnInit {
 
   private getUserPreferences(): void {
     if (!this.userId || !this.token) {
+      console.warn('User ID or token is missing.');
       return;
     }
+  
     this.userService.getUserPreferences(this.userId, this.token).subscribe(
-      (data: UserPreferences) => {
-        if (data) {
-          this.userPreferences = data;
-          if (this.userPreferences.schoolAddress) {
-            this.schoolAddressControl.setValue(this.userPreferences.schoolAddress.placeName);
-          }
-        
-          if (this.userPreferences.workAddress) {
-            this.workAddressControl.setValue(this.userPreferences.workAddress.placeName);
-          }
-
+      (preferences) => {
+        if (preferences) {
+          this.userPreferences = preferences;
+  
+          this.schoolAddressControl.setValue(preferences.schoolAddress?.placeName || '');
+          this.workAddressControl.setValue(preferences.workAddress?.placeName || '');
+  
         } else {
+          console.warn('No preferences found for the user.');
           alert('No preferences found for this user. Please create new preferences.');
         }
       },
@@ -118,11 +117,12 @@ export class AccountPreferencesComponent implements OnInit {
           alert('User preferences not found. Please create preferences.');
         } else {
           console.error('Error fetching user preferences:', error);
-          alert('An error occurred while fetching user preferences.');
+          alert('An error occurred while fetching user preferences. Please try again later.');
         }
       }
     );
   }
+  
   
 
   public updatePreferences(): void {

@@ -1,0 +1,101 @@
+<div class="container">
+  <h1 class="title">
+    {{ isEditMode ? 'Edit Roommate Request' : 'Create Roommate Request' }}
+  </h1>
+  
+  <form (ngSubmit)="onSubmit()" #roommateForm="ngForm" class="card request-form">
+    <h2>Roommate Request Details</h2>
+
+    <div class="form-row">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="roommatePost.description"
+        required
+        placeholder="Enter a brief description of your roommate request"
+        rows="4"
+        maxlength="500"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <label for="numberPreferredRoommates">Preferred Number of Roommates:</label>
+      <input
+        id="numberPreferredRoommates"
+        name="numberPreferredRoommates"
+        type="number"
+        [(ngModel)]="roommatePost.numberPreferredRoommates"
+        required
+        min="1"
+        placeholder="Enter the number of roommates you'd prefer"
+      />
+    </div>
+
+
+    <div class="form-row readonly">
+      <label for="createdAt">Created At:</label>
+      <input
+        id="createdAt"
+        name="createdAt"
+        type="text"
+        [value]="currentDate | date: 'medium'"
+        readonly
+      />
+    </div>
+
+    <div class="button-container">
+      <button
+        *ngIf="roommatePost && roommatePost.id"
+        type="button"
+        mat-raised-button
+        [color]="roommatePost.active ? 'warn' : 'primary'"
+        (click)="toggleRequestStatus()"
+        class="toggle-request-btn"
+      >
+        {{ roommatePost.active ? 'Deactivate My Request' : 'Activate My Request' }}
+      </button>
+      <button
+        type="submit"
+        mat-raised-button
+        [disabled]="!roommateForm.valid"
+        class="submit-request-btn"
+      >
+      {{ isEditMode ? 'Edit Request' : 'Create Request' }}
+    </button>
+    </div>
+    
+  </form>
+
+  <section class="card profile-info">
+    <h2>Your Profile Information</h2>
+    <div class="info-row">
+      <span class="label">Full Name:</span>
+      <span class="value">{{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Username:</span>
+      <span class="value">{{ userInfo?.username }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Phone:</span>
+      <span class="value">{{ userInfo?.phone }}</span>
+    </div>
+  </section>
+
+  <section class="card preferences-info">
+    <h2>Your Preferences</h2>
+    <div *ngIf="userPreferences; else noPreferences">
+      <div class="info-row" *ngFor="let pref of userPreferencesKeys">
+        <span class="label">{{ pref.label }}:</span>
+        <span class="value">{{ pref.value }}</span>
+      </div>
+    </div>
+    <ng-template #noPreferences>
+      <div class="no-preferences">
+        <p>You haven’t set your preferences yet. Please define them for better results.</p>
+        <button mat-button color="accent" (click)="goToUserPreferencesPage()">Set Preferences</button>
+      </div>
+    </ng-template>
+  </section>
+</div>

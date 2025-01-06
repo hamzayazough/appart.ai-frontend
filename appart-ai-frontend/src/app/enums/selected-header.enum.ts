@@ -1,7 +1,7 @@
 export enum SelectedHeader {
   home = 'home',
   browse = 'browse',
-  roomates = 'roomates',
+  roommates = 'roommates',
   aboutUs = 'about-us',
   myProfile = 'my profile',
   nothing = '',

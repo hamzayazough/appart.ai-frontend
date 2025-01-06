@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppUser, UserInfo } from '../../intefaces/user.interface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from '../auth/authentication.service';
 import { UserPreferences } from '../../intefaces/user-preferences.interface';
@@ -58,9 +58,18 @@ export class UserService {
   }
 
 
-  public getUserPreferences(userId: string, token: string): Observable<UserPreferences> {
+  public getUserPreferences(userId: string, token: string): Observable<UserPreferences | null> {
     const url = `${this.baseUrl}/user-preferences/${userId}`;
     const headers = this.getAuthHeaders(token);
-    return this.http.get<UserPreferences>(url, { headers });
+    return this.http.get<UserPreferences>(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          console.error('User preferences not found:', error.message);
+          return of(null);
+        }
+        return throwError(() => error);
+      })
+    );
   }
+  
 }

@@ -49,8 +49,10 @@ import { AccountPreferencesComponent } from './pages/account/account-page/shared
 import { MySavedAccommodationsComponent } from './pages/account/account-page/shared-components/saved-accommodations/my-saved-accommodations/my-saved-accommodations.component';
 import { SuccessDialogComponent } from './pages/account/dialogs/success-dialog/success-dialog.component';
 import { ContactLandLordComponent } from './pages/accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
-import { RoomatesPageComponent } from './pages/roomates-research/roomates-page/roomates-page.component';
+import { RoommatesPageComponent } from './pages/roomates-research/roomates-page/roommates-page.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
+import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -71,7 +73,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MySavedAccommodationsComponent,
         SuccessDialogComponent,
         ContactLandLordComponent,
-        RoomatesPageComponent,
+        RoommatesPageComponent,
+        CreateRoommateRequestComponent,
+        RoommateSearchingComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,
