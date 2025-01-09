@@ -7,6 +7,8 @@ import { AppUser, UserInfo } from '../../../../intefaces/user.interface';
 import { UserPreferences } from '../../../../intefaces/user-preferences.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { AuthenticationService } from '../../../../services/auth/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-roommate-request',
@@ -23,25 +25,19 @@ export class CreateRoommateRequestComponent implements OnInit {
   public userPreferences: UserPreferences | null = null;
   public userPreferencesKeys: { label: string; value: any }[] = [];
   public isEditMode: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
 
-  constructor(private roommateService: RoommateService, private userService: UserService, private router: Router, private dialog: MatDialog) {}
+  constructor(private roommateService: RoommateService, private userService: UserService, private router: Router, private dialog: MatDialog, private authService: AuthenticationService) {}
 
   ngOnInit(): void {
-    this.loadUserInfo();
-    this.loadUserPreferences();
-    this.loadRoommateRequest();
+    this.initializeData();
+
   }
 
   onSubmit(): void {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('You need to be logged in to create or update a request.');
-      return;
-    }
-
     if (this.isEditMode && this.roommatePost.id) {
-      this.roommateService.updateRoommateRequest(this.roommatePost.id, this.roommatePost as RoommatePost, token).subscribe(
+      this.roommateService.updateRoommateRequest(this.roommatePost.id, this.roommatePost as RoommatePost).subscribe(
         () => {
           alert('Roommate Request Updated Successfully!');
         },
@@ -56,7 +52,7 @@ export class CreateRoommateRequestComponent implements OnInit {
         createdAt: new Date(),
         userId: this.userId,
       } as RoommatePost;
-      this.roommateService.addRoommateRequest(newPost, token).subscribe(
+      this.roommateService.addRoommateRequest(newPost).subscribe(
         () => {
           alert('Roommate Request Created Successfully!');
         },
@@ -73,8 +69,7 @@ export class CreateRoommateRequestComponent implements OnInit {
   }
 
   toggleRequestStatus(): void {
-    const token = localStorage.getItem('token');
-    if (!this.roommatePost.id || !token) {
+    if (!this.roommatePost.id) {
       alert('Unable to update status. Please try again.');
       return;
     }
@@ -92,7 +87,7 @@ export class CreateRoommateRequestComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed && this.roommatePost.id) {
         this.roommateService
-          .updateRoommateRequestStatus(this.roommatePost.id, !this.roommatePost.active, token)
+          .updateRoommateRequestStatus(this.roommatePost.id, !this.roommatePost.active)
           .subscribe(
             () => {
               this.roommatePost.active = !this.roommatePost.active;
@@ -111,39 +106,18 @@ export class CreateRoommateRequestComponent implements OnInit {
     });
   }
   
-  
 
-  private loadUserInfo(): void {
-    const user: AppUser | null = this.userService.getStoredUser();
-    if (!user) {
+
+  private loadRoommateRequest(): void {
+    if (!this.userId) {
       console.error('User not found');
       return;
     }
-    else {
-      this.userId = user.id || '';
-      this.userInfo = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        phone: user.phone || '',
-      };
-    }
-  }
-
-  private loadRoommateRequest(): void {
-    const token = localStorage.getItem('token');
-    if (!this.userId || !token) {
-      console.error('User ID or token not found.');
-      return;
-    }
-
-    this.roommateService.getMyRoommateRequest(this.userId, token).subscribe(
+    this.roommateService.getMyRoommateRequest(this.userId).subscribe(
       (response) => {
         if (response) {
           this.isEditMode = true;
           this.roommatePost = response;
-          console.log(response);
-          console.log('Roommate Request:', this.roommatePost.active);
         } else {
           this.isEditMode = false;
         }
@@ -156,14 +130,11 @@ export class CreateRoommateRequestComponent implements OnInit {
   }
 
   private loadUserPreferences(): void {
-    const user: AppUser | null = this.userService.getStoredUser();
-    const token = localStorage.getItem('token');
-    if (!user || !user.id || !token) {
+    if (!this.userId) {
       console.error('User not found');
-      alert('User not found');
       return;
     }
-    this.userService.getUserPreferences(user.id, token).subscribe(
+    this.userService.getUserPreferences(this.userId).subscribe(
       (preferences) => {
         if (preferences) {
           this.userPreferences = preferences;
@@ -187,5 +158,35 @@ export class CreateRoommateRequestComponent implements OnInit {
     return key
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, (str) => str.toUpperCase());
+  }
+
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.setUserData(user);
+      }
+    });
+  }
+
+  private setUserData(user: AppUser): void {
+    this.userId = user.id || '';
+    this.userInfo = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      phone: user.phone || '',
+    };
+
+    if (!this.userId) {
+      this.router.navigate(['/register']);
+      return;
+    }
+    this.loadRoommateRequest();
+    this.loadUserPreferences();
   }
 }

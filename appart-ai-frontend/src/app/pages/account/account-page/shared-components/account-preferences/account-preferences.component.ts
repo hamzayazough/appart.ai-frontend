@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../../services/user-service/user.service';
 import { UserPreferences } from '../../../../../intefaces/user-preferences.interface';
 import { AppUser } from '../../../../../intefaces/user.interface';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
 import { MapBoxService } from '../../../../../services/map-box-service/map-box.service';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Address } from '../../../../../intefaces/adress.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-dialog.component';
+import { AuthenticationService } from '../../../../../services/auth/authentication.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-account-preferences',
@@ -18,51 +20,26 @@ export class AccountPreferencesComponent implements OnInit {
   public userPreferences: UserPreferences = {} as UserPreferences;
   public schoolAddressControl = new FormControl();
   public workAddressControl = new FormControl();
-  schoolAddressSuggestions: any[] = [];
-  workAddressSuggestions: any[] = [];
+  public schoolAddressSuggestions: any[] = [];
+  public workAddressSuggestions: any[] = [];
   public showSchoolSuggestions: boolean = false;
   public showWorkSuggestions: boolean = false;
-  private token: string = '';
-  private  userId: string | null = null;
+  private user: AppUser = {} as AppUser;
+  private unsubscribe$ = new Subject<void>();
 
-  constructor(private userService: UserService, private mapboxService: MapBoxService, private dialog: MatDialog) {
+
+  constructor(
+    private userService: UserService,
+    private mapboxService: MapBoxService,
+    private dialog: MatDialog,
+    private authService: AuthenticationService
+  ) {}
+
+  ngOnInit(): void {
+    this.initializeData();
   }
 
-
-  ngOnInit() {
-    this.getUser();
-    this.getUserPreferences();
-    this.schoolAddressControl.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
-        if (value) {
-          this.mapboxService.searchPlace(value).subscribe((response: any) => {
-            this.schoolAddressSuggestions = response.features;
-          });
-        } else {
-          this.schoolAddressSuggestions = [];
-        }
-      });
-
-    this.workAddressControl.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
-        if (value) {
-          this.mapboxService.searchPlace(value).subscribe((response: any) => {
-            this.workAddressSuggestions = response.features;
-          });
-        } else {
-          this.workAddressSuggestions = [];
-        }
-      });
-  }
-  
+    
   hideSchoolSuggestions() {
     setTimeout(() => {
       this.showSchoolSuggestions = false;
@@ -75,12 +52,12 @@ export class AccountPreferencesComponent implements OnInit {
     }, 200);
   }
 
-  public selectAddress(suggestion: any, addressType: 'school' | 'work') {
+  public selectAddress(suggestion: any, addressType: 'school' | 'work'): void {
     const address: Address = {
       placeName: suggestion.place_name,
-      location: [suggestion.geometry.coordinates[0], suggestion.geometry.coordinates[1]]
+      location: [suggestion.geometry.coordinates[0], suggestion.geometry.coordinates[1]],
     };
-  
+
     if (addressType === 'school') {
       this.userPreferences.schoolAddress = address;
       this.schoolAddressControl.setValue(address.placeName);
@@ -91,25 +68,18 @@ export class AccountPreferencesComponent implements OnInit {
       this.workAddressSuggestions = [];
     }
   }
-  
 
-  private getUserPreferences(): void {
-    if (!this.userId || !this.token) {
-      console.warn('User ID or token is missing.');
-      return;
-    }
-  
-    this.userService.getUserPreferences(this.userId, this.token).subscribe(
+  private getUserPreferences(userId: string): void {
+    this.userService.getUserPreferences(userId).subscribe(
       (preferences) => {
         if (preferences) {
           this.userPreferences = preferences;
-  
           this.schoolAddressControl.setValue(preferences.schoolAddress?.placeName || '');
           this.workAddressControl.setValue(preferences.workAddress?.placeName || '');
-  
+          this.initializeAddressControls();
         } else {
           console.warn('No preferences found for the user.');
-          alert('No preferences found for this user. Please create new preferences.');
+          alert('No preferences found. Please create new preferences.');
         }
       },
       (error) => {
@@ -117,60 +87,100 @@ export class AccountPreferencesComponent implements OnInit {
           alert('User preferences not found. Please create preferences.');
         } else {
           console.error('Error fetching user preferences:', error);
-          alert('An error occurred while fetching user preferences. Please try again later.');
         }
       }
     );
   }
-  
-  
 
   public updatePreferences(): void {
-    if (!this.userId || !this.token) {
+    if (!this.user.id) {
+      alert('User ID or token is missing.');
       return;
     }
-    this.userService.updateUserPreferences(this.userId, this.userPreferences, this.token).subscribe(
-      (data: UserPreferences) => {
-        this.showSuccessDialog();
-      },
+
+    this.userService.updateUserPreferences(this.user.id, this.userPreferences).subscribe(
+      () => this.showSuccessDialog(),
       (error) => {
-        console.error('Error updating preferences', error);
+        console.error('Error updating preferences:', error);
       }
     );
   }
 
   public setPreferences(): void {
-    if (!this.userId || !this.token) {
+    if (!this.user.id) {
+      alert('User ID or token is missing.');
       return;
     }
-      
-  
-    this.userService.createUserPreferences(this.userPreferences, this.userId, this.token).subscribe(
+
+    this.userService.createUserPreferences(this.userPreferences, this.user.id).subscribe(
       (data: UserPreferences) => {
         this.userPreferences = data;
         this.showSuccessDialog();
       },
       (error) => {
-        console.error('Error creating preferences', error);
+        console.error('Error creating preferences:', error);
       }
     );
-  }
-  private getUser(): void {
-    const token: string | null = localStorage.getItem('token');
-    const storedUser: AppUser | null = this.userService.getStoredUser();
-    if (!token || !storedUser) {
-      alert("Attention, veuillez vous identifier pour accéder à cette page!");
-      return;
-    }
-    this.token = token;
-    this.userId = storedUser.id ?? '';
   }
 
   private showSuccessDialog(): void {
     const dialogRef = this.dialog.open(SuccessDialogComponent);
-
-    setTimeout(() => {
-      dialogRef.close();
-    }, 3000);
+    setTimeout(() => dialogRef.close(), 3000);
   }
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.user = user;
+        this.subscribeToLoggedUser();
+      }
+    });
+  }
+
+  private subscribeToLoggedUser(): void {
+    this.authService.loggedUser$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((user: AppUser) => {
+        this.user = user;
+        if (!this.user || !this.user.id) {
+          alert('Please log in to access this page.');
+          this.authService.handleUnAuthorizedUser();
+          return;
+        }
+        this.getUserPreferences(this.user.id);
+      });
+  }
+
+  private initializeAddressControls(): void {
+    this.setupAddressControl(this.schoolAddressControl, 'school');
+    this.setupAddressControl(this.workAddressControl, 'work');
+  }
+  
+  private setupAddressControl(control: AbstractControl, type: 'school' | 'work'): void {
+    control.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((value) => this.handleAddressInput(value, type));
+  }
+
+  private handleAddressInput(value: string, type: 'school' | 'work'): void {
+    if (!value) {
+      if (type === 'school') this.schoolAddressSuggestions = [];
+      if (type === 'work') this.workAddressSuggestions = [];
+      return;
+    }
+
+    this.mapboxService.searchPlace(value).subscribe((response: any) => {
+      if (type === 'school') {
+        this.schoolAddressSuggestions = response.features;
+      } else if (type === 'work') {
+        this.workAddressSuggestions = response.features;
+      }
+    });
+  }
+
+
 }

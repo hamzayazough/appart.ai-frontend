@@ -53,6 +53,7 @@ import { RoommatesPageComponent } from './pages/roomates-research/roomates-page/
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
 import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
+import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -76,6 +77,7 @@ import { RoommateSearchingComponent } from './pages/roomates-research/roomates-p
         RoommatesPageComponent,
         CreateRoommateRequestComponent,
         RoommateSearchingComponent,
+        RegistrationPageComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,
@@ -105,6 +107,7 @@ import { RoommateSearchingComponent } from './pages/roomates-research/roomates-p
             clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
             authorizationParams: {
                 redirect_uri: window.location.origin,
+                audience: 'https://dev-8cn4ee7fnjylxcsz.us.auth0.com/api/v2/',
             },
         }),
         MatSidenavModule,

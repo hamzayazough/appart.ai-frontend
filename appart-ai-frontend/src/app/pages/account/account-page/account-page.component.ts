@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user-service/user.service';
 import { AppUser, UserInfo } from '../../../intefaces/user.interface';
 import { Router } from '@angular/router';
 import { SelectedHeader } from '../../../enums/selected-header.enum';
 import { UserType } from '../../../enums/user-type.enum';
+import { TokenService } from '../../../services/token-service/token.service';
+import { AuthenticationService } from '../../../services/auth/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 
 enum Display {
   Contact = "My Contact",
@@ -19,38 +22,34 @@ enum Display {
 })
 
 
-export class AccountPageComponent {
+export class AccountPageComponent implements OnInit{
   public user: AppUser = {} as AppUser;
   public userType = UserType;
-  private token: string = '';
   public display = Display;
   public selectedHeader = SelectedHeader.myProfile;
   public selectedSection: string | null = null;
+  private unsubscribe$ = new Subject<void>();
 
 
-  constructor(private userService: UserService, private router: Router) {
-    this.getUser();
+
+
+  constructor(private userService: UserService, private router: Router, private authService: AuthenticationService) {
   }
 
 
-  private getUser(): void {
-    const token: string | null = localStorage.getItem('token');
-    const storedUser: AppUser | null = this.userService.getStoredUser();
-    if (!token || !storedUser) {
-      alert("Attention, veuillez vous identifier pour accéder à cette page!");
-      return;
-    }
-    this.token = token;
-    this.user = storedUser;
+  ngOnInit(): void {
+    this.initializeData();
   }
+
 
   public updateUserInfo(): void {
     const userInfo: UserInfo = {
       username: this.user.username,
       phone: this.user.phone || '',
       firstName: this.user.firstName,
-      lastName: this.user.lastName
+      lastName: this.user.lastName,
     };
+
     if (!this.validateFields(userInfo)) {
       alert("Please make sure all fields are filled out.");
       return;
@@ -60,9 +59,11 @@ export class AccountPageComponent {
       alert("Please enter a valid phone number in the format: 5813378450");
       return;
     }
+
     const userId = this.user.id;
-    if(!userId) return;
-    this.userService.validateNewUserName(userId, userInfo.username, this.token).subscribe(
+    if (!userId) return;
+
+    this.userService.validateNewUserName(userId, userInfo.username).subscribe(
       (isValid: boolean) => {
         if (isValid) {
           this.changeUserInfo(userInfo);
@@ -74,7 +75,6 @@ export class AccountPageComponent {
         alert(`There was a problem. We couldn't update your informations, ${error.message}`);
       }
     );
-    
   }
 
   public toggleSection(section: Display): void {
@@ -102,22 +102,36 @@ export class AccountPageComponent {
     );
   }
   
-    private validatePhoneNumber(phone: string): boolean {
-      const phoneRegex = /^[0-9]{10}$/;
-      return phoneRegex.test(phone);
-    }
+  private validatePhoneNumber(phone: string): boolean {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phone);
+  }
   
-  private changeUserInfo(userInfo: UserInfo) {
-    this.userService.changeUserInfo(this.user.id || '', userInfo, this.token).subscribe(
+  private changeUserInfo(userInfo: UserInfo): void {
+    this.userService.changeUserInfo(this.user.id || '', userInfo).subscribe(
       (updatedUser: AppUser) => {
         alert('Informations mises à jour avec succès !');
         this.user = updatedUser;
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        this.authService.updateLoggedUserInfo(updatedUser);
       },
       (error) => {
         console.error('Erreur lors de la mise à jour des informations:', error);
       }
     );
   }
+
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.user = user;
+      }
+    });
+  }
+    
 }
 

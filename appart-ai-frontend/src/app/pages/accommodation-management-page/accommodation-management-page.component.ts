@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppUser } from '../../intefaces/user.interface';
 import { Accommodation } from '../../intefaces/accommodation.interface';
 import { AccommodationManagingService } from '../../services/accommodation-managing/accommodation-managing.service';
@@ -7,17 +7,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AccommodationCreationDialogComponent } from './dialog-components/accommodation-creation-dialog/accommodation-creation-dialog.component';
 import { SelectedHeader } from '../../enums/selected-header.enum';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-accommodation-management-page',
   templateUrl: './accommodation-management-page.component.html',
   styleUrls: ['./accommodation-management-page.component.scss']
 })
-export class AccommodationManagementPageComponent implements OnInit {
+export class AccommodationManagementPageComponent implements OnInit, OnDestroy {
   user: AppUser = {} as AppUser;
-  token: string | null = null;
   accommodations: Accommodation[] = [];
   public selectedHeader = SelectedHeader.myProfile;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private authService: AuthenticationService,
@@ -27,32 +28,12 @@ export class AccommodationManagementPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscribeToUserAndToken();
+    this.initializeData();
   }
 
-  private subscribeToUserAndToken(): void {
-    this.authService.loggedUser.subscribe((user: AppUser) => {
-      this.user = user;
-      if (this.token) {
-        this.loadAccommodations();
-      }
-    });
-    this.authService.token.subscribe((token: string) => {
-      this.token = token;
-    });
-  }
-
-  private loadAccommodations(): void {
-    if (this.token && this.user.id) {
-      this.accommodationService.getLandlordAccommodations(this.user.id, this.token)
-        .subscribe((accommodation) => {
-          this.accommodations = accommodation;
-          this.accommodations.forEach((acc) => {
-            });
-        }, (error) => {
-          this.snackBar.open('Failed to load accommodations', 'Close', { duration: 3000 });
-        });
-    }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   public viewAccommodation(accommodation: Accommodation): void {
@@ -67,7 +48,7 @@ export class AccommodationManagementPageComponent implements OnInit {
       });
   
       dialogRef.afterClosed().subscribe((result: Accommodation) => {
-        if (result && this.token) {
+        if (result) {
           this.accommodations.push(result);
         }
       });
@@ -81,36 +62,40 @@ export class AccommodationManagementPageComponent implements OnInit {
       data: { accommodation }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && this.token) {
-        this.accommodationService.updateAccommodation(accommodation.id, result, this.token)
-          .subscribe(() => {
-            this.snackBar.open('Accommodation updated successfully', 'Close', { duration: 3000 });
-            this.loadAccommodations();
-          }, () => {
-            this.snackBar.open('Failed to update accommodation', 'Close', { duration: 3000 });
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          this.accommodationService.updateAccommodation(accommodation.id, result).subscribe({
+            next: () => {
+              this.snackBar.open('Accommodation updated successfully', 'Close', { duration: 3000 });
+              this.loadAccommodations();
+            },
+            error: () => {
+              this.snackBar.open('Failed to update accommodation', 'Close', { duration: 3000 });
+            },
           });
-      }
-    });
+        }
+      },
+      error: () => {
+        this.snackBar.open('Something went wrong with the dialog', 'Close', { duration: 3000 });
+      },
+    });    
   }
 
   public deleteAccommodation(accommodationId: string): void {
-    if (this.token) {
-      this.accommodationService.deleteAccommodation(accommodationId, this.token)
-        .subscribe(() => {
-          this.snackBar.open('Accommodation deleted successfully', 'Close', { duration: 3000 });
-          this.loadAccommodations();
-        }, () => {
-          this.snackBar.open('Failed to delete accommodation', 'Close', { duration: 3000 });
-        });
-    }
+    this.accommodationService.deleteAccommodation(accommodationId).subscribe({
+      next: () => {
+        this.snackBar.open('Accommodation deleted successfully', 'Close', { duration: 3000 });
+        this.loadAccommodations();
+      },
+      error: () => {
+        this.snackBar.open('Failed to delete accommodation', 'Close', { duration: 3000 });
+      },
+    });    
+    
   }
 
   private isProfileValid(): boolean {
-    if (!this.user || !this.user.id) {
-      this.snackBar.open('Please login to create an accommodation', 'Close', { duration: 3000 });
-      return false;
-    }
     if(this.user.type !== 'landlord') {
       this.snackBar.open('You must be a landlord to create an accommodation', 'Close', { duration: 3000 });
       return false;
@@ -120,5 +105,30 @@ export class AccommodationManagementPageComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.user = user;
+        this.loadAccommodations();
+      }
+    });
+  }
+
+  private loadAccommodations(): void {
+    this.accommodationService.getLandlordAccommodations(this.user.id)
+      .subscribe({
+        next: (accommodations) => {
+          this.accommodations = accommodations;
+        },
+        error: (error) => {
+          this.snackBar.open(`Failed to load accommodations:  ${error}`, 'Close', { duration: 3000 });
+        },
+      });
   }
 }

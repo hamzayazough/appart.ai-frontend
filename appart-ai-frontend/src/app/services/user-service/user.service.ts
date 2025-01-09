@@ -1,75 +1,92 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppUser, UserInfo } from '../../intefaces/user.interface';
-import { BehaviorSubject, catchError, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, from, Observable, of, switchMap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AuthenticationService } from '../auth/authentication.service';
 import { UserPreferences } from '../../intefaces/user-preferences.interface';
+import { TokenService } from '../token-service/token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = '/protected/api/user'
+  private apiUrl = '/protected/api/user';
   private baseUrl: string = environment.apiUrl + this.apiUrl;
 
-  constructor(private http: HttpClient) {
-   }
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
-
-  public createUserIfDontExist(user: AppUser, token: string): Observable<AppUser> {
-    const url = `${this.baseUrl}/create-user-if-not-exist`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.post<AppUser>(url, user, { headers });
-  }
-
-  public changeUserInfo(userId: string, userInfo: UserInfo, token: string): Observable<AppUser> {
-    const url = `${this.baseUrl}/${userId}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.patch<AppUser>(url, userInfo, { headers });
-  }
-
-  public validateNewUserName(userId: string, newUserName: string, token: string): Observable<boolean> {
-    const url = `${this.baseUrl}/${userId}/new-user-name/${newUserName}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.get<boolean>(url, { headers });
-  }
-
-  public getStoredUser(): AppUser | null {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  }
-
-
-  public getAuthHeaders(token: string): HttpHeaders {
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  }
-
-  public createUserPreferences(preferences: UserPreferences, userId: string, token: string): Observable<UserPreferences> {
-    const url = `${this.baseUrl}/user-preferences/create/${userId}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.post<UserPreferences>(url, preferences, { headers });
-  }
-
-  public updateUserPreferences(userId: string, preferences: UserPreferences, token: string): Observable<UserPreferences> {
-    const url = `${this.baseUrl}/user-preferences/update/${userId}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.put<UserPreferences>(url, preferences, { headers });
-  }
-
-
-  public getUserPreferences(userId: string, token: string): Observable<UserPreferences | null> {
-    const url = `${this.baseUrl}/user-preferences/${userId}`;
-    const headers = this.getAuthHeaders(token);
-    return this.http.get<UserPreferences>(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 404) {
-          console.error('User preferences not found:', error.message);
-          return of(null);
+  public getAuthHeaders(): Observable<HttpHeaders> {
+    return this.tokenService.getToken$().pipe(
+      switchMap((token) => {
+        if (!token) {
+          throw new Error('Token is not available. Please log in.');
         }
-        return throwError(() => error);
+        return of(new HttpHeaders().set('Authorization', `Bearer ${token}`));
       })
     );
   }
-  
+
+  public createUserIfDontExist(user: AppUser): Observable<AppUser> {
+    const url = `${this.baseUrl}/create-user-if-not-exist`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.post<AppUser>(url, user, { headers })
+      )
+    );
+  }
+
+  public changeUserInfo(userId: string, userInfo: UserInfo): Observable<AppUser> {
+    const url = `${this.baseUrl}/${userId}`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.patch<AppUser>(url, userInfo, { headers })
+      )
+    );
+  }
+
+  public validateNewUserName(userId: string, newUserName: string): Observable<boolean> {
+    const url = `${this.baseUrl}/${userId}/new-user-name/${newUserName}`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.get<boolean>(url, { headers })
+      )
+    );
+  }
+
+  public createUserPreferences(preferences: UserPreferences, userId: string): Observable<UserPreferences> {
+    const url = `${this.baseUrl}/user-preferences/create/${userId}`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.post<UserPreferences>(url, preferences, { headers })
+      )
+    );
+  }
+
+  public updateUserPreferences(userId: string, preferences: UserPreferences): Observable<UserPreferences> {
+    const url = `${this.baseUrl}/user-preferences/update/${userId}`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.put<UserPreferences>(url, preferences, { headers })
+      )
+    );
+  }
+
+  public getUserPreferences(userId: string): Observable<UserPreferences | null> {
+    const url = `${this.baseUrl}/user-preferences/${userId}`;
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.get<UserPreferences>(url, { headers }).pipe(
+          catchError((error: HttpErrorResponse) => {
+            if (error.status === 404) {
+              console.warn('User preferences not found.');
+              return of(null);
+            }
+            return throwError(() => error);
+          })
+        )
+      )
+    );
+  }
+
+
 }
