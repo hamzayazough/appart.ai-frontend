@@ -8,6 +8,7 @@ import { ImageUrl } from '../../../../intefaces/image.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TokenService } from '../../../../services/token-service/token.service';
 import { Subject } from 'rxjs';
+import { AuthenticationService } from '../../../../services/auth/authentication.service';
 @Component({
   selector: 'app-accommodation-creation-dialog',
   templateUrl: './accommodation-creation-dialog.component.html',
@@ -28,7 +29,7 @@ export class AccommodationCreationDialogComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<AccommodationCreationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder, private accommodationService: AccommodationManagingService, private snackBar: MatSnackBar, private tokenService: TokenService
+    private fb: FormBuilder, private accommodationService: AccommodationManagingService, private snackBar: MatSnackBar, private authService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +95,7 @@ export class AccommodationCreationDialogComponent implements OnInit, OnDestroy {
       ...this.accommodationForm.value,
       id: this.accommodationId,
       offerDate: this.accommodationOfferDate,
+      ownerId: this.authService.getUser()?.id || '',
     };
 
     this.accommodationService.addAccommodation(accommodation, this.selectedFiles).subscribe({

@@ -6,6 +6,7 @@ import { SelectedHeader } from '../../../enums/selected-header.enum';
 import { UserType } from '../../../enums/user-type.enum';
 import { TokenService } from '../../../services/token-service/token.service';
 import { AuthenticationService } from '../../../services/auth/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 
 enum Display {
   Contact = "My Contact",
@@ -27,15 +28,17 @@ export class AccountPageComponent implements OnInit{
   public display = Display;
   public selectedHeader = SelectedHeader.myProfile;
   public selectedSection: string | null = null;
+  private unsubscribe$ = new Subject<void>();
 
 
 
-  constructor(private userService: UserService, private router: Router, private auth: AuthenticationService) {
+
+  constructor(private userService: UserService, private router: Router, private authService: AuthenticationService) {
   }
 
 
   ngOnInit(): void {
-    this.getUser();
+    this.initializeData();
   }
 
 
@@ -99,29 +102,36 @@ export class AccountPageComponent implements OnInit{
     );
   }
   
-    private validatePhoneNumber(phone: string): boolean {
-      const phoneRegex = /^[0-9]{10}$/;
-      return phoneRegex.test(phone);
-    }
+  private validatePhoneNumber(phone: string): boolean {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phone);
+  }
   
-    private changeUserInfo(userInfo: UserInfo): void {
-      this.userService.changeUserInfo(this.user.id || '', userInfo).subscribe(
-        (updatedUser: AppUser) => {
-          alert('Informations mises à jour avec succès !');
-          this.user = updatedUser;
-          this.auth.loggedUser.next(updatedUser);
-        },
-        (error) => {
-          console.error('Erreur lors de la mise à jour des informations:', error);
-        }
-      );
-    }
+  private changeUserInfo(userInfo: UserInfo): void {
+    this.userService.changeUserInfo(this.user.id || '', userInfo).subscribe(
+      (updatedUser: AppUser) => {
+        alert('Informations mises à jour avec succès !');
+        this.user = updatedUser;
+        this.authService.updateLoggedUserInfo(updatedUser);
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour des informations:', error);
+      }
+    );
+  }
 
-    private getUser(): void {
-      this.auth.loggedUser.subscribe((user) => {
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
         this.user = user;
-      });
-    }
+      }
+    });
+  }
     
 }
 

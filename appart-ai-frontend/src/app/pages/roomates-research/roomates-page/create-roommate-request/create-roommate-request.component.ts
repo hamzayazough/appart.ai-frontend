@@ -8,6 +8,7 @@ import { UserPreferences } from '../../../../intefaces/user-preferences.interfac
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { AuthenticationService } from '../../../../services/auth/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-roommate-request',
@@ -24,16 +25,14 @@ export class CreateRoommateRequestComponent implements OnInit {
   public userPreferences: UserPreferences | null = null;
   public userPreferencesKeys: { label: string; value: any }[] = [];
   public isEditMode: boolean = false;
-  private user: AppUser | null = null;
-
+  private unsubscribe$ = new Subject<void>();
 
 
   constructor(private roommateService: RoommateService, private userService: UserService, private router: Router, private dialog: MatDialog, private authService: AuthenticationService) {}
 
   ngOnInit(): void {
-    this.loadUserInfo();
-    this.loadUserPreferences();
-    this.loadRoommateRequest();
+    this.initializeData();
+
   }
 
   onSubmit(): void {
@@ -107,23 +106,7 @@ export class CreateRoommateRequestComponent implements OnInit {
     });
   }
   
-  
 
-  private loadUserInfo(): void {
-    this.getUser();
-    if (this.user) {
-      this.userId = this.user.id || '';
-      this.userInfo = {
-        firstName: this.user.firstName,
-        lastName: this.user.lastName,
-        username: this.user.username,
-        phone: this.user.phone || '',
-      };
-    }
-    else {
-      console.error('User not found');
-    }
-  }
 
   private loadRoommateRequest(): void {
     if (!this.userId) {
@@ -149,7 +132,6 @@ export class CreateRoommateRequestComponent implements OnInit {
   private loadUserPreferences(): void {
     if (!this.userId) {
       console.error('User not found');
-      alert('User not found');
       return;
     }
     this.userService.getUserPreferences(this.userId).subscribe(
@@ -178,9 +160,33 @@ export class CreateRoommateRequestComponent implements OnInit {
       .replace(/^./, (str) => str.toUpperCase());
   }
 
-  private getUser(): void {
-    this.authService.loggedUser.subscribe((user) => {
-      this.user = user;
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.setUserData(user);
+      }
     });
+  }
+
+  private setUserData(user: AppUser): void {
+    this.userId = user.id || '';
+    this.userInfo = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      phone: user.phone || '',
+    };
+
+    if (!this.userId) {
+      this.router.navigate(['/register']);
+      return;
+    }
+    this.loadRoommateRequest();
+    this.loadUserPreferences();
   }
 }

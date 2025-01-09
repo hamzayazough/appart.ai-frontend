@@ -1,17 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
-import { Feature } from 'geojson';
 import { PointLike } from 'mapbox-gl';
 import { parseGeoJson } from '../../../shared/utils/geoJson.util';
 import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
 import { PinClass } from './pinClass';
 import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
 import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-map-page',
   templateUrl: './map-page.component.html',
   styleUrl: './map-page.component.scss',
 })
+
 export class MapPageComponent {
   map?: mapboxgl.Map;
   public apartments: AccommodationMatchingDTO[] = [];
@@ -42,7 +43,7 @@ export class MapPageComponent {
     },
   ];
 
-  constructor(public accommodationService: AccommodationsService) {
+  constructor(private accommodationService: AccommodationsService, private authService: AuthService) {
     // this.navigation = accommodationService.getNavigations();
   }
 
@@ -112,14 +113,23 @@ export class MapPageComponent {
       neLng = ne.x;
       neLat = ne.y;
     }
-  
-    this.accommodationService.getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
-      .subscribe((accommodations: AccommodationMatchingDTO[]) => {
-        this.apartments = accommodations;
-        this.pinClasses.forEach(
-          (cl) => cl.features = parseGeoJson(this.apartments)
-        );
-      });
+    if (this.authService.isAuthenticated$) {
+      this.accommodationService.getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
+        .subscribe((accommodations: AccommodationMatchingDTO[]) => {
+          this.apartments = accommodations;
+          this.pinClasses.forEach(
+            (cl) => cl.features = parseGeoJson(this.apartments)
+          );
+        });
+    } else {
+      this.accommodationService.getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
+        .subscribe((accommodations: AccommodationMatchingDTO[]) => {
+          this.apartments = accommodations;
+          this.pinClasses.forEach(
+            (cl) => cl.features = parseGeoJson(this.apartments)
+          );
+        });
+      }
   }
   
 

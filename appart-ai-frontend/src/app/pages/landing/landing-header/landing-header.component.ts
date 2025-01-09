@@ -21,10 +21,6 @@ export class LandingHeaderComponent {
   }
 
   public goToProfile(): void {
-    if (!this.userId) {
-      alert('Vous devez vous connecter pour accéder à votre profil');
-      return;
-    }
     this.router.navigate([`/account/${this.userId}`]);
   }
 
@@ -33,14 +29,13 @@ export class LandingHeaderComponent {
     this.selected = SelectedHeader.home;
   }
 
-  // si l'utilisateur s'est enregistré, alors on va prendre son objet user
   private subscribeToLoggedUser(): void {
-    this.authService.loggedUser.subscribe((user) => {
+    this.authService.loggedUser$.subscribe((user) => {
       if (user) {
         this.userId = user.id;
-        return;
+      } else {
+        this.userId = undefined;
       }
-      this.userId = undefined;
     });
   }
 }

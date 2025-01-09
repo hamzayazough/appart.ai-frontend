@@ -1,15 +1,15 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Accommodation } from '../../intefaces/accommodation.interface';
 import { ActivatedRoute } from '@angular/router';
 import { AccommodationsService } from '../../services/accomodations/accomodations.service';
 import { Image, ImageUrl } from '../../intefaces/image.interface';
-import { UserService } from '../../services/user-service/user.service';
 import { AppUser, LandlordInfo } from '../../intefaces/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { InterestedPeopleDialogComponent } from '../../dialogs/interested-people-dialog/interested-people-dialog.component';
 import { ContactLandLordComponent } from '../accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 import { AuthenticationService } from '../../services/auth/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -17,13 +17,15 @@ import { AuthenticationService } from '../../services/auth/authentication.servic
   templateUrl: './accommodation-page.component.html',
   styleUrl: './accommodation-page.component.scss'
 })
-export class AccommodationPageComponent implements OnInit {
+export class AccommodationPageComponent implements OnInit, OnDestroy {
   accommodationId!: string;
   accommodation!: Accommodation;
   public numPeopleInterested = 0;
-  private user: AppUser | null = null;
+  private user: AppUser = {} as AppUser;
   public isInUserPublicInterests = false;
   public isInUserPrivateInterests = false;
+  private unsubscribe$ = new Subject<void>();
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -34,21 +36,12 @@ export class AccommodationPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getUser();
-    this.accommodationId = this.route.snapshot.paramMap.get('accommodationId') || '';
-    if (this.accommodationId) {
-      this.accommodationsService.getAccommodationById(this.accommodationId).subscribe(
-        (data: Accommodation) => {
-          this.accommodation = data;
-          this.setNumPeopleInterested();
-          this.getUserInterest();
-          this.incrementViews(this.accommodationId);
-        },
-        (error) => {
-          console.error('Error fetching accommodation', error);
-        }
-      );
-    }
+    this.initializeData();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   public convertToImage(imageUrl: ImageUrl[]): Image[] {
@@ -146,12 +139,6 @@ export class AccommodationPageComponent implements OnInit {
     
   }
 
-  private getUser(): void {
-    this.authService.loggedUser.subscribe((user) => {
-      this.user = user;
-    });
-  }
-
   private getUserInterest(): void {
     if (!this.user || !this.user.id) return;
     this.accommodationsService.getUserInterest(this.accommodationId, this.user.id).subscribe(
@@ -180,6 +167,36 @@ export class AccommodationPageComponent implements OnInit {
   }
   private setNumPeopleInterested(): void {
     this.numPeopleInterested = this.accommodation.numInterestedPublic ;
+  }
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.user = user;
+        this.setUpAccommodation();
+      }
+    });
+  }
+
+  private setUpAccommodation(): void {
+    this.accommodationId = this.route.snapshot.paramMap.get('accommodationId') || '';
+    if (this.accommodationId) {
+      this.accommodationsService.getAccommodationById(this.accommodationId).subscribe(
+        (data: Accommodation) => {
+          this.accommodation = data;
+          this.setNumPeopleInterested();
+          this.getUserInterest();
+          this.incrementViews(this.accommodationId);
+        },
+        (error) => {
+          console.error('Error fetching accommodation', error);
+        }
+      );
+    }
   }
   
 }

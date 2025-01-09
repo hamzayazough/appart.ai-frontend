@@ -1,61 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SelectedHeader } from '../../../../../enums/selected-header.enum';
 import { ContactService } from '../../../../../services/contact-service/contact.service';
 import { AppUser, UserInfo } from '../../../../../intefaces/user.interface';
 import { Contact, ContactRequest } from '../../../../../intefaces/contact.interface';
-import { TokenService } from '../../../../../services/token-service/token.service';
-import { UserService } from '../../../../../services/user-service/user.service';
 import { AuthenticationService } from '../../../../../services/auth/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-account-contacts',
   templateUrl: './account-contacts.component.html',
   styleUrls: ['./account-contacts.component.scss']
 })
-export class AccountContactsComponent implements OnInit {
+export class AccountContactsComponent implements OnInit, OnDestroy {
   public selectedHeader = SelectedHeader.myProfile;
   public user: AppUser = {} as AppUser;
-  public userId: string = '';
   public contacts: Contact[] = [];
   public userContactRequests: ContactRequest[] = [];
   public receivedContactRequests: ContactRequest[] = [];
   public suggestedUsers: UserInfo[] = [];
+  private unsubscribe$ = new Subject<void>();
+
 
   constructor(
     private contactService: ContactService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    await this.initializeData();
+  ngOnInit(): void {
+    this.initializeData();
   }
 
-  private async initializeData(): Promise<void> {
-    try {
-      this.authService.loggedUser.subscribe((user) => {
-        this.user = user;
-        this.userId = user.id || '';
-        if(!this.userId){
-          alert('You must be logged in to access your contacts');
-          return;
-        }
-      });
-
-      this.loadAllContacts();
-    } catch (error) {
-      console.error('Error initializing data:', error);
-    }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
-  private loadAllContacts(): void {
-    this.getAllUserContact();
-    this.getAllUserContactRequests();
-    this.getReceivedContactRequests();
-  }
 
   public sendContactRequest(receiverId: string): void {
     const relationType = 'friend';
-    this.contactService.sendContactRequest(this.userId, receiverId, relationType ).subscribe(
+    this.contactService.sendContactRequest(this.user.id, receiverId, relationType ).subscribe(
       (contactRequest: ContactRequest) => {
         alert(`Contact request sent successfully! Date: ${contactRequest.date}`);
       },
@@ -67,7 +50,7 @@ export class AccountContactsComponent implements OnInit {
   }
 
   public discoverNewContacts(): void {
-    this.contactService.getContactSuggestions(this.userId).subscribe(
+    this.contactService.getContactSuggestions(this.user.id).subscribe(
       (suggestedUsers: UserInfo[]) => {
         this.suggestedUsers = suggestedUsers;
       },
@@ -80,7 +63,7 @@ export class AccountContactsComponent implements OnInit {
 
   public removeContact(contactId: string): void {
     if (confirm('Are you sure you want to remove this contact?')) {
-      this.contactService.removeContact(this.userId, contactId).subscribe(
+      this.contactService.removeContact(this.user.id, contactId).subscribe(
         (success: boolean) => {
           if (success) {
             alert('Contact removed successfully!');
@@ -147,7 +130,7 @@ export class AccountContactsComponent implements OnInit {
   }
 
   private getAllUserContact(): void {
-    this.contactService.getUserContacts(this.userId).subscribe(
+    this.contactService.getUserContacts(this.user.id).subscribe(
       (contacts: Contact[]) => {
         this.contacts = contacts;
       },
@@ -158,7 +141,7 @@ export class AccountContactsComponent implements OnInit {
   }
 
   private getAllUserContactRequests(): void {
-    this.contactService.getAllUserContactRequests(this.userId).subscribe(
+    this.contactService.getAllUserContactRequests(this.user.id).subscribe(
       (contactRequests: ContactRequest[]) => {
         this.userContactRequests = contactRequests;
       },
@@ -170,7 +153,7 @@ export class AccountContactsComponent implements OnInit {
   }
 
   private getReceivedContactRequests(): void {
-    this.contactService.getReceivedContactRequests(this.userId).subscribe(
+    this.contactService.getReceivedContactRequests(this.user.id).subscribe(
       (contactRequests: ContactRequest[]) => {
         this.receivedContactRequests = contactRequests;
       },
@@ -179,5 +162,24 @@ export class AccountContactsComponent implements OnInit {
         this.receivedContactRequests = [];
       }
     );
+  }
+
+  private initializeData(): void {
+    this.authService.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
+      if (!user.id) {
+        this.authService.handleUnAuthorizedUser();
+      } else {
+        this.user = user;
+        this.loadAllContacts();
+      }
+    });
+  }
+
+  private loadAllContacts(): void {
+    this.getAllUserContact();
+    this.getAllUserContactRequests();
+    this.getReceivedContactRequests();
   }
 }

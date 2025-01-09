@@ -1,7 +1,7 @@
 // interfaces related to user
 
 export interface AppUser {
-    id?: string,
+    id: string,
     auth0Id: string,
     email: string,
     phone?: string,

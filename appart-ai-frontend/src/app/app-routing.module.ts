@@ -11,23 +11,28 @@ import { AccountPreferencesComponent } from './pages/account/account-page/shared
 import { RoommatesPageComponent } from './pages/roomates-research/roomates-page/roommates-page.component';
 import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
+import { authGuard } from './auth.guard';
+import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
+  { path: 'register', component: RegistrationPageComponent },
+
   {
     path: 'r',
-    component: RoommatesPageComponent,
+    component: RoommatesPageComponent, canActivate: [authGuard],
     children: [
       { path: 'create-post', component: CreateRoommateRequestComponent },
       { path: 'research', component: RoommateSearchingComponent },
       { path: 'research/:id', component: RoommateSearchingComponent }
     ]
   },
-  { path: 'account/:id', component: AccountPageComponent },
-  { path: 'account/:id/r', component: AccountContactsComponent },
-  { path: 'account/:id/contacts', component: AccountContactsComponent },
-  { path: 'account/:id/saved-accommodations', component: MySavedAccommodationsComponent},
-  { path: 'account/:id/accommodations-manager', component: AccommodationManagementPageComponent },
-  { path: 'account/:id/preferences', component: AccountPreferencesComponent },
+  { path: 'account/:id', component: AccountPageComponent, canActivate: [authGuard] },
+  { path: 'account/:id/r', component: AccountContactsComponent, canActivate: [authGuard]},
+  { path: 'account/:id/contacts', component: AccountContactsComponent, canActivate: [authGuard] },
+  { path: 'account/:id/saved-accommodations', component: MySavedAccommodationsComponent, canActivate: [authGuard]},
+  { path: 'account/:id/accommodations-manager', component: AccommodationManagementPageComponent, canActivate: [authGuard] },
+  { path: 'account/:id/preferences', component: AccountPreferencesComponent, canActivate: [authGuard] },
   { path: 'map', component: MapPageComponent },
   { path: 'accommodation/:accommodationId', component: AccommodationPageComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
