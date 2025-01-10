@@ -6,6 +6,8 @@ import { RecommendationCircleComponent } from './components/recommendation-circl
 import { MaterialModule } from '../material/material.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { LandingHeaderComponent } from '../pages/landing/landing-header/landing-header.component';
+import { AuthButtonComponent } from '../pages/landing/landing-header/components/auth-button/auth-button.component';
 
 @NgModule({
   declarations: [
@@ -13,12 +15,16 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     GradientButtonComponent,
     RecommendationCircleComponent,
     ConfirmationDialogComponent,
+    LandingHeaderComponent,
+    AuthButtonComponent,
   ],
   imports: [CommonModule, MaterialModule, MatProgressSpinnerModule],
   exports: [
     ImageSliderComponent,
     GradientButtonComponent,
     RecommendationCircleComponent,
+    LandingHeaderComponent,
+    AuthButtonComponent,
   ],
 })
 export class SharedModule {}

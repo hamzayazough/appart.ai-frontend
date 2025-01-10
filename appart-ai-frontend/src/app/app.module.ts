@@ -6,14 +6,10 @@ import {
 } from '@angular/platform-browser';
 
 import { AuthModule } from '@auth0/auth0-angular';
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './pages/landing/landing-page/landing-page.component';
-import { LandingHeaderComponent } from './pages/landing/landing-header/landing-header.component';
 import { SharedModule } from './shared/shared.module';
-import { AuthButtonComponent } from './pages/landing/landing-header/components/auth-button/auth-button.component';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AccountPageComponent } from './pages/account/account-page/account-page.component';
@@ -54,12 +50,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
 import { RoommateSearchingComponent } from './pages/roomates-research/roomates-page/roommate-searching/roommate-searching.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 
 @NgModule({ declarations: [
         AppComponent,
         LandingPageComponent,
-        LandingHeaderComponent,
-        AuthButtonComponent,
         AccountPageComponent,
         AccountPersonalInfoComponent,
         AccountContactsComponent,
@@ -78,6 +73,7 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         CreateRoommateRequestComponent,
         RoommateSearchingComponent,
         RegistrationPageComponent,
+        LoginDialogComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,
