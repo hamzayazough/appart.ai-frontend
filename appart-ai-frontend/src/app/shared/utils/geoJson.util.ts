@@ -9,7 +9,7 @@ export function parseGeoJson(accomodations: AccommodationMatchingDTO[]): Feature
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [accom.value.address.location[0], accom.value.address.location[1]],
+          coordinates: [accom.accommodation.address.location[0], accom.accommodation.address.location[1]],
         },
         properties: accom,
       };

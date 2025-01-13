@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
 import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
 @Component({
   selector: 'app-map-sidebar',
@@ -7,7 +6,7 @@ import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.inter
   styleUrl: './map-sidebar.component.scss',
 })
 export class MapSidebarComponent {
-  constructor(public accommodationService: AccommodationsService) {}
+  constructor() {}
   @Input() data: AccommodationMatchingDTO[] = [];
   @Input() opened: boolean = true;
 }

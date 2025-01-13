@@ -10,7 +10,7 @@ import { InterestedPeopleDialogComponent } from '../../dialogs/interested-people
 import { ContactLandLordComponent } from '../accommodation-management-page/dialog-components/contact-land-lord/contact-land-lord.component';
 import { AuthenticationService } from '../../services/auth/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
-
+import { LoginDialogComponent } from '../../dialogs/login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-accommodation-page',
@@ -25,6 +25,7 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
   public isInUserPublicInterests = false;
   public isInUserPrivateInterests = false;
   private unsubscribe$ = new Subject<void>();
+  private isUserAuthenticated: boolean = false;
   
 
   constructor(
@@ -68,12 +69,12 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
   }
 
 
-
   public addToFavorites(accommodationId: string): void {
-    if (!this.user || !this.user.id) {
-      alert('Please login to show your interest');
+    if (!this.isUserAuthenticated) {
+      this.openLoginDialog();
       return;
     }
+    console.log(this.authService.isAuthenticated$);
     if(this.isInUserPrivateInterests) return;
     this.accommodationsService.addToFavorites(accommodationId, this.user.id).subscribe(
       (numInterested) => {
@@ -90,9 +91,11 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+
   public expressMyInterestPublicly(accommodationId: string): void {
-    if (!this.user || !this.user.id) {
-        alert('Please login to show your interest');
+    if (!this.isUserAuthenticated) {
+        this.openLoginDialog();
         return;
     }
 
@@ -115,7 +118,9 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
 }
 
   public incrementViews(accommodationId: string): void {
-    if (!this.user || !this.user.id) return;
+    if (!this.isUserAuthenticated) {
+      return;
+    }
     this.accommodationsService.incrementViews(accommodationId, this.user.id).subscribe(
       (numViews) => {
         this.accommodation.numViews = numViews;
@@ -126,6 +131,7 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
     );
   }
 
+  // TODO: change this in the case where the accommodation got web scrapped and dont have an associated landlord
   public contactLandlord(): void {
     const landlordInfo: LandlordInfo = {
       landlordName: this.accommodation.ownerName,
@@ -140,7 +146,10 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
   }
 
   private getUserInterest(): void {
-    if (!this.user || !this.user.id) return;
+
+    if (!this.isUserAuthenticated) {
+      return;
+    }
     this.accommodationsService.getUserInterest(this.accommodationId, this.user.id).subscribe(
       (interest) => {
         switch (interest) {
@@ -169,17 +178,19 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
     this.numPeopleInterested = this.accommodation.numInterestedPublic ;
   }
 
-  private initializeData(): void {
-    this.authService.loggedUser$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((user) => {
-      if (!user.id) {
-        this.authService.handleUnAuthorizedUser();
-      } else {
-        this.user = user;
-        this.setUpAccommodation();
-      }
+  private openLoginDialog(): void {
+    this.dialog.open(LoginDialogComponent, {
+      data: {
+        message: 'Please login to show your interest',
+      },
+      width: '50%',
     });
+  }
+
+  private initializeData(): void {
+    this.subscribeToAuthentication();
+    this.setUpAccommodation();
+
   }
 
   private setUpAccommodation(): void {
@@ -197,6 +208,23 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  private subscribeToAuthentication(): void {
+    this.authService.isAuthenticated$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((isAuthenticated) => {
+        this.isUserAuthenticated = isAuthenticated;
+        if (isAuthenticated) {
+          const user = this.authService.getStoredUser();
+          if (user) {
+            this.user = user;
+          }
+          else {
+            this.authService.handleUnAuthorizedUser();
+          }
+        }
+      });
   }
   
 }

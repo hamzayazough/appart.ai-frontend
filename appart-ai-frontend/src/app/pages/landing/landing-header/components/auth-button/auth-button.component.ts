@@ -10,7 +10,6 @@ import { TokenService } from '../../../../../services/token-service/token.servic
   styleUrl: './auth-button.component.scss'
 })
 export class AuthButtonComponent implements OnInit, OnDestroy {
-  @Input() message: string = 'Se connecter';
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -30,6 +29,7 @@ export class AuthButtonComponent implements OnInit, OnDestroy {
     this.auth.user$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
+
   }
 
   ngOnDestroy(): void {

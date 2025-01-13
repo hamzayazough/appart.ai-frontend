@@ -1,5 +1,8 @@
+import { Coordinate } from "mapbox-gl";
 import { Address } from "./adress.interface";
 import { Image, ImageUrl } from "./image.interface";
+import exp from "constants";
+import { UserAccommodationMatching } from "./matching.interface";
 
 export interface Accommodation {
     id: string;
@@ -41,11 +44,10 @@ export interface Accommodation {
   }
 
   export interface AccommodationMatchingDTO {
-    pros: string[];
-    cons: string[];
-    score: number;
-    value: AccommodationBaseDTO;
-  }
+    matching: UserAccommodationMatching;
+    accommodation: AccommodationBaseDTO;
+}
+
   export interface AccommodationBaseDTO {
     id: string;
     title: string;
@@ -53,5 +55,5 @@ export interface Accommodation {
     bathrooms: number;
     price: number;
     address: Address;
-    imageUrls: Image[];
+    imageUrls: ImageUrl[];
   }

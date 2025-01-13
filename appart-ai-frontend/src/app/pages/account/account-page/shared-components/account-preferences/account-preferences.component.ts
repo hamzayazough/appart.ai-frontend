@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-dialog.component';
 import { AuthenticationService } from '../../../../../services/auth/authentication.service';
 import { Subject } from 'rxjs';
+import { Place } from '../../../../../intefaces/place.interface';
 
 @Component({
   selector: 'app-account-preferences',
@@ -18,12 +19,9 @@ import { Subject } from 'rxjs';
 })
 export class AccountPreferencesComponent implements OnInit {
   public userPreferences: UserPreferences = {} as UserPreferences;
-  public schoolAddressControl = new FormControl();
-  public workAddressControl = new FormControl();
-  public schoolAddressSuggestions: any[] = [];
-  public workAddressSuggestions: any[] = [];
-  public showSchoolSuggestions: boolean = false;
-  public showWorkSuggestions: boolean = false;
+  public placeControls: FormControl[] = [];
+  public placeSuggestions: any[][] = [];
+  public showSuggestions: boolean[] = [];
   private user: AppUser = {} as AppUser;
   private unsubscribe$ = new Subject<void>();
 
@@ -39,58 +37,47 @@ export class AccountPreferencesComponent implements OnInit {
     this.initializeData();
   }
 
-    
-  hideSchoolSuggestions() {
-    setTimeout(() => {
-      this.showSchoolSuggestions = false;
-    }, 200);
+  public addPlace(): void {
+    const newPlace: Place = {
+      id: '',
+      name: '',
+      address: { placeName: '', location: [0, 0] },
+      weight: 0,
+    };
+    this.userPreferences.places.push(newPlace);
+    const index = this.userPreferences.places.length - 1;
+    this.placeControls[index] = new FormControl();
+    this.placeSuggestions[index] = [];
+    this.showSuggestions[index] = false;
+  
+    this.setupAddressControl(this.placeControls[index], index);
+  }
+  
+
+  public removePlace(index: number): void {
+    this.userPreferences.places.splice(index, 1);
+    this.placeControls.splice(index, 1);
+    this.placeSuggestions.splice(index, 1);
+    this.showSuggestions.splice(index, 1);
   }
 
-  hideWorkSuggestions() {
-    setTimeout(() => {
-      this.showWorkSuggestions = false;
-    }, 200);
-  }
-
-  public selectAddress(suggestion: any, addressType: 'school' | 'work'): void {
+  public selectAddress(suggestion: any, index: number): void {
     const address: Address = {
       placeName: suggestion.place_name,
       location: [suggestion.geometry.coordinates[0], suggestion.geometry.coordinates[1]],
     };
-
-    if (addressType === 'school') {
-      this.userPreferences.schoolAddress = address;
-      this.schoolAddressControl.setValue(address.placeName);
-      this.schoolAddressSuggestions = [];
-    } else if (addressType === 'work') {
-      this.userPreferences.workAddress = address;
-      this.workAddressControl.setValue(address.placeName);
-      this.workAddressSuggestions = [];
-    }
+    this.userPreferences.places[index].address = address;
+    this.placeControls[index].setValue(address.placeName);
+    this.placeSuggestions[index] = [];
+    this.showSuggestions[index] = false;
   }
 
-  private getUserPreferences(userId: string): void {
-    this.userService.getUserPreferences(userId).subscribe(
-      (preferences) => {
-        if (preferences) {
-          this.userPreferences = preferences;
-          this.schoolAddressControl.setValue(preferences.schoolAddress?.placeName || '');
-          this.workAddressControl.setValue(preferences.workAddress?.placeName || '');
-          this.initializeAddressControls();
-        } else {
-          console.warn('No preferences found for the user.');
-          alert('No preferences found. Please create new preferences.');
-        }
-      },
-      (error) => {
-        if (error.status === 404) {
-          alert('User preferences not found. Please create preferences.');
-        } else {
-          console.error('Error fetching user preferences:', error);
-        }
-      }
-    );
+  public hideSuggestions(index: number): void {
+    setTimeout(() => {
+      this.showSuggestions[index] = false;
+    }, 200);
   }
+
 
   public updatePreferences(): void {
     if (!this.user.id) {
@@ -155,32 +142,53 @@ export class AccountPreferencesComponent implements OnInit {
       });
   }
 
-  private initializeAddressControls(): void {
-    this.setupAddressControl(this.schoolAddressControl, 'school');
-    this.setupAddressControl(this.workAddressControl, 'work');
-  }
   
-  private setupAddressControl(control: AbstractControl, type: 'school' | 'work'): void {
-    control.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((value) => this.handleAddressInput(value, type));
-  }
-
-  private handleAddressInput(value: string, type: 'school' | 'work'): void {
-    if (!value) {
-      if (type === 'school') this.schoolAddressSuggestions = [];
-      if (type === 'work') this.workAddressSuggestions = [];
-      return;
-    }
-
-    this.mapboxService.searchPlace(value).subscribe((response: any) => {
-      if (type === 'school') {
-        this.schoolAddressSuggestions = response.features;
-      } else if (type === 'work') {
-        this.workAddressSuggestions = response.features;
+  private setupAddressControl(control: AbstractControl, index: number): void {
+    control.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((value) => {
+      if (!value) {
+        this.placeSuggestions[index] = [];
+        return;
       }
+      this.mapboxService.searchPlace(value).subscribe((response: any) => {
+        this.placeSuggestions[index] = response.features;
+      });
     });
   }
+
+  private getUserPreferences(userId: string): void {
+    this.userService.getUserPreferences(userId).subscribe(
+      (preferences) => {
+        if (preferences) {
+          this.userPreferences = preferences;
+          console.log('User preferences:', this.userPreferences);
+          this.initializePlaces(preferences.places);
+        } else {
+          console.warn('No preferences found for the user.');
+          alert('No preferences found. Please create new preferences.');
+        }
+      },
+      (error) => {
+        if (error.status === 404) {
+          alert('User preferences not found. Please create preferences.');
+        } else {
+          console.error('Error fetching user preferences:', error);
+        }
+      }
+    );
+  }
+
+  private initializePlaces(places: Place[]): void {
+    this.placeControls = [];
+    this.placeSuggestions = [];
+    this.showSuggestions = [];
+  
+    places.forEach((place, index) => {
+      this.placeControls[index] = new FormControl(place.address.placeName || '');
+      this.placeSuggestions[index] = [];
+      this.showSuggestions[index] = false;
+      this.setupAddressControl(this.placeControls[index], index);
+    });
+  }  
 
 
 }

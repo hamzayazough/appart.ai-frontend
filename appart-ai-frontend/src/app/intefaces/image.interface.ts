@@ -1,6 +1,6 @@
 export interface ImageUrl {
     imageUrl: string;
-    imageAlt?: string;
+    imageAlt: string;
   }
 
 export interface Image {

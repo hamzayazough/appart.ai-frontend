@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccommodationBaseDTO } from '../../../../../../intefaces/accommodation.interface';
-import { PrivateAccommodationService } from '../../../../../../services/private-accommodation-service/private-accommodation.service';
+import { UserRelatedAccommodationsService } from '../../../../../../services/private-accommodation-service/user-related-accommodations.service';
 import { ActivatedRoute } from '@angular/router';
-import { TokenService } from '../../../../../../services/token-service/token.service';
 import { of, switchMap } from 'rxjs';
 
 @Component({
@@ -16,7 +15,7 @@ export class MySavedAccommodationsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private accommodationService: PrivateAccommodationService,
+    private accommodationService: UserRelatedAccommodationsService,
   ) {}
 
   ngOnInit(): void {
