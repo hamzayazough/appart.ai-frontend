@@ -9,11 +9,12 @@
       </h1>
     </div>
     <!-- should we use roter instead of hrefs? -->
-    <a href="/map" class="no-underline">
-      <app-gradient-button id="get-started" [width]="200" [height]="75"
-        >Get started</app-gradient-button
-      >
-    </a>
+    <div class="no-underline" (click)="onGetStartedClick()">
+      <app-gradient-button id="get-started" [width]="200" [height]="75">
+        Get started
+      </app-gradient-button>
+    </div>
+    
   </div>
   <app-image-slider
     [images]="images"

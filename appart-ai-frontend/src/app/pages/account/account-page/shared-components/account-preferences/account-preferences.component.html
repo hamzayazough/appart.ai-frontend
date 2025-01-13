@@ -26,51 +26,61 @@
         <input id="car" type="checkbox" [(ngModel)]="userPreferences.car" name="car" />
       </div>
   
-      <div class="form-group">
-        <label for="schoolAddress">School Address:</label>
-        <input 
-        matInput 
-        type="text" 
-        [formControl]="schoolAddressControl" 
-        placeholder="Enter school address" 
-        (focus)="showSchoolSuggestions = true"
-        (blur)="hideSchoolSuggestions()"
-      />
-        <ul *ngIf="schoolAddressSuggestions.length > 0 && showSchoolSuggestions" class="address-suggestions">
-          <li *ngFor="let suggestion of schoolAddressSuggestions" (click)="selectAddress(suggestion, 'school')">
-            {{ suggestion.place_name }}
-          </li>
-        </ul>
+     <div class="form-group">
+      <label>Places:</label>
+      <div *ngFor="let place of userPreferences.places; let i = index" class="place-item">
+        <!-- Place Name -->
+        <div>
+          <label for="placeName-{{ i }}">Place Name:</label>
+          <input
+            id="placeName-{{ i }}"
+            type="text"
+            [(ngModel)]="place.name"
+            name="placeName-{{ i }}"
+            placeholder="Enter place name"
+            required
+          />
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label for="address-{{ i }}">Address:</label>
+          <input
+            id="address-{{ i }}"
+            type="text"
+            [formControl]="placeControls[i]"
+            placeholder="Enter address"
+            (focus)="showSuggestions[i] = true"
+            (blur)="hideSuggestions(i)"
+          />
+          <ul *ngIf="showSuggestions[i]" class="address-suggestions">
+            <li *ngFor="let suggestion of placeSuggestions[i]" (click)="selectAddress(suggestion, i)">
+              {{ suggestion.place_name }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Weight -->
+        <div>
+          <label for="weight-{{ i }}">Weight:</label>
+          <input
+            id="weight-{{ i }}"
+            type="number"
+            min="0"
+            max="10"
+            [(ngModel)]="place.weight"
+            name="weight-{{ i }}"
+            required
+          />
+        </div>
+
+        <!-- Remove Place -->
+        <button type="button" (click)="removePlace(i)">Remove Place</button>
       </div>
 
-      <div class="form-group">
-        <label for="workAddress">Work Address:</label>
-        <input 
-        matInput 
-        type="text" 
-        [formControl]="workAddressControl" 
-        placeholder="Enter work address"
-        (focus)="showWorkSuggestions = true"
-        (blur)="hideWorkSuggestions()"
-      />
-        <ul *ngIf="workAddressSuggestions.length > 0 && showWorkSuggestions" class="address-suggestions">
-          <li *ngFor="let suggestion of workAddressSuggestions" (click)="selectAddress(suggestion, 'work')">
-            {{ suggestion.place_name }}
-          </li>
-        </ul>
-      </div>
-  
-      <div class="form-group">
-        <label for="schoolAddressWeight">School Address Weight (0-10):</label>
-        <input id="schoolAddressWeight" type="number" min="0" max="10" [(ngModel)]="userPreferences.schoolAddressWeight" name="schoolAddressWeight" />
-      </div>
-  
-  
-      <div class="form-group">
-        <label for="workAddressWeight">Work Address Weight (0-10):</label>
-        <input id="workAddressWeight" type="number" min="0" max="10" [(ngModel)]="userPreferences.workAddressWeight" name="workAddressWeight" />
-      </div>
-  
+      <!-- Add New Place -->
+      <button type="button" (click)="addPlace()">Add New Place</button>
+    </div>
       <div class="form-group">
         <label for="publicTransportationProximity">Public Transportation Proximity (0-10):</label>
         <input id="publicTransportationProximity" type="number" min="0" max="10" [(ngModel)]="userPreferences.publicTransportationProximity" name="publicTransportationProximity" />

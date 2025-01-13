@@ -29,6 +29,14 @@ export class LandingHeaderComponent {
     this.selected = SelectedHeader.home;
   }
 
+  public onBrowseClick(): void {
+    if (this.userId) {
+      this.router.navigate([`/map/authenticated`]);
+    } else {
+      this.router.navigate([`/map`]);
+    }
+  }
+
   private subscribeToLoggedUser(): void {
     this.authService.loggedUser$.subscribe((user) => {
       if (user) {

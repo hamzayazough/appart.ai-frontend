@@ -1,19 +1,20 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PointLike } from 'mapbox-gl';
-import { parseGeoJson } from '../../../shared/utils/geoJson.util';
-import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
-import { PinClass } from './pinClass';
-import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
-import {  Subject } from 'rxjs';
-import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
+import { parseGeoJson } from '../../shared/utils/geoJson.util';
+import { AccommodationsService } from '../../services/accomodations/accomodations.service';
+import { PinClass } from '../map/map-page/pinClass';
+import { MapSidebarComponent } from '../map/map-sidebar/map-sidebar.component';
+import { combineLatest, filter, Subject, takeUntil } from 'rxjs';
+import { AuthenticationService } from '../../services/auth/authentication.service';
+import { TokenService } from '../../services/token-service/token.service';
+import { AccommodationMatchingDTO } from '../../intefaces/accommodation.interface';
 
 @Component({
-  selector: 'app-map-page',
-  templateUrl: './map-page.component.html',
-  styleUrl: './map-page.component.scss',
+  selector: 'app-matching-map-page',
+  templateUrl: './matching-map-page.component.html',
+  styleUrl: './matching-map-page.component.scss'
 })
-
-export class MapPageComponent implements OnInit, OnDestroy{
+export class MatchingMapPageComponent implements OnInit, OnDestroy{
 
   @ViewChild('sidebar') sidebar!: MapSidebarComponent;
   public map?: mapboxgl.Map;
@@ -21,6 +22,7 @@ export class MapPageComponent implements OnInit, OnDestroy{
 
   public sidebarOpened = true;
   private unsubscribe$ = new Subject<void>();
+  private userId: string = "";
 
 
   pinClasses: PinClass[] = [
@@ -44,10 +46,12 @@ export class MapPageComponent implements OnInit, OnDestroy{
     },
   ];
 
-  constructor(private accommodationService: AccommodationsService) {
+  constructor(private accommodationService: AccommodationsService, private authService: AuthenticationService, private tokenService: TokenService) {
   }
 
   ngOnInit(): void {
+    console.log('MatchingMapPageComponent constructor called');
+    console.log(this.sidebar);
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -93,7 +97,8 @@ export class MapPageComponent implements OnInit, OnDestroy{
         [bounds.getSouthWest().lng, bounds.getSouthWest().lat], // South-West
         [bounds.getNorthEast().lng, bounds.getNorthEast().lat]  // North-East
       ];
-      this.getAccommodationsInBoundingBox(bbox);   
+
+      this.initializeData(bbox);
     }
   }
   
@@ -115,15 +120,36 @@ export class MapPageComponent implements OnInit, OnDestroy{
       neLng = ne.x;
       neLat = ne.y;
     }
-    
-    console.log('User is not authenticated, calling accommodation');
-    this.accommodationService.getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
-      .subscribe((accommodations: AccommodationMatchingDTO[]) => {
-        console.log('accommodations:', accommodations);
-        this.apartments = accommodations;
-        this.pinClasses.forEach(
-          (cl) => cl.features = parseGeoJson(this.apartments)
-        );
+      console.log('User is authenticated, calling accommodation');
+      this.accommodationService.getAccommodationsInBoundingBoxWithMatching(this.userId, swLng, swLat, neLng, neLat)
+        .subscribe((accommodations: AccommodationMatchingDTO[]) => {
+          console.log('accommodations:', accommodations);
+          this.apartments = accommodations;
+          this.pinClasses.forEach(
+            (cl) => cl.features = parseGeoJson(this.apartments)
+          );
+        });
+  }
+  
+
+  private initializeData(bbox: [PointLike, PointLike]) {
+    // no choice of waiting for both of them cause for a mysterious reason the token is not being stored synchronously
+    combineLatest([
+      this.authService.isAuthenticated$,
+      this.tokenService.getToken$(), 
+    ])
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        filter(([isAuthenticated, token]) => isAuthenticated && !!token)
+      )
+      .subscribe(([isAuthenticated]) => {  
+        const user = this.authService.getStoredUser();
+  
+        if (user) {
+          this.userId = user.id;
+        }
+        this.getAccommodationsInBoundingBox(bbox);
+        console.log('We are calling getAccommodations:', isAuthenticated);
       });
   }
   

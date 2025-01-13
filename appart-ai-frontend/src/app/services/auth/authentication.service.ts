@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { AppUser } from '../../intefaces/user.interface';
 import { UserService } from '../user-service/user.service';
 import { UserType } from '../../enums/user-type.enum';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 
 export class AuthenticationService {
   private loggedUser: BehaviorSubject<AppUser> = new BehaviorSubject<AppUser>({} as AppUser);
+  public isAuthentificated: boolean = false;
 
   get isAuthenticated$() {
     return this.auth0Service.isAuthenticated$;
@@ -43,6 +44,7 @@ export class AuthenticationService {
         });
       }
     });
+    
    }
 
   public logout() {

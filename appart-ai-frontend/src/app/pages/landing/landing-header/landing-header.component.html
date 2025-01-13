@@ -9,13 +9,13 @@
     >
 
     <a
-      class="poppins-thin header-item"
-      [ngClass]="{ selected: selected === selectedHeader.browse }"
-      (click)="selected = selectedHeader.browse"  href="/map"
-      ><app-gradient-button [styleOnHover]="true"
-        >Browse</app-gradient-button
-      ></a
-    >
+    class="poppins-thin header-item"
+    [ngClass]="{ selected: selected === selectedHeader.browse }"
+    (click)="onBrowseClick()"
+  >
+    <app-gradient-button [styleOnHover]="true">Browse</app-gradient-button>
+  </a>
+  
 
     <a
     class="poppins-thin header-item"

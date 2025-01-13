@@ -1,38 +1,30 @@
 <div class="container" (click)="selectAccommodation()">
   <div class="header">
-    <app-recommendation-circle
-      [value]="data.score || 0"
-    ></app-recommendation-circle>
     <div class="header-data">
-      <span class="poppins-black-title big">{{ data.value.title }}</span>
-      <span class="poppins-black-title">{{ data.value.address.placeName }}</span>
+      <span class="title">{{ data.accommodation.title }}</span>
+      <span class="subtitle">{{ data.accommodation.address.placeName }}</span>
     </div>
     <mat-icon class="bookmark">bookmark</mat-icon>
   </div>
-
-
   <div class="card-content">
-    <ng-container *ngIf="data.value.imageUrls.length > 0">
+    <ng-container *ngIf="data.accommodation.imageUrls.length > 0">
       <app-image-slider
-      [images]="data.value.imageUrls"
+      [images]="toImage(data.accommodation.imageUrls)"
       [delayBetweenSwitches]="0"
       [height]="150"
       [width]="250"
     ></app-image-slider>
     </ng-container>
-  
-    <div class="pros-cons-content">
-      <span class="poppins-black-title big"
-        >{{ data.value.price }}$ / mo</span
-      >
 
-      <span class="poppins-black-title" *ngFor="let p of data?.pros">
-        <span class="green">+ &nbsp;</span>{{ p }}</span
-      >
-      <span class="poppins-black-title" *ngFor="let c of data?.cons"
-        ><span class="red">- &nbsp;</span>{{ c }}</span
-      >
+  <div class="card-footer">
+    <div>
+      <span class="detail-label">Price:</span> ${{ data.accommodation.price }}
     </div>
-
+    <div>
+      <span class="detail-label">Bedrooms:</span> {{ data.accommodation.bedrooms }}
+    </div>
+    <div>
+      <span class="detail-label">Bathrooms:</span> {{ data.accommodation.bathrooms }}
+    </div>
   </div>
 </div>

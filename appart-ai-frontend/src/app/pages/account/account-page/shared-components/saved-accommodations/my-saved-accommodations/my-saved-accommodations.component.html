@@ -5,7 +5,7 @@
       <div class="accommodation-card" *ngFor="let accommodation of savedAccommodations">
         <mat-card class="accommodation-card__mat">
           <div class="accommodation-image">
-            <img [src]="accommodation.imageUrls[0].src || 'assets/default-image.jpg'" alt="Accommodation image">
+            <img [src]="accommodation.imageUrls[0].imageUrl || 'assets/default-image.jpg'" alt="Accommodation image">
           </div>
           <div class="accommodation-details">
             <mat-card-title>{{ accommodation.title }}</mat-card-title>

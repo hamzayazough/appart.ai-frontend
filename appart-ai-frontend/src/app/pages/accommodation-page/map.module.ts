@@ -9,9 +9,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { SharedModule } from '../../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatchingApartmentCardComponent } from '../matching-map-page/matching-apartment-card/matching-apartment-card.component';
+import { MatchingMapPageComponent } from '../matching-map-page/matching-map-page.component';
 
 @NgModule({
-  declarations: [MapPageComponent, ApartmentCardComponent, MapSidebarComponent],
+  declarations: [MapPageComponent, ApartmentCardComponent, MapSidebarComponent, MatchingApartmentCardComponent, MatchingMapPageComponent],
   imports: [
     CommonModule,
     MatSidenavModule,

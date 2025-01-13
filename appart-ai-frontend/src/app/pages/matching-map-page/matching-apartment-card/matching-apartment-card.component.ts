@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { Image, ImageUrl } from '../../../intefaces/image.interface';
 
 @Component({
-  selector: 'app-apartment-card',
-  templateUrl: './apartment-card.component.html',
-  styleUrl: './apartment-card.component.scss',
+  selector: 'app-matching-apartment-card',
+  templateUrl: './matching-apartment-card.component.html',
+  styleUrl: './matching-apartment-card.component.scss'
 })
-export class ApartmentCardComponent {
+export class MatchingApartmentCardComponent {
   @Input() data: AccommodationMatchingDTO = {} as AccommodationMatchingDTO;
 
   constructor(private route: Router) {}

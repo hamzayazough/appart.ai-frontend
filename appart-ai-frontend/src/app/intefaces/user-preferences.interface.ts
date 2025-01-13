@@ -1,12 +1,9 @@
-import { Address } from "./adress.interface";
+import { Place } from "./place.interface";
 
 export interface UserPreferences {
   occupation: string;
   pets: boolean;
-  schoolAddress: Address;
-  workAddress: Address;
-  workAddressWeight: number;
-  schoolAddressWeight: number;
+  places: Place[];
   minBudget: number;
   maxBudget: number;
   car: boolean;
