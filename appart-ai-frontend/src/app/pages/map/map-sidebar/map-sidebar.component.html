@@ -4,10 +4,18 @@
 </div> -->
 
 <mat-drawer #drawer class="sidebar" mode="over" [opened]="opened">
-  <app-apartment-card
+  @if(matchingFeature){
+    <app-matching-apartment-card
+      *ngFor="let apartment of data"
+      [data]="apartment"
+    ></app-matching-apartment-card>
+  } @else {
+    <app-apartment-card
     *ngFor="let apartment of data"
     [data]="apartment"
   ></app-apartment-card>
+  }
+
 </mat-drawer>
 
 <button

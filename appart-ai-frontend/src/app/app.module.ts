@@ -73,7 +73,7 @@ import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.compon
         CreateRoommateRequestComponent,
         RoommateSearchingComponent,
         RegistrationPageComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

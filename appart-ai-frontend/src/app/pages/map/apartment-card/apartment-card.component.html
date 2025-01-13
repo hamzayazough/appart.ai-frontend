@@ -1,6 +1,5 @@
 <div class="container" (click)="selectAccommodation()">
   <div class="header">
-    <app-recommendation-circle [value]="formattedScore"></app-recommendation-circle>
     <div class="header-data">
       <span class="title">{{ data.accommodation.title }}</span>
       <span class="subtitle">{{ data.accommodation.address.placeName }}</span>
@@ -16,21 +15,6 @@
       [width]="250"
     ></app-image-slider>
     </ng-container>
-
-  <div class="card-content">
-    <div class="pros-cons-content">
-      <h3 class="green">Pros</h3>
-      <ul>
-        <li *ngFor="let pro of pros" class="green">{{ pro }}</li>
-      </ul>
-    </div>
-    <div class="pros-cons-content">
-      <h3 class="red">Cons</h3>
-      <ul>
-        <li *ngFor="let con of cons" class="red">{{ con }}</li>
-      </ul>
-    </div>
-  </div>
 
   <div class="card-footer">
     <div>

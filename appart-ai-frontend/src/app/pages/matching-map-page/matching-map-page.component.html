@@ -1,0 +1,54 @@
+<div id="container">
+    <mat-drawer-container>
+      <app-map-sidebar
+        #sidebar
+        [opened]="sidebarOpened"
+        [data]="apartments"
+        [matchingFeature]="false"
+      ></app-map-sidebar>
+      <mgl-map
+        class="map"
+        [style]="'mapbox://styles/mapbox/streets-v9'"
+        [zoom]="[10]"
+        [center]="[-73.567253, 45.50169]"
+        (mapCreate)="onMapLoaded($event)"
+        (click)="onMapClick($event)"
+      >
+        <mgl-geojson-source
+          *ngFor="let pinData of pinClasses"
+          [id]="pinData.id"
+          [data]="pinData.features"
+        ></mgl-geojson-source>
+  
+  
+        <mgl-layer
+          id="nav"
+          type="line"
+          [source]="'symbols-source'"
+          [layout]="{
+            'line-join': 'round',
+            'line-cap': 'round'
+          }"
+          [paint]="{
+            'line-color': '#888',
+            'line-width': 8
+          }"
+        >
+        </mgl-layer>
+  
+        <mgl-layer
+          *ngFor="let pinData of pinClasses"
+          [id]="pinData.iconName"
+          type="symbol"
+          [source]="pinData.id"
+          [layout]="{
+            'icon-image': pinData.iconName,
+            'icon-anchor': 'bottom',
+            'icon-size': 0.3
+          }"
+        >
+        </mgl-layer>
+      </mgl-map>
+    </mat-drawer-container>
+  </div>
+  

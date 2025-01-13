@@ -13,6 +13,7 @@ import { RoommateSearchingComponent } from './pages/roomates-research/roomates-p
 import { CreateRoommateRequestComponent } from './pages/roomates-research/roomates-page/create-roommate-request/create-roommate-request.component';
 import { authGuard } from './auth.guard';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { MatchingMapPageComponent } from './pages/matching-map-page/matching-map-page.component';
 
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'account/:id/accommodations-manager', component: AccommodationManagementPageComponent, canActivate: [authGuard] },
   { path: 'account/:id/preferences', component: AccountPreferencesComponent, canActivate: [authGuard] },
   { path: 'map', component: MapPageComponent },
+  { path: 'map/authenticated', component: MatchingMapPageComponent, canActivate: [authGuard] },
   { path: 'accommodation/:accommodationId', component: AccommodationPageComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' },

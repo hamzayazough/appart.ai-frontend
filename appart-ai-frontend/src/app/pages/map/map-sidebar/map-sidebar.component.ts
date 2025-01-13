@@ -6,7 +6,10 @@ import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.inter
   styleUrl: './map-sidebar.component.scss',
 })
 export class MapSidebarComponent {
-  constructor() {}
+  constructor() {
+  }
   @Input() data: AccommodationMatchingDTO[] = [];
   @Input() opened: boolean = true;
+  @Input() matchingFeature: boolean = false;
 }
+
