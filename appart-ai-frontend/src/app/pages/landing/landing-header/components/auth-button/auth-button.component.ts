@@ -1,4 +1,4 @@
-import { Component, Input, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { DOCUMENT } from '@angular/common';
 import { combineLatest, filter, Subject, takeUntil } from 'rxjs';
