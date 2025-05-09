@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
 import { Router } from '@angular/router';
 import { Image, ImageUrl } from '../../../intefaces/image.interface';
@@ -8,11 +8,36 @@ import { Image, ImageUrl } from '../../../intefaces/image.interface';
   templateUrl: './matching-apartment-card.component.html',
   styleUrl: './matching-apartment-card.component.scss'
 })
-export class MatchingApartmentCardComponent {
+export class MatchingApartmentCardComponent implements OnInit {
   @Input() data: AccommodationMatchingDTO = {} as AccommodationMatchingDTO;
+  images: Image[] = [];
+  currentImageIndex = 0;
 
   constructor(private route: Router) {}
+  ngOnInit() {
+    this.images = this.toImage(this.data.accommodation.imageUrls || []);
 
+    if (this.images.length === 0) {
+      this.images.push({
+        src: "/assets/images/placeholder.jpg",
+        alt: "No image available",
+      });
+    }
+  }
+
+  get currentImage(): Image {
+    return this.images[this.currentImageIndex]
+  }
+
+  prevImage(event: Event) {
+    event.stopPropagation()
+    this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length
+  }
+
+  nextImage(event: Event) {
+    event.stopPropagation()
+    this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length
+  }
   public selectAccommodation() {
     this.route.navigate([`accommodation/${this.data.accommodation.id}`]);
   }
@@ -26,7 +51,8 @@ export class MatchingApartmentCardComponent {
   }
 
   public get formattedScore(): number {
-    return this.data.matching.score?.total || 0;
+    const score = this.data.matching.score?.total || 0;
+    return Math.round(score * 100);
   }
 
   public toImage(images: ImageUrl[]): Image[] {
@@ -36,4 +62,13 @@ export class MatchingApartmentCardComponent {
     }));
   }
   
+  public getDistanceText(distance: number): string {
+    if (distance <= 0.3) {
+      return "Very close to your locations"
+    } else if (distance <= 0.6) {
+      return "Reasonable distance"
+    } else {
+      return "Far from your locations"
+    }
+  }
 }

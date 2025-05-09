@@ -1,64 +1,117 @@
-<div class="container">
+<div class="contacts-container">
     <app-landing-header [selected]="selectedHeader"></app-landing-header>
 
     <div class="content">
-        <section class="contacts-section">
-            <h2>My Contacts</h2>
-            <div *ngIf="contacts.length === 0">
-                <p>No contact yet.</p>
-            </div>
-            <ul>
-                <li *ngFor="let contact of contacts" class="contact-item">
-                    <span>{{ contact.firstName }} {{ contact.lastName }}</span>
-                    <span>Relation: {{ contact.relationType.typeName || 'No relation type' }}</span>
-                    <span>Added on: {{ contact.contactDate | date: 'longDate' }}</span>
-                    <button (click)="removeContact(contact.id)">Remove Contact</button>
-                </li>
-            </ul>
-        </section>
+        <div class="page-title">
+            <h1>My Network</h1>
+            <p>Manage your contacts and connection requests</p>
+        </div>
 
-        <section class="discover-new-contacts-section">
-            <h2>Discover New Contacts</h2>
-            <button (click)="discoverNewContacts()">Discover New Contacts</button>
-            <div *ngIf="suggestedUsers.length === 0">
-                <p>No suggestions available.</p>
-            </div>
-            <ul *ngIf="suggestedUsers.length > 0">
-                <li *ngFor="let user of suggestedUsers" class="suggested-user-item">
-                    <span>{{ user.firstName }} {{ user.lastName }} ({{ user.username }})</span>
-                    <span>Phone: {{ user.phone }}</span>
-                    <ng-container *ngIf="user.id">
-                        <button (click)="sendContactRequest(user.id)">Send Contact Request</button>
-                    </ng-container>
-                </li>
-            </ul>
-        </section>
+        <div class="contacts-grid">
+            <section class="card contacts-section">
+                <h2 class="section-title">My Contacts</h2>
+                <div *ngIf="contacts.length === 0" class="empty-state">
+                    <i class="material-icons">people_outline</i>
+                    <p>No contacts yet. Start building your network!</p>
+                </div>
+                <ul class="contacts-list">
+                    <li *ngFor="let contact of contacts" class="contact-item">
+                        <div class="contact-info">
+                            <div class="contact-avatar">{{ contact.firstName.charAt(0) }}{{ contact.lastName.charAt(0) }}</div>
+                            <div class="contact-details">
+                                <span class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</span>
+                                <span class="contact-relation">{{ contact.relationType.typeName || 'No relation type' }}</span>
+                            </div>
+                        </div>
+                        <div class="contact-meta">
+                            <span class="contact-date">Added on: {{ contact.contactDate | date: 'mediumDate' }}</span>
+                            <button class="btn-icon" (click)="removeContact(contact.id)" title="Remove Contact">
+                                <i class="material-icons">person_remove</i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </section>
 
-        <section class="sent-requests-section">
-            <h2>Sent Contact Requests</h2>
-            <div *ngIf="userContactRequests.length === 0">
-                <p>No contact requests sent.</p>
-            </div>
-            <ul>
-                <li *ngFor="let request of userContactRequests" class="contact-request-item">
-                    <span>Requested: {{ request.receiver.firstName }} {{ request.receiver.lastName }}</span>
-                    <button (click)="cancelRequest(request.id)">Cancel Request</button>
-                </li>
-            </ul>
-        </section>
+            <section class="card discover-new-contacts-section">
+                <h2 class="section-title">Discover New Contacts</h2>
+                <button class="btn btn-primary discover-btn" (click)="discoverNewContacts()">
+                    <i class="material-icons">person_search</i>
+                    Find People
+                </button>
+                <div *ngIf="suggestedUsers.length === 0" class="empty-state">
+                    <i class="material-icons">search_off</i>
+                    <p>No suggestions available at the moment.</p>
+                </div>
+                <ul class="suggested-users-list">
+                    <li *ngFor="let user of suggestedUsers" class="suggested-user-item">
+                        <div class="user-info">
+                            <div class="user-avatar">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</div>
+                            <div class="user-details">
+                                <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+                                <span class="user-username">{{ user.username }}</span>
+                                <span class="user-phone">{{ user.phone }}</span>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="user.id">
+                            <button class="btn btn-primary send-request-btn" (click)="sendContactRequest(user.id)">
+                                <i class="material-icons">person_add</i>
+                                Connect
+                            </button>
+                        </ng-container>
+                    </li>
+                </ul>
+            </section>
 
-        <section class="received-requests-section">
-            <h2>Received Contact Requests</h2>
-            <div *ngIf="receivedContactRequests.length === 0">
-                <p>No contact requests received.</p>
-            </div>
-            <ul>
-                <li *ngFor="let request of receivedContactRequests" class="contact-request-item">
-                    <span>Request from: {{ request.sender.firstName }} {{ request.sender.lastName }} ({{ request.relationTypeName}})</span>
-                    <button (click)="acceptRequest(request)">Accept</button>
-                    <button (click)="refuseRequest(request)">Refuse</button>
-                </li>
-            </ul>
-        </section>
+            <section class="card requests-section">
+                <div class="requests-tabs">
+                    <button class="tab-btn" [class.active]="activeTab === 'sent'" (click)="activeTab = accountContactsTabs.Sent">Sent Requests</button>
+                    <button class="tab-btn" [class.active]="activeTab === 'received'" (click)="activeTab = accountContactsTabs.Received">Received Requests</button>
+                </div>
+
+                <div *ngIf="activeTab === 'sent'" class="tab-content">
+                    <div *ngIf="userContactRequests.length === 0" class="empty-state">
+                        <i class="material-icons">outgoing_mail</i>
+                        <p>No contact requests sent.</p>
+                    </div>
+                    <ul class="requests-list">
+                        <li *ngFor="let request of userContactRequests" class="request-item">
+                            <div class="request-info">
+                                <div class="request-avatar">{{ request.receiver.firstName.charAt(0) }}{{ request.receiver.lastName.charAt(0) }}</div>
+                                <div class="request-details">
+                                    <span class="request-name">{{ request.receiver.firstName }} {{ request.receiver.lastName }}</span>
+                                    <span class="request-status">Pending</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon cancel-btn" (click)="cancelRequest(request.id)" title="Cancel Request">
+                                <i class="material-icons">cancel</i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div *ngIf="activeTab === 'received'" class="tab-content">
+                    <div *ngIf="receivedContactRequests.length === 0" class="empty-state">
+                        <i class="material-icons">inbox</i>
+                        <p>No contact requests received.</p>
+                    </div>
+                    <ul class="requests-list">
+                        <li *ngFor="let request of receivedContactRequests" class="request-item">
+                            <div class="request-info">
+                                <div class="request-avatar">{{ request.sender.firstName.charAt(0) }}{{ request.sender.lastName.charAt(0) }}</div>
+                                <div class="request-details">
+                                    <span class="request-name">{{ request.sender.firstName }} {{ request.sender.lastName }}</span>
+                                    <span class="request-relation">{{ request.relationTypeName || 'No relation specified' }}</span>
+                                </div>
+                            </div>
+                            <div class="request-actions">
+                                <button class="btn btn-primary accept-btn" (click)="acceptRequest(request)">Accept</button>
+                                <button class="btn btn-secondary refuse-btn" (click)="refuseRequest(request)">Decline</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
     </div>
 </div>

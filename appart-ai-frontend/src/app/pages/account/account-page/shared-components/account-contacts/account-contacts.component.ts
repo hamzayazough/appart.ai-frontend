@@ -5,6 +5,7 @@ import { AppUser, UserInfo } from '../../../../../intefaces/user.interface';
 import { Contact, ContactRequest } from '../../../../../intefaces/contact.interface';
 import { AuthenticationService } from '../../../../../services/auth/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
+import { AccountContactsTabs } from '../../../../../enums/tabs.enum';
 
 @Component({
   selector: 'app-account-contacts',
@@ -18,6 +19,8 @@ export class AccountContactsComponent implements OnInit, OnDestroy {
   public userContactRequests: ContactRequest[] = [];
   public receivedContactRequests: ContactRequest[] = [];
   public suggestedUsers: UserInfo[] = [];
+  public activeTab: AccountContactsTabs = AccountContactsTabs.Received;
+  public accountContactsTabs = AccountContactsTabs;
   private unsubscribe$ = new Subject<void>();
 
 

@@ -1,7 +1,5 @@
-import { Coordinate } from "mapbox-gl";
 import { Address } from "./adress.interface";
 import { Image, ImageUrl } from "./image.interface";
-import exp from "constants";
 import { UserAccommodationMatching } from "./matching.interface";
 
 export interface Accommodation {
@@ -53,6 +51,7 @@ export interface Accommodation {
     title: string;
     bedrooms: number;
     bathrooms: number;
+    squareFootage?: number;
     price: number;
     address: Address;
     imageUrls: ImageUrl[];

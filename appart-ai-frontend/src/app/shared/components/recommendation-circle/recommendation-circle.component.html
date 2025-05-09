@@ -1,12 +1,21 @@
-<div
-  [ngClass]="['container', getClass()]"
-  [style.width.px]="size"
-  [style.height.px]="size"
->
-  <mat-spinner
-    [value]="value"
-    [mode]="'determinate'"
-    [diameter]="size"
-  ></mat-spinner>
-  <p class="text poppins-black-title">{{ value }}%</p>
+<div class="circle-container" [ngClass]="getClass()" [style.width.px]="size" [style.height.px]="size">
+  <svg [attr.viewBox]="viewBox">
+    <circle
+      class="circle-bg"
+      [attr.cx]="size/2"
+      [attr.cy]="size/2"
+      [attr.r]="radius"
+      [attr.stroke-width]="stroke"
+    ></circle>
+    <circle
+      class="circle-progress"
+      [attr.cx]="size/2"
+      [attr.cy]="size/2"
+      [attr.r]="radius"
+      [attr.stroke-width]="stroke"
+      [attr.stroke-dasharray]="circumference"
+      [attr.stroke-dashoffset]="dashoffset"
+    ></circle>
+  </svg>
+  <div class="percentage">{{ value }}%</div>
 </div>

@@ -1,11 +1,20 @@
 <div id="container">
-    <mat-drawer-container>
+  <mat-drawer-container>
+    <mat-drawer mode="side" [opened]="sidebarOpened">
       <app-map-sidebar
         #sidebar
-        [opened]="sidebarOpened"
         [data]="apartments"
         [matchingFeature]="false"
       ></app-map-sidebar>
+    </mat-drawer>
+    
+    <mat-drawer-content>
+      <div class="sidebar-toggle-wrapper" [class.sidebar-open]="sidebarOpened">
+        <button class="sidebar-toggle" (click)="sidebarOpened = !sidebarOpened">
+          <mat-icon>{{ sidebarOpened ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+      
       <mgl-map
         class="map"
         [style]="'mapbox://styles/mapbox/streets-v9'"
@@ -19,8 +28,7 @@
           [id]="pinData.id"
           [data]="pinData.features"
         ></mgl-geojson-source>
-  
-  
+
         <mgl-layer
           id="nav"
           type="line"
@@ -35,7 +43,7 @@
           }"
         >
         </mgl-layer>
-  
+
         <mgl-layer
           *ngFor="let pinData of pinClasses"
           [id]="pinData.iconName"
@@ -49,6 +57,6 @@
         >
         </mgl-layer>
       </mgl-map>
-    </mat-drawer-container>
-  </div>
-  
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

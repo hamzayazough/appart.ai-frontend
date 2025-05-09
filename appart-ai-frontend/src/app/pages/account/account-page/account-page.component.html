@@ -1,45 +1,106 @@
-<div class="container">
+<div class="account-page-container">
     <app-landing-header [selected]="selectedHeader"></app-landing-header>
-    <div class="account-page-container">
-        <section class="user-info-section">
-        <h2>User Information</h2>
-        <div class="user-info">
-            <label for="username">Username:</label>
-            <input id="username" [(ngModel)]="user.username" placeholder="Username" />
     
-            <label for="firstName">First Name:</label>
-            <input id="firstName" [(ngModel)]="user.firstName" placeholder="First Name" />
-    
-            <label for="lastName">Last Name:</label>
-            <input id="lastName" [(ngModel)]="user.lastName" placeholder="Last Name" />
-    
-            <label for="email">Email:</label>
-            <input id="email" [(ngModel)]="user.email" placeholder="Email" readonly />
-    
-            <label for="phone">Phone:</label>
-            <input id="phone" [(ngModel)]="user.phone" placeholder="Phone" />
-    
-            <button (click)="updateUserInfo()">Update Information</button>
-        </div>
+    <div class="content">
+      <div class="page-title">
+        <h1>My Account</h1>
+        <p>Manage your profile and settings</p>
+      </div>
+      
+      <div class="account-grid">
+        <section class="card user-info-section">
+          <h2 class="section-title">Personal Information</h2>
+          <div class="user-avatar">
+            <div class="avatar-circle">
+              {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+            </div>
+            <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+          </div>
+          
+          <div class="user-info-form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input id="username" class="form-control" [(ngModel)]="user.username" placeholder="Username" />
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input id="firstName" class="form-control" [(ngModel)]="user.firstName" placeholder="First Name" />
+              </div>
+              
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" class="form-control" [(ngModel)]="user.lastName" placeholder="Last Name" />
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input id="email" class="form-control" [(ngModel)]="user.email" placeholder="Email" readonly />
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input id="phone" class="form-control" [(ngModel)]="user.phone" placeholder="Phone" />
+            </div>
+            
+            <button class="btn btn-primary update-btn" (click)="updateUserInfo()">
+              <i class="material-icons">save</i>
+              Update Information
+            </button>
+          </div>
         </section>
-
-        <section *ngIf="user.type === userType.LANDLORD " class="user-section" (click)="toggleSection(display.AccommodationManagement)">
-            <h2>{{display.AccommodationManagement}}</h2>
-        </section>
-    
-        <section class="user-section" (click)="toggleSection(display.Contact)">
-            <h2>{{display.Contact}}</h2>
-        </section>
-
-        <section class="user-section" (click)="toggleSection(display.Preferences)">
-            <h2>{{display.Preferences}}</h2>
-        </section>
-
         
-        <section class="user-section" (click)="toggleSection(display.MySavedAccommodations)">
-            <h2>{{display.MySavedAccommodations}}</h2>
-        </section>
-    
-        <app-gradient-button id="get-started">Get started</app-gradient-button>
+        <div class="account-sections">
+          <section *ngIf="user.type === userType.LANDLORD" class="card account-section" (click)="toggleSection(display.AccommodationManagement)">
+            <div class="section-icon">
+              <i class="material-icons">apartment</i>
+            </div>
+            <div class="section-content">
+              <h2>{{display.AccommodationManagement}}</h2>
+              <p>Manage your property listings</p>
+            </div>
+            <i class="material-icons section-arrow">arrow_forward</i>
+          </section>
+          
+          <section class="card account-section" (click)="toggleSection(display.Contact)">
+            <div class="section-icon">
+              <i class="material-icons">people</i>
+            </div>
+            <div class="section-content">
+              <h2>{{display.Contact}}</h2>
+              <p>Manage your contacts and connections</p>
+            </div>
+            <i class="material-icons section-arrow">arrow_forward</i>
+          </section>
+          
+          <section class="card account-section" (click)="toggleSection(display.Preferences)">
+            <div class="section-icon">
+              <i class="material-icons">tune</i>
+            </div>
+            <div class="section-content">
+              <h2>{{display.Preferences}}</h2>
+              <p>Set your apartment preferences</p>
+            </div>
+            <i class="material-icons section-arrow">arrow_forward</i>
+          </section>
+          
+          <section class="card account-section" (click)="toggleSection(display.MySavedAccommodations)">
+            <div class="section-icon">
+              <i class="material-icons">favorite</i>
+            </div>
+            <div class="section-content">
+              <h2>{{display.MySavedAccommodations}}</h2>
+              <p>View your saved properties</p>
+            </div>
+            <i class="material-icons section-arrow">arrow_forward</i>
+          </section>
+        </div>
+      </div>
+      
+      <div class="get-started-container">
+        <button mat-button id="get-started" class="custom-button">Get started</button>
+      </div>
     </div>
-</div>
+  </div>

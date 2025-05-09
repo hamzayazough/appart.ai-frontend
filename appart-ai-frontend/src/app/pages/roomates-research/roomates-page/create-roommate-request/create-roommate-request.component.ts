@@ -35,6 +35,18 @@ export class CreateRoommateRequestComponent implements OnInit {
 
   }
 
+  decrementRoommates() {
+    //TODO: make it
+  }
+
+  incrementRoommates() {
+    //TODO: make it
+  }
+
+  getUserInitials() {
+    //TODO: make it
+  }
+
   onSubmit(): void {
     if (this.isEditMode && this.roommatePost.id) {
       this.roommateService.updateRoommateRequest(this.roommatePost.id, this.roommatePost as RoommatePost).subscribe(

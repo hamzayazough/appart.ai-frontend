@@ -10,10 +10,10 @@
       [data]="apartment"
     ></app-matching-apartment-card>
   } @else {
-    <app-apartment-card
-    *ngFor="let apartment of data"
-    [data]="apartment"
-  ></app-apartment-card>
+    <app-matching-apartment-card
+      *ngFor="let apartment of data"
+      [data]="apartment"
+    ></app-matching-apartment-card>
   }
 
 </mat-drawer>

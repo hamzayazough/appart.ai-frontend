@@ -4,6 +4,7 @@ import { ImageSliderComponent } from './components/image-slider/image-slider.com
 import { GradientButtonComponent } from './components/gradient-button/gradient-button.component';
 import { RecommendationCircleComponent } from './components/recommendation-circle/recommendation-circle.component';
 import { MaterialModule } from '../material/material.module';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { LandingHeaderComponent } from '../pages/landing/landing-header/landing-header.component';
@@ -18,7 +19,7 @@ import { AuthButtonComponent } from '../pages/landing/landing-header/components/
     LandingHeaderComponent,
     AuthButtonComponent,
   ],
-  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MaterialModule, MatProgressSpinnerModule, MatIconModule],
   exports: [
     ImageSliderComponent,
     GradientButtonComponent,
