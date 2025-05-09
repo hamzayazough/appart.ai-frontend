@@ -89,6 +89,19 @@ mat-drawer-content {
   bottom: 0;
 }
 
+.map-popup {
+  max-width: 350px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 0;
+  
+  app-matching-apartment-card {
+    display: block;
+    transform: scale(0.9);
+    transform-origin: top center;
+  }
+}
+
 ::ng-deep {
   .mat-drawer-container {
     background-color: transparent;
@@ -107,12 +120,31 @@ mat-drawer-content {
   
   // Mapbox popup styling
   .mapboxgl-popup {
-    max-width: 300px !important;
+    max-width: 380px !important;
     
     .mapboxgl-popup-content {
-      padding: 12px;
-      border-radius: 8px;
+      padding: 0;
+      border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .mapboxgl-popup-close-button {
+      font-size: 16px;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      top: 8px;
+      right: 8px;
+      z-index: 10;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.7);
+      }
     }
   }
   

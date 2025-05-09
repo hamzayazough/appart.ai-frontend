@@ -303,13 +303,6 @@ label {
   transform: translateX(5px);
 }
 
-.get-started-container {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--spacing-lg);
-  background-color: var(--primary-color-gradient);
-}
-
 @media (min-width: 768px) {
   .get-started-container {
     margin-top: var(--spacing-xl);

@@ -63,9 +63,9 @@ export class MatchingApartmentCardComponent implements OnInit {
   }
   
   public getDistanceText(distance: number): string {
-    if (distance <= 0.3) {
+    if (distance >= 0.85) {
       return "Very close to your locations"
-    } else if (distance <= 0.6) {
+    } else if (distance > 0.6) {
       return "Reasonable distance"
     } else {
       return "Far from your locations"

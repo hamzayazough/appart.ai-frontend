@@ -3,7 +3,7 @@
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 16px;
-  margin-top: 12px;
+  margin-top: 10px;
   padding: 24px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -15,26 +15,6 @@
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-  
-  mat-icon {
-    font-size: 20px;
-    color: #666;
   }
 }
 
@@ -187,11 +167,6 @@
     width: calc(100% - 8px);
     margin-left: 4px;
     margin-right: 4px;
-  }
-  
-  .back-button {
-    top: 16px;
-    left: 16px;
   }
   
   .card-header {
