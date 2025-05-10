@@ -50,8 +50,6 @@ export class ImageSliderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.images.forEach((image, index) => {
-    });
     this.startAutoSwitch();
   }
 
