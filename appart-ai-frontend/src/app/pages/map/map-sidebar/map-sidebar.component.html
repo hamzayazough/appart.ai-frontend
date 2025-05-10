@@ -1,49 +1,68 @@
 <div class="sidebar" [class.opened]="opened">
   <div class="sidebar-header">
     <div class="navigation-icons">
-      <button class="nav-icon" [ngClass]="{'active': selected === selectedHeader.home}" (click)="goToHomePage()">
+      <button
+        class="nav-icon"
+        [ngClass]="{ active: selected === selectedHeader.home }"
+        (click)="goToHomePage()"
+      >
         <mat-icon>home</mat-icon>
         <span class="icon-label">Home</span>
       </button>
-      <button class="nav-icon" [ngClass]="{'active': selected === selectedHeader.map}" (click)="onBrowseClick()">
+      <button
+        class="nav-icon"
+        [ngClass]="{ active: selected === selectedHeader.map }"
+        (click)="onBrowseClick()"
+      >
         <mat-icon>map</mat-icon>
         <span class="icon-label">Map</span>
       </button>
-      <button class="nav-icon" [ngClass]="{'active': selected === selectedHeader.roommate}" (click)="goToRoommates()">
+      <button
+        class="nav-icon"
+        [ngClass]="{ active: selected === selectedHeader.roommate }"
+        (click)="goToRoommates()"
+      >
         <mat-icon>people</mat-icon>
         <span class="icon-label">Roommates</span>
       </button>
-      <button class="nav-icon" [ngClass]="{'active': selected === selectedHeader.profile}" (click)="goToProfile()">
+      <button
+        class="nav-icon"
+        [ngClass]="{ active: selected === selectedHeader.profile }"
+        (click)="goToProfile()"
+      >
         <mat-icon>person</mat-icon>
         <span class="icon-label">Profile</span>
       </button>
     </div>
   </div>
-  
+
   <div class="sidebar-content">
-    <div *ngIf="data && data.length > 0; else noResults" class="accommodation-list">
-      <app-matching-apartment-card 
-        *ngFor="let apartment of data" 
-        [data]="apartment">
+    <div *ngIf="isLoading" class="loading-indicator">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading accommodations...</p>
+    </div>
+
+    <div *ngIf="!isLoading && data && data.length > 0; else noResults" class="accommodation-list">
+      <app-matching-apartment-card *ngFor="let apartment of data" [data]="apartment">
       </app-matching-apartment-card>
     </div>
-    
+
     <ng-template #noResults>
-      <div class="no-results">
+      <div *ngIf="!isLoading" class="no-results">
         <mat-icon>search_off</mat-icon>
         <p>No accommodations found in this area.</p>
         <p>Try adjusting your search or zoom out to see more results.</p>
       </div>
     </ng-template>
   </div>
-  
+
   <div class="sidebar-footer" *ngIf="data && data.length > 0">
     <div class="pagination">
-      <button [disabled]="currentPage === 1" (click)="prevPage()">
+      <button [disabled]="currentPage === 0" (click)="prevPage()">
         <mat-icon>chevron_left</mat-icon>
       </button>
-      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
-      <button [disabled]="currentPage === totalPages" (click)="nextPage()">
+      <span class="page-info">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">
         <mat-icon>chevron_right</mat-icon>
       </button>
     </div>

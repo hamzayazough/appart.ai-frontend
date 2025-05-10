@@ -18,21 +18,23 @@ export class UserRelatedAccommodationsService {
     private tokenService: TokenService
   ) {}
 
-  // TODO: à implementer plus tard comme feature
-  public getUserSuggestedAccommodations(
+  public getRecentMatchingAccommodations(
     userId: string,
-    page: number,
-    quantity: number
-  ): Observable<Accommodation[]> {
-    const url = `${this.baseUrl}/${userId}/suggested-accommodations`;
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('quantity', quantity.toString());
+    page = 0,
+    size = 20
+  ): Observable<AccommodationMatchingDTO[]> {
+    const url = `${this.baseUrl}/recent/matching/${userId}`;
+    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
     return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<Accommodation[]>(url, { headers, params }).pipe(catchError(this.handleError))
-      )
+      switchMap((headers) => this.http.get<AccommodationMatchingDTO[]>(url, { headers, params })),
+      map((response) => {
+        return response || [];
+      }),
+      catchError((error) => {
+        console.error('Error fetching recent matching accommodations:', error);
+        return this.handleError(error);
+      })
     );
   }
 

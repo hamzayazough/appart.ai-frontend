@@ -14,24 +14,38 @@ export class AccommodationsService {
   private url = '/public/api/accommodations';
   private apiUrl: string = environment.apiUrl + this.url;
 
-  constructor(private http: HttpClient, private userRelatedAccommodations: UserRelatedAccommodationsService) { }
+  constructor(
+    private http: HttpClient,
+    private userRelatedAccommodations: UserRelatedAccommodationsService
+  ) {}
 
-
-  public getAccommodationsInBoundingBox(minLat: number, minLong: number, maxLat: number, maxLong: number): Observable<AccommodationMatchingDTO[]> {
-    return this.http.get<AccommodationMatchingDTO[]>(
-      `${this.apiUrl}/in-bounding-box?minLat=${minLat}&minLong=${minLong}&maxLat=${maxLat}&maxLong=${maxLong}`
+  public getAccommodationsInBoundingBoxWithMatching(
+    userId: string,
+    minLat: number,
+    minLong: number,
+    maxLat: number,
+    maxLong: number
+  ): Observable<AccommodationMatchingDTO[]> {
+    return this.userRelatedAccommodations.getAccommodationsInBoundingBoxWithMatching(
+      userId,
+      minLat,
+      minLong,
+      maxLat,
+      maxLong
     );
   }
 
-  public getAccommodationsInBoundingBoxWithMatching(userId: string, minLat: number, minLong: number, maxLat: number, maxLong: number): Observable<AccommodationMatchingDTO[]> {
-    return this.userRelatedAccommodations.getAccommodationsInBoundingBoxWithMatching(userId, minLat, minLong, maxLat, maxLong);
+  public getRecentMatchingAccommodations(
+    userId: string,
+    page = 0,
+    size = 20
+  ): Observable<AccommodationMatchingDTO[]> {
+    return this.userRelatedAccommodations.getRecentMatchingAccommodations(userId, page, size);
   }
 
   public getAccommodationById(id: string): Observable<Accommodation> {
     return this.http.get<Accommodation>(`${this.apiUrl}/${id}`);
   }
-
-
 
   public getInterestedPeople(accommodationId: string): Observable<AppUser[]> {
     return this.http.get<AppUser[]>(`${this.apiUrl}/${accommodationId}/interested-people`);
@@ -52,6 +66,4 @@ export class AccommodationsService {
   public incrementViews(accommodationId: string, userId: string): Observable<number> {
     return this.userRelatedAccommodations.incrementViews(accommodationId, userId);
   }
-
-
 }

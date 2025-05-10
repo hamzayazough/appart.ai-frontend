@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatchingApartmentCardComponent } from '../matching-map-page/matching-apartment-card/matching-apartment-card.component';
 import { MatchingMapPageComponent } from '../matching-map-page/matching-map-page.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MatchingMapPageComponent } from '../matching-map-page/matching-map-page
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     NgxMapboxGLModule.withConfig({
       accessToken: accessToken, // Optional, can also be set per map (accessToken input of mgl-map)
     }),

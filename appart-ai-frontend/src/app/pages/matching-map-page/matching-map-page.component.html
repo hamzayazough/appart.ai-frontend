@@ -3,7 +3,6 @@
     <mat-drawer mode="side" [opened]="sidebarOpened">
       <app-map-sidebar
         #sidebar
-        [data]="apartments"
         [matchingFeature]="false"
         [opened]="sidebarOpened"
         (sidebarToggle)="toggleSidebar()"
