@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Accommodation } from '../../intefaces/accommodation.interface';
+import {
+  Accommodation,
+  AccommodationMatchingDetailsDTO,
+} from '../../intefaces/accommodation.interface';
 import { Observable } from 'rxjs';
 import { AppUser } from '../../intefaces/user.interface';
 import { UserRelatedAccommodationsService } from '../private-accommodation-service/user-related-accommodations.service';
@@ -43,8 +46,11 @@ export class AccommodationsService {
     return this.userRelatedAccommodations.getRecentMatchingAccommodations(userId, page, size);
   }
 
-  public getAccommodationById(id: string): Observable<Accommodation> {
-    return this.http.get<Accommodation>(`${this.apiUrl}/${id}`);
+  public getAccommodationById(
+    id: string,
+    userId: string
+  ): Observable<AccommodationMatchingDetailsDTO> {
+    return this.http.get<AccommodationMatchingDetailsDTO>(`${this.apiUrl}/${userId}/${id}`);
   }
 
   public getInterestedPeople(accommodationId: string): Observable<AppUser[]> {

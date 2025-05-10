@@ -117,7 +117,6 @@ export class MapSidebarComponent implements OnInit, OnDestroy {
   }
 
   private loadAccommodations(): void {
-    console.log('Loading accommodations for user:', this.userId);
     if (!this.userId) return;
 
     this.isLoading = true;
@@ -130,7 +129,6 @@ export class MapSidebarComponent implements OnInit, OnDestroy {
           if (data.length < this.itemsPerPage) {
             this.totalItems = this.currentPage * this.itemsPerPage + data.length;
           } else {
-            // If we get a full page, assume there are more
             this.totalItems = (this.currentPage + 1) * this.itemsPerPage + 1;
           }
           this.isLoading = false;
