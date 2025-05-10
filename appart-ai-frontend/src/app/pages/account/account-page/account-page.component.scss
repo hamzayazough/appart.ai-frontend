@@ -324,11 +324,12 @@ label {
 
 .btn-primary {
   background-color: var(--primary-color-gradient);
-  color: var(--white);
+  color: black;
 }
 
 .btn-primary:hover {
   background-color: var(--primary-dark);
+  color: var(--white);
 }
 
 .btn-secondary {

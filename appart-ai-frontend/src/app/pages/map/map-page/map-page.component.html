@@ -20,18 +20,17 @@
         [data]="pinData.features"
       ></mgl-geojson-source>
 
-
       <mgl-layer
         id="nav"
         type="line"
         [source]="'symbols-source'"
         [layout]="{
           'line-join': 'round',
-          'line-cap': 'round'
+          'line-cap': 'round',
         }"
         [paint]="{
           'line-color': '#888',
-          'line-width': 8
+          'line-width': 8,
         }"
       >
       </mgl-layer>
@@ -44,7 +43,7 @@
         [layout]="{
           'icon-image': pinData.iconName,
           'icon-anchor': 'bottom',
-          'icon-size': 0.3
+          'icon-size': 0.3,
         }"
       >
       </mgl-layer>

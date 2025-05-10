@@ -1,138 +1,256 @@
 <div class="container">
     <app-landing-header></app-landing-header>
-    <div class="accommodation-container">
-        <div class="accommodation-info-header">
-            <div class="info-text">
-                <h1>{{ accommodation.title }}</h1>
-                <p>{{ accommodation.address.placeName }}</p>
-            </div>
-            <div class="price-info">
-                <strong>{{ accommodation.rentPrice }} $/mois</strong>
-            </div>
-        </div>
     
-        <div class="accommodation-gallery">
-            <ng-container *ngIf="accommodation.imageUrls.length > 0">
-                <app-image-slider
-                    [images]="convertToImage(accommodation.imageUrls)"
-                    [delayBetweenSwitches]="5000"
-                    [height]="450"
-                    [width]="1000">
-                </app-image-slider>
-            </ng-container>
+    <div class="accommodation-container" *ngIf="accommodation">
+      <!-- Header Section -->
+      <div class="accommodation-info-header">
+        <div class="info-text">
+          <h1>{{ accommodation.title }}</h1>
+          <p>{{ accommodation.address.placeName }}</p>
         </div>
-        
-        <div class="accommodation-stats">
-            <span>{{ accommodation.numViews }} Views</span> | 
-            <a (click)="showInterestedPeople()" class="interested-link">{{ numPeopleInterested }} Interested</a>
-
-            <button class="interest-btn" *ngIf="!isInUserPublicInterests; else isInPublic" (click)="expressMyInterestPublicly(accommodation.id)">
-                 <mat-icon>favorite_border</mat-icon>
-            </button>
-
-            <ng-template #isInPublic>
-                <button class="interest-btn" (click)="expressMyInterestPublicly(accommodation.id)">
-                    <mat-icon>favorite</mat-icon>
-                </button>
-            </ng-template>
+        <div class="price-info">
+          {{ accommodation.rentPrice | currency:'USD':'symbol':'1.0-0' }}/month
+        </div>
+      </div>
+      
+      <!-- Custom Gallery Section - Carousel Style -->
+      <div class="accommodation-gallery">
+        <div class="gallery-container">
+          <ng-container *ngIf="images.length > 0; else noImages">
+            <img 
+              *ngFor="let image of images; let i = index" 
+              [src]="image.src" 
+              [alt]="image.alt" 
+              class="gallery-image"
+              [class.active]="i === currentImageIndex"
+              [class.prev]="i === getPrevIndex()"
+              [class.next]="i === getNextIndex()"
+            >
             
-            <button class="favorite-btn" *ngIf="!isInUserPrivateInterests; else isInFavorite" (click)="addToFavorites(accommodation.id)">
-                <mat-icon>bookmark_border</mat-icon>
-            </button>
-
-            <ng-template #isInFavorite>
-                <button class="favorite-btn" (click)="addToFavorites(accommodation.id)">
-                    <mat-icon>bookmark</mat-icon>
-                </button>
-            </ng-template>
-        </div>
-        
-        
-        <div class="accommodation-details">
-            <div class="detail">
-                <strong>Number of Bedrooms:</strong> {{ accommodation.numBeds }}
-            </div>
-            <div class="detail">
-                <strong>Number of Bathrooms:</strong> {{ accommodation.numBathrooms }}
-            </div>
-            <div class="detail">
-                <strong>Square Footage:</strong> {{ accommodation.squareFootage }} sq ft
-            </div>
-            <div class="detail">
-                <strong>Offer Date:</strong> {{ accommodation.offerDate }}
-            </div>
-            <div class="detail">
-                <strong>Availability Status:</strong> {{ accommodation.availabilityStatus }}
-            </div>
-            <div class="detail">
-                <strong>Available From:</strong> {{ accommodation.availableFrom }}
-            </div>
-        </div>
-        
-        <div class="accommodation-description">
-            <mat-card>
-                <h3>Description:</h3>
-                <mat-card-content>
-                    <p>{{ accommodation.description }}</p>
-                </mat-card-content>
-            </mat-card>
-        </div>
-    
-        <div class="accommodation-pros-cons">
-            <div class="pros">
-                <div class="pros-header">
-                    <h3>Pros</h3>
-                </div>
-                <div class="pros-list">
-                    <ul>
-                        <li *ngIf="accommodation.airConditioning">Air Conditioning</li>
-                        <li *ngIf="accommodation.furnished">Furnished</li>
-                        <li *ngIf="accommodation.utilitiesIncluded">Utilities Included</li>
-                        <li *ngIf="accommodation.dishwasher">Dishwasher</li>
-                        <li *ngIf="accommodation.stainlessSteelAppliances">Stainless Steel Appliances</li>
-                        <li *ngIf="accommodation.patio">Patio</li>
-                        <li *ngIf="accommodation.balcony">Balcony</li>
-                        <li *ngIf="accommodation.refrigerator">Refrigerator</li>
-                        <li *ngIf="accommodation.petsAllowed">Pets Allowed</li>
-                        <li *ngIf="accommodation.smokingAllowed">Smoking Allowed</li>
-                        <li *ngIf="accommodation.gym">Gym</li>
-                        <li *ngIf="accommodation.parkingIncluded">Parking Included</li>
-                        <li *ngIf="accommodation.roommateAccepted">Roommate Accepted</li>
-                    </ul>
-                </div>
+            <div class="gallery-controls" *ngIf="images.length > 1">
+              <button class="gallery-nav prev" (click)="prevImage($event)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <button class="gallery-nav next" (click)="nextImage($event)">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
             </div>
             
-            <div class="cons">
-                <div class="cons-header">
-                    <h3>Cons</h3>
-                </div>
-                <div class="cons-list">
-                    <ul>
-                        <li *ngIf="!accommodation.airConditioning">No Air Conditioning</li>
-                        <li *ngIf="!accommodation.furnished">Not Furnished</li>
-                        <li *ngIf="!accommodation.utilitiesIncluded">No Utilities Included</li>
-                        <li *ngIf="!accommodation.dishwasher">No Dishwasher</li>
-                        <li *ngIf="!accommodation.stainlessSteelAppliances">No Stainless Steel Appliances</li>
-                        <li *ngIf="!accommodation.patio">No Patio</li>
-                        <li *ngIf="!accommodation.balcony">No Balcony</li>
-                        <li *ngIf="!accommodation.refrigerator">No Refrigerator</li>
-                        <li *ngIf="!accommodation.petsAllowed">No Pets Allowed</li>
-                        <li *ngIf="!accommodation.smokingAllowed">No Smoking</li>
-                        <li *ngIf="!accommodation.gym">No Gym</li>
-                        <li *ngIf="!accommodation.parkingIncluded">No Parking Included</li>
-                        <li *ngIf="!accommodation.roommateAccepted">Roommate Not Accepted</li>
-                    </ul>
-                </div>
+            <div class="gallery-indicators" *ngIf="images.length > 1">
+              <div 
+                *ngFor="let image of images; let i = index" 
+                class="indicator" 
+                [class.active]="i === currentImageIndex"
+                (click)="setCurrentImage(i, $event)"
+              ></div>
             </div>
+            
+            <div class="gallery-counter" *ngIf="images.length > 1">
+              {{ currentImageIndex + 1 }} / {{ images.length }}
+            </div>
+          </ng-container>
+          
+          <ng-template #noImages>
+            <div class="no-images">
+              <mat-icon>image</mat-icon>
+              <p>No images available</p>
+            </div>
+          </ng-template>
         </div>
-        <div class="accommodation-location">
-            <app-accommodation-map [accommodation]="accommodation"></app-accommodation-map>
+      </div>
+      
+      <!-- Stats Section -->
+      <div class="accommodation-stats">
+        <span>
+          <mat-icon>visibility</mat-icon> {{ accommodation.numViews }} Views
+        </span>
+        <span>|</span>
+        <a (click)="showInterestedPeople()" class="interested-link">
+          <mat-icon>people</mat-icon> {{ numPeopleInterested }} Interested
+        </a>
+        
+        <button class="interest-btn" *ngIf="!isInUserPublicInterests; else isInPublic" (click)="expressMyInterestPublicly(accommodation.id)" matTooltip="Express Interest Publicly">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+        
+        <ng-template #isInPublic>
+          <button class="interest-btn" (click)="expressMyInterestPublicly(accommodation.id)" matTooltip="You've Expressed Interest">
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </ng-template>
+        
+        <button class="favorite-btn" *ngIf="!isInUserPrivateInterests; else isInFavorite" (click)="addToFavorites(accommodation.id)" matTooltip="Add to Favorites">
+          <mat-icon>bookmark_border</mat-icon>
+        </button>
+        
+        <ng-template #isInFavorite>
+          <button class="favorite-btn" (click)="addToFavorites(accommodation.id)" matTooltip="In Your Favorites">
+            <mat-icon>bookmark</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+      
+      <!-- Key Details Section -->
+      <div class="accommodation-details">
+        <div class="detail">
+          <mat-icon>hotel</mat-icon>
+          <strong>Bedrooms:</strong> {{ accommodation.numBeds }}
         </div>
-
-        <div class="accommodation-actions">
-            <button mat-raised-button color="primary" (click)="contactLandlord()">Contact Landlord</button>
+        <div class="detail">
+          <mat-icon>bathtub</mat-icon>
+          <strong>Bathrooms:</strong> {{ accommodation.numBathrooms }}
         </div>
-        <div class="sharethis-inline-share-buttons"></div>
-
+        <div class="detail">
+          <mat-icon>square_foot</mat-icon>
+          <strong>Square Footage:</strong> {{ accommodation.squareFootage }} sq ft
+        </div>
+        <div class="detail">
+          <mat-icon>event</mat-icon>
+          <strong>Offer Date:</strong> {{ accommodation.offerDate | date }}
+        </div>
+        <div class="detail">
+          <mat-icon>info</mat-icon>
+          <strong>Status:</strong> {{ accommodation.availabilityStatus }}
+        </div>
+        <div class="detail">
+          <mat-icon>calendar_today</mat-icon>
+          <strong>Available From:</strong> {{ accommodation.availableFrom | date }}
+        </div>
+      </div>
+      
+      <!-- Description Section -->
+      <div class="accommodation-description">
+        <mat-card>
+          <h3>Description</h3>
+          <mat-card-content>
+            <p>{{ accommodation.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      
+      <!-- Pros and Cons Section - Updated colors -->
+      <div class="accommodation-pros-cons">
+        <div class="pros">
+          <div class="pros-header">
+            <h3>Features & Amenities</h3>
+          </div>
+          <div class="pros-list">
+            <ul>
+              <li *ngIf="accommodation.airConditioning">
+                <mat-icon>ac_unit</mat-icon> Air Conditioning
+              </li>
+              <li *ngIf="accommodation.furnished">
+                <mat-icon>chair</mat-icon> Furnished
+              </li>
+              <li *ngIf="accommodation.utilitiesIncluded">
+                <mat-icon>power</mat-icon> Utilities Included
+              </li>
+              <li *ngIf="accommodation.dishwasher">
+                <mat-icon>countertops</mat-icon> Dishwasher
+              </li>
+              <li *ngIf="accommodation.stainlessSteelAppliances">
+                <mat-icon>kitchen</mat-icon> Stainless Steel Appliances
+              </li>
+              <li *ngIf="accommodation.patio">
+                <mat-icon>deck</mat-icon> Patio
+              </li>
+              <li *ngIf="accommodation.balcony">
+                <mat-icon>balcony</mat-icon> Balcony
+              </li>
+              <li *ngIf="accommodation.refrigerator">
+                <mat-icon>kitchen</mat-icon> Refrigerator
+              </li>
+              <li *ngIf="accommodation.petsAllowed">
+                <mat-icon>pets</mat-icon> Pets Allowed
+              </li>
+              <li *ngIf="accommodation.smokingAllowed">
+                <mat-icon>smoking_rooms</mat-icon> Smoking Allowed
+              </li>
+              <li *ngIf="accommodation.gym">
+                <mat-icon>fitness_center</mat-icon> Gym
+              </li>
+              <li *ngIf="accommodation.parkingIncluded">
+                <mat-icon>local_parking</mat-icon> Parking Included
+              </li>
+              <li *ngIf="accommodation.roommateAccepted">
+                <mat-icon>people</mat-icon> Roommate Accepted
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="cons">
+          <div class="cons-header">
+            <h3>Not Included</h3>
+          </div>
+          <div class="cons-list">
+            <ul>
+              <li *ngIf="!accommodation.airConditioning">
+                <mat-icon>ac_unit</mat-icon> No Air Conditioning
+              </li>
+              <li *ngIf="!accommodation.furnished">
+                <mat-icon>chair</mat-icon> Not Furnished
+              </li>
+              <li *ngIf="!accommodation.utilitiesIncluded">
+                <mat-icon>power</mat-icon> No Utilities Included
+              </li>
+              <li *ngIf="!accommodation.dishwasher">
+                <mat-icon>countertops</mat-icon> No Dishwasher
+              </li>
+              <li *ngIf="!accommodation.stainlessSteelAppliances">
+                <mat-icon>kitchen</mat-icon> No Stainless Steel Appliances
+              </li>
+              <li *ngIf="!accommodation.patio">
+                <mat-icon>deck</mat-icon> No Patio
+              </li>
+              <li *ngIf="!accommodation.balcony">
+                <mat-icon>balcony</mat-icon> No Balcony
+              </li>
+              <li *ngIf="!accommodation.refrigerator">
+                <mat-icon>kitchen</mat-icon> No Refrigerator
+              </li>
+              <li *ngIf="!accommodation.petsAllowed">
+                <mat-icon>pets</mat-icon> No Pets Allowed
+              </li>
+              <li *ngIf="!accommodation.smokingAllowed">
+                <mat-icon>smoking_rooms</mat-icon> No Smoking
+              </li>
+              <li *ngIf="!accommodation.gym">
+                <mat-icon>fitness_center</mat-icon> No Gym
+              </li>
+              <li *ngIf="!accommodation.parkingIncluded">
+                <mat-icon>local_parking</mat-icon> No Parking Included
+              </li>
+              <li *ngIf="!accommodation.roommateAccepted">
+                <mat-icon>people</mat-icon> Roommate Not Accepted
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Map Section - Updated to be more compact -->
+      <div class="accommodation-location">
+        <div class="map-wrapper">
+          <app-accommodation-map [accommodation]="accommodation"></app-accommodation-map>
+        </div>
+      </div>
+      
+      <!-- Actions Section -->
+      <div class="accommodation-actions">
+        <button mat-raised-button color="primary" (click)="contactLandlord()">
+          <mat-icon>email</mat-icon> Contact Landlord
+        </button>
+      </div>
+      
+      <!-- Share Buttons -->
+      <div class="sharethis-inline-share-buttons"></div>
     </div>
-</div>  
+    
+    <!-- Loading State -->
+    <div *ngIf="!accommodation" class="loading-container">
+      <mat-spinner color="accent"></mat-spinner>
+      <p>Loading accommodation details...</p>
+    </div>
+  </div>
+  

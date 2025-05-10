@@ -1,11 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core"
+import { Component, Input, OnChanges, SimpleChanges, OnInit } from "@angular/core"
 
 @Component({
   selector: "app-recommendation-circle",
   templateUrl: "./recommendation-circle.component.html",
   styleUrl: "./recommendation-circle.component.scss",
 })
-export class RecommendationCircleComponent implements OnChanges {
+export class RecommendationCircleComponent implements OnChanges, OnInit {
   @Input() size = 100
   @Input() stroke = 10
   @Input() value = 50

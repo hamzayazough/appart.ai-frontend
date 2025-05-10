@@ -6,7 +6,7 @@ import { Image, ImageUrl } from '../../../intefaces/image.interface';
 @Component({
   selector: 'app-matching-apartment-card',
   templateUrl: './matching-apartment-card.component.html',
-  styleUrl: './matching-apartment-card.component.scss'
+  styleUrl: './matching-apartment-card.component.scss',
 })
 export class MatchingApartmentCardComponent implements OnInit {
   @Input() data: AccommodationMatchingDTO = {} as AccommodationMatchingDTO;
@@ -19,24 +19,24 @@ export class MatchingApartmentCardComponent implements OnInit {
 
     if (this.images.length === 0) {
       this.images.push({
-        src: "/assets/images/placeholder.jpg",
-        alt: "No image available",
+        src: '/assets/images/placeholder.jpg',
+        alt: 'No image available',
       });
     }
   }
 
   get currentImage(): Image {
-    return this.images[this.currentImageIndex]
+    return this.images[this.currentImageIndex];
   }
 
   prevImage(event: Event) {
-    event.stopPropagation()
-    this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length
+    event.stopPropagation();
+    this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length;
   }
 
   nextImage(event: Event) {
-    event.stopPropagation()
-    this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length
+    event.stopPropagation();
+    this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
   }
   public selectAccommodation() {
     this.route.navigate([`accommodation/${this.data.accommodation.id}`]);
@@ -61,14 +61,14 @@ export class MatchingApartmentCardComponent implements OnInit {
       src: image.imageUrl,
     }));
   }
-  
+
   public getDistanceText(distance: number): string {
     if (distance >= 0.85) {
-      return "Very close to your locations"
+      return 'Very close to your locations';
     } else if (distance > 0.6) {
-      return "Reasonable distance"
+      return 'Reasonable distance';
     } else {
-      return "Far from your locations"
+      return 'Far from your locations';
     }
   }
 }

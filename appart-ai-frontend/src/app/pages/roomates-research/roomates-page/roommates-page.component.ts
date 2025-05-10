@@ -1,20 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { RoommateService } from '../../../services/roommate/roommate.service';
-import { UserService } from '../../../services/user-service/user.service';
-import { RoommatePost, RoommatePostInfo } from '../../../intefaces/roommate.interface';
 import { SelectedHeader } from '../../../enums/selected-header.enum';
 import { filter, Subscription } from 'rxjs';
-import { TokenService } from '../../../services/token-service/token.service';
 
 @Component({
   selector: 'app-roommates-page',
   templateUrl: './roommates-page.component.html',
-  styleUrls: ['./roommates-page.component.scss']
+  styleUrls: ['./roommates-page.component.scss'],
 })
 export class RoommatesPageComponent implements OnInit, OnDestroy {
   public selectedHeader = SelectedHeader.roommates;
-  public hasChildRoute: boolean = false;
+  public hasChildRoute = false;
   private routerSubscription: Subscription | null = null;
 
   constructor(

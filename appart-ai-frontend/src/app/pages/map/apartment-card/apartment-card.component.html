@@ -9,22 +9,17 @@
   <div class="card-content">
     <ng-container *ngIf="data.accommodation.imageUrls.length > 0">
       <app-image-slider
-      [images]="toImage(data.accommodation.imageUrls)"
-      [delayBetweenSwitches]="0"
-      [height]="150"
-      [width]="250"
-    ></app-image-slider>
+        [images]="toImage(data.accommodation.imageUrls)"
+        [delayBetweenSwitches]="0"
+        [height]="150"
+        [width]="250"
+      ></app-image-slider>
     </ng-container>
 
-  <div class="card-footer">
-    <div>
-      <span class="detail-label">Price:</span> ${{ data.accommodation.price }}
-    </div>
-    <div>
-      <span class="detail-label">Bedrooms:</span> {{ data.accommodation.bedrooms }}
-    </div>
-    <div>
-      <span class="detail-label">Bathrooms:</span> {{ data.accommodation.bathrooms }}
+    <div class="card-footer">
+      <div><span class="detail-label">Price:</span> ${{ data.accommodation.price }}</div>
+      <div><span class="detail-label">Bedrooms:</span> {{ data.accommodation.bedrooms }}</div>
+      <div><span class="detail-label">Bathrooms:</span> {{ data.accommodation.bathrooms }}</div>
     </div>
   </div>
 </div>

@@ -13,51 +13,61 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-create-roommate-request',
   templateUrl: './create-roommate-request.component.html',
-  styleUrl: './create-roommate-request.component.scss'
+  styleUrl: './create-roommate-request.component.scss',
 })
 export class CreateRoommateRequestComponent implements OnInit {
   public roommatePost: Partial<RoommatePost> = {
-    description: ''
+    description: '',
   };
   public currentDate: Date = new Date();
-  private userId: string = '';
+  private userId = '';
   public userInfo: UserInfo | null = null;
   public userPreferences: UserPreferences | null = null;
-  public userPreferencesKeys: { label: string; value: any }[] = [];
-  public isEditMode: boolean = false;
+  public userPreferencesKeys: { label: string; value }[] = [];
+  public isEditMode = false;
   private unsubscribe$ = new Subject<void>();
 
-
-  constructor(private roommateService: RoommateService, private userService: UserService, private router: Router, private dialog: MatDialog, private authService: AuthenticationService) {}
+  constructor(
+    private roommateService: RoommateService,
+    private userService: UserService,
+    private router: Router,
+    private dialog: MatDialog,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.initializeData();
-
   }
 
   decrementRoommates() {
-    //TODO: make it
+    if (this.roommatePost.roommates && this.roommatePost.roommates > 0) {
+      this.roommatePost.roommates = (this.roommatePost.roommates || 0) - 1;
+    }
   }
 
   incrementRoommates() {
-    //TODO: make it
+    this.roommatePost.roommates = (this.roommatePost.roommates || 0) + 1;
   }
 
   getUserInitials() {
-    //TODO: make it
+    return this.userInfo
+      ? `${this.userInfo.firstName.charAt(0)}${this.userInfo.lastName.charAt(0)}`
+      : '';
   }
 
   onSubmit(): void {
     if (this.isEditMode && this.roommatePost.id) {
-      this.roommateService.updateRoommateRequest(this.roommatePost.id, this.roommatePost as RoommatePost).subscribe(
-        () => {
-          alert('Roommate Request Updated Successfully!');
-        },
-        (error) => {
-          console.error('Error updating roommate request:', error);
-          alert('Failed to update roommate request. Please try again.');
-        }
-      );
+      this.roommateService
+        .updateRoommateRequest(this.roommatePost.id, this.roommatePost as RoommatePost)
+        .subscribe(
+          () => {
+            alert('Roommate Request Updated Successfully!');
+          },
+          (error) => {
+            console.error('Error updating roommate request:', error);
+            alert('Failed to update roommate request. Please try again.');
+          }
+        );
     } else {
       const newPost: RoommatePost = {
         ...this.roommatePost,
@@ -85,7 +95,7 @@ export class CreateRoommateRequestComponent implements OnInit {
       alert('Unable to update status. Please try again.');
       return;
     }
-  
+
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '40%',
       data: {
@@ -95,7 +105,7 @@ export class CreateRoommateRequestComponent implements OnInit {
         } this request?`,
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed && this.roommatePost.id) {
         this.roommateService
@@ -103,11 +113,7 @@ export class CreateRoommateRequestComponent implements OnInit {
           .subscribe(
             () => {
               this.roommatePost.active = !this.roommatePost.active;
-              alert(
-                `Request has been ${
-                  this.roommatePost.active ? 'activated' : 'deactivated'
-                }.`
-              );
+              alert(`Request has been ${this.roommatePost.active ? 'activated' : 'deactivated'}.`);
             },
             (error) => {
               console.error('Error toggling request status:', error);
@@ -117,8 +123,6 @@ export class CreateRoommateRequestComponent implements OnInit {
       }
     });
   }
-  
-
 
   private loadRoommateRequest(): void {
     if (!this.userId) {
@@ -138,7 +142,6 @@ export class CreateRoommateRequestComponent implements OnInit {
         console.error('Error loading roommate request:', error);
       }
     );
-  
   }
 
   private loadUserPreferences(): void {
@@ -152,7 +155,7 @@ export class CreateRoommateRequestComponent implements OnInit {
           this.userPreferences = preferences;
           this.userPreferencesKeys = Object.entries(preferences).map(([key, value]) => ({
             label: this.formatKey(key),
-            value: value
+            value: value,
           }));
         } else {
           console.warn('No preferences found for user.');
@@ -165,18 +168,13 @@ export class CreateRoommateRequestComponent implements OnInit {
       }
     );
   }
-  
+
   private formatKey(key: string): string {
-    return key
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, (str) => str.toUpperCase());
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
   }
 
-
   private initializeData(): void {
-    this.authService.loggedUser$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((user) => {
+    this.authService.loggedUser$.pipe(takeUntil(this.unsubscribe$)).subscribe((user) => {
       if (!user.id) {
         this.authService.handleUnAuthorizedUser();
       } else {

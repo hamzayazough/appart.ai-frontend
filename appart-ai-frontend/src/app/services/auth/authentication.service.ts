@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 
 export class AuthenticationService {
   private loggedUser: BehaviorSubject<AppUser> = new BehaviorSubject<AppUser>({} as AppUser);
-  public isAuthentificated: boolean = false;
+  public isAuthentificated = false;
 
   get isAuthenticated$() {
     return this.auth0Service.isAuthenticated$;

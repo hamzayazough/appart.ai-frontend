@@ -11,7 +11,7 @@ import { TokenService } from '../token-service/token.service';
 })
 export class UserRelatedAccommodationsService {
 
-  private apiUrl: string = '/protected/api/accommodation'
+  private apiUrl = '/protected/api/accommodation'
   private baseUrl: string = environment.apiUrl + this.apiUrl;
 
   constructor(private http: HttpClient, private tokenService: TokenService) {}

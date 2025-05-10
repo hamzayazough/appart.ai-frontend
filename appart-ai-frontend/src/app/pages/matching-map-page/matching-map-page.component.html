@@ -9,21 +9,20 @@
         (sidebarToggle)="toggleSidebar()"
       ></app-map-sidebar>
     </mat-drawer>
-    
+
     <mat-drawer-content>
       <div class="sidebar-toggle-wrapper" [class.sidebar-open]="sidebarOpened">
         <button class="sidebar-toggle" (click)="toggleSidebar()">
           <mat-icon>{{ sidebarOpened ? 'chevron_left' : 'chevron_right' }}</mat-icon>
         </button>
       </div>
-      
+
       <mgl-map
         class="map"
         [style]="'mapbox://styles/mapbox/streets-v9'"
         [zoom]="[10]"
         [center]="[-73.567253, 45.50169]"
         (mapCreate)="onMapLoaded($event)"
-        (click)="onMapClick($event)"
       >
         <mgl-geojson-source
           *ngFor="let pinData of pinClasses"
@@ -40,7 +39,7 @@
             'icon-image': pinData.iconName,
             'icon-anchor': 'bottom',
             'icon-size': 0.3,
-            'icon-allow-overlap': true
+            'icon-allow-overlap': true,
           }"
           [paint]="{}"
           [filter]="['has', 'id']"

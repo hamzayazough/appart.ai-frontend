@@ -1,16 +1,13 @@
 <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
-  <app-gradient-button
-    (click)="
-      auth.logout({ logoutParams: { returnTo: document.location.origin } })
-    "
-    [styleOnHover]="true"
-  >
-    <p class="poppins-black-title inside-text">Log out</p>
-  </app-gradient-button>
+  <div class="auth-button" (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
+    <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+    <span class="text">Log out</span>
+  </div>
 </ng-container>
 
 <ng-template #loggedOut>
-  <app-gradient-button (click)="auth.loginWithRedirect()" [styleOnHover]="true">
-    <p class="poppins-black-title inside-text">Sign in</p>
-  </app-gradient-button>
+  <div class="auth-button" (click)="auth.loginWithRedirect()">
+    <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+    <span class="text">Sign in</span>
+  </div>
 </ng-template>

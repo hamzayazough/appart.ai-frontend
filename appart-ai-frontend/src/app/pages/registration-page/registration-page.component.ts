@@ -5,10 +5,13 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-registration-page',
   templateUrl: './registration-page.component.html',
-  styleUrl: './registration-page.component.scss'
+  styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent implements OnInit {
-  constructor(private authService: AuthenticationService, private router: Router) {}
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.subscribeToUserRegistration();
@@ -21,6 +24,4 @@ export class RegistrationPageComponent implements OnInit {
       }
     });
   }
-
-
 }

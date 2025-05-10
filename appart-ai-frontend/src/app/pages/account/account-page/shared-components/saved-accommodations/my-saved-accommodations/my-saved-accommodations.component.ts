@@ -11,7 +11,7 @@ import { of, switchMap } from 'rxjs';
 })
 export class MySavedAccommodationsComponent implements OnInit {
   public savedAccommodations: AccommodationBaseDTO[] = [];
-  private userId: string = '';
+  private userId = '';
 
   constructor(
     private route: ActivatedRoute,

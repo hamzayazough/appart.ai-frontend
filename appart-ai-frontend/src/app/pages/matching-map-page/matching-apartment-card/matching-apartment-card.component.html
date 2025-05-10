@@ -3,18 +3,18 @@
     <div class="score-container">
       <app-recommendation-circle [value]="formattedScore" [size]="80"></app-recommendation-circle>
     </div>
-    
+
     <div class="header-content">
       <h3 class="title">{{ data.accommodation.title }}</h3>
       <p class="address">{{ data.accommodation.address.placeName }}</p>
     </div>
   </div>
-  
+
   <div class="card-content">
     <div class="image-section">
       <div class="image-container">
-        <img [src]="currentImage.src" [alt]="currentImage.alt" class="apartment-image">
-        
+        <img [src]="currentImage.src" [alt]="currentImage.alt" class="apartment-image" />
+
         <div class="image-navigation" *ngIf="images.length > 1">
           <button class="nav-button prev" (click)="prevImage($event)">
             <mat-icon>chevron_left</mat-icon>
@@ -25,23 +25,23 @@
         </div>
       </div>
     </div>
-    
+
     <div class="details-section">
       <p class="price">${{ data.accommodation.price }}</p>
-      
+
       <div class="features-list">
         <ng-container *ngIf="cons.length > 0">
           <div *ngFor="let con of cons" class="feature-item negative">
             <span class="bullet">-</span> {{ con }}
           </div>
         </ng-container>
-        
+
         <ng-container *ngIf="pros.length > 0">
           <div *ngFor="let pro of pros" class="feature-item positive">
             <span class="bullet">+</span> {{ pro }}
           </div>
         </ng-container>
-        
+
         <div class="feature-item neutral" *ngIf="data.matching.score?.distance">
           <span class="bullet">•</span> {{ getDistanceText(data.matching.score.distance) }}
         </div>

@@ -1,18 +1,54 @@
-button {
-    // background: linear-gradient(45deg, #02c39a, #05668d);
-    height: 55px;
-    width: 225px;
-    border-radius: 55px;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-  }
+// Define color variables based on the provided palette
+$primary-400: #26c6af;
+$primary-600: #00ab99;
+
+.auth-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  cursor: pointer;
   
-  .inside-text {
-    color: rgb(46, 46, 46);
+  .icon {
+    color: black;
     font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
+  .text {
+    color: black;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, $primary-400, $primary-600);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 188, 161, 0.2);
+    
+    .icon, .text {
+      color: white;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .auth-button {
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    
+    .icon {
+      margin-right: 12px;
+      margin-bottom: 0;
+    }
+  }
+}

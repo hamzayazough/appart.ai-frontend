@@ -55,7 +55,7 @@ export class RoommateService {
 
   public getPosts(
     userId: string,
-    limit: number = 10,
+    limit = 10,
     lastPostId?: string
   ): Observable<RoommatePostInfo[]> {
     const url = `${this.baseUrl}/posts?userId=${userId}&limit=${limit}${

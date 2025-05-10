@@ -7,15 +7,18 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-roommate-searching',
   templateUrl: './roommate-searching.component.html',
-  styleUrl: './roommate-searching.component.scss'
+  styleUrl: './roommate-searching.component.scss',
 })
 export class RoommateSearchingComponent implements OnInit, OnDestroy {
   public roommatePosts: RoommatePostInfo[] = [];
-  public currentPostIndex: number = 0;
-  private userId: string = "";
+  public currentPostIndex = 0;
+  private userId = '';
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private roommateService: RoommateService, private authService: AuthenticationService) {}
+  constructor(
+    private roommateService: RoommateService,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.initializeData();
@@ -31,12 +34,10 @@ export class RoommateSearchingComponent implements OnInit, OnDestroy {
   }
 
   get preferenceKeys() {
-    return Object.entries(this.currentPost?.userPreferences || {}).map(
-      ([key, value]) => ({
-        label: this.formatKey(key),
-        value,
-      })
-    );
+    return Object.entries(this.currentPost?.userPreferences || {}).map(([key, value]) => ({
+      label: this.formatKey(key),
+      value,
+    }));
   }
 
   public loadRoommateRequests(): void {
@@ -74,11 +75,8 @@ export class RoommateSearchingComponent implements OnInit, OnDestroy {
     return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
   }
 
-
   private initializeData(): void {
-    this.authService.loggedUser$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((user) => {
+    this.authService.loggedUser$.pipe(takeUntil(this.unsubscribe$)).subscribe((user) => {
       if (!user.id) {
         this.authService.handleUnAuthorizedUser();
       } else {
@@ -87,6 +85,4 @@ export class RoommateSearchingComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
-
 }

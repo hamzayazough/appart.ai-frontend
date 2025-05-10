@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { PointLike } from 'mapbox-gl';
 import { parseGeoJson } from '../../../shared/utils/geoJson.util';
 import { AccommodationsService } from '../../../services/accomodations/accomodations.service';
 import { PinClass } from './pinClass';
 import { MapSidebarComponent } from '../map-sidebar/map-sidebar.component';
-import {  Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.interface';
 
 @Component({
@@ -12,16 +12,13 @@ import { AccommodationMatchingDTO } from '../../../intefaces/accommodation.inter
   templateUrl: './map-page.component.html',
   styleUrl: './map-page.component.scss',
 })
-
-export class MapPageComponent implements OnInit, OnDestroy{
-
+export class MapPageComponent implements OnDestroy {
   @ViewChild('sidebar') sidebar!: MapSidebarComponent;
   public map?: mapboxgl.Map;
   public apartments: AccommodationMatchingDTO[] = [];
 
   public sidebarOpened = true;
   private unsubscribe$ = new Subject<void>();
-
 
   pinClasses: PinClass[] = [
     {
@@ -44,17 +41,14 @@ export class MapPageComponent implements OnInit, OnDestroy{
     },
   ];
 
-  constructor(private accommodationService: AccommodationsService) {
-  }
+  constructor(private accommodationService: AccommodationsService) {}
 
-  ngOnInit(): void {
-  }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  onMapClick(event: any) {
+  onMapClick(event) {
     const bbox: [PointLike, PointLike] = [
       [event.x - 5, event.y - 5],
       [event.x + 5, event.y + 5],
@@ -63,6 +57,7 @@ export class MapPageComponent implements OnInit, OnDestroy{
       layers: this.pinClasses.map((cl) => cl.iconName),
     });
     if (selectedFeatures?.length === 1) {
+      // TODO: Handle the case when only one feature is selected
     }
   }
 
@@ -85,46 +80,40 @@ export class MapPageComponent implements OnInit, OnDestroy{
         item.iconName
       );
     });
-  
-    // Get the current bounding box of the map when it's loaded
+
     const bounds = this.map.getBounds();
-    if(bounds) {
+    if (bounds) {
       const bbox: [PointLike, PointLike] = [
-        [bounds.getSouthWest().lng, bounds.getSouthWest().lat], // South-West
-        [bounds.getNorthEast().lng, bounds.getNorthEast().lat]  // North-East
+        [bounds.getSouthWest().lng, bounds.getSouthWest().lat],
+        [bounds.getNorthEast().lng, bounds.getNorthEast().lat],
       ];
-      this.getAccommodationsInBoundingBox(bbox);   
+      this.getAccommodationsInBoundingBox(bbox);
     }
   }
-  
 
   private getAccommodationsInBoundingBox(bbox: [PointLike, PointLike]) {
     console.log('getAccommodationsInBoundingBox called:', bbox);
     let swLng, swLat, neLng, neLat;
-  
+
     if (Array.isArray(bbox[0])) {
-      // If PointLike is an array
-      [swLng, swLat] = bbox[0] as [number, number]; // South-West corner
-      [neLng, neLat] = bbox[1] as [number, number]; // North-East corner
+      [swLng, swLat] = bbox[0] as [number, number];
+      [neLng, neLat] = bbox[1] as [number, number];
     } else {
-      // If PointLike is an object
-      const sw = bbox[0] as { x: number, y: number };
-      const ne = bbox[1] as { x: number, y: number };
+      const sw = bbox[0] as { x: number; y: number };
+      const ne = bbox[1] as { x: number; y: number };
       swLng = sw.x;
       swLat = sw.y;
       neLng = ne.x;
       neLat = ne.y;
     }
-    
+
     console.log('User is not authenticated, calling accommodation');
-    this.accommodationService.getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
+    this.accommodationService
+      .getAccommodationsInBoundingBox(swLng, swLat, neLng, neLat)
       .subscribe((accommodations: AccommodationMatchingDTO[]) => {
         console.log('accommodations:', accommodations);
         this.apartments = accommodations;
-        this.pinClasses.forEach(
-          (cl) => cl.features = parseGeoJson(this.apartments)
-        );
+        this.pinClasses.forEach((cl) => (cl.features = parseGeoJson(this.apartments)));
       });
   }
-  
 }
