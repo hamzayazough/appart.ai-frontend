@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MapPageComponent } from '../map/map-page/map-page.component';
 import { ApartmentCardComponent } from '../map/apartment-card/apartment-card.component';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { accessToken } from '../../../assets/tokens/maps';
@@ -13,7 +12,12 @@ import { MatchingApartmentCardComponent } from '../matching-map-page/matching-ap
 import { MatchingMapPageComponent } from '../matching-map-page/matching-map-page.component';
 
 @NgModule({
-  declarations: [MapPageComponent, ApartmentCardComponent, MapSidebarComponent, MatchingApartmentCardComponent, MatchingMapPageComponent],
+  declarations: [
+    ApartmentCardComponent,
+    MapSidebarComponent,
+    MatchingApartmentCardComponent,
+    MatchingMapPageComponent,
+  ],
   imports: [
     CommonModule,
     MatSidenavModule,

@@ -1,7 +1,7 @@
 <div class="preferences-container">
   <app-landing-header></app-landing-header>
 
-  <div class="content" *ngIf="userPreferences">
+  <div class="content">
     <div class="page-title">
       <h1>My Preferences</h1>
       <p>Customize your apartment search criteria</p>
@@ -12,46 +12,84 @@
         <!-- Basic Information Section -->
         <section class="form-section card">
           <h2 class="section-title">Basic Information</h2>
-          
+
           <div class="form-group">
             <label for="occupation">Occupation</label>
-            <input id="occupation" class="form-control" [(ngModel)]="userPreferences.occupation" name="occupation" placeholder="Enter your occupation" required />
+            <input
+              id="occupation"
+              class="form-control"
+              [(ngModel)]="userPreferences.occupation"
+              name="occupation"
+              placeholder="Enter your occupation"
+              required
+            />
           </div>
-          
+
           <div class="form-row">
             <div class="form-group">
               <label for="minBudget">Minimum Budget ($)</label>
-              <input id="minBudget" class="form-control" type="number" [(ngModel)]="userPreferences.minBudget" name="minBudget" placeholder="Min budget" required />
+              <input
+                id="minBudget"
+                class="form-control"
+                type="number"
+                [(ngModel)]="userPreferences.minBudget"
+                name="minBudget"
+                placeholder="Min budget"
+                required
+              />
             </div>
-            
+
             <div class="form-group">
               <label for="maxBudget">Maximum Budget ($)</label>
-              <input id="maxBudget" class="form-control" type="number" [(ngModel)]="userPreferences.maxBudget" name="maxBudget" placeholder="Max budget" required />
+              <input
+                id="maxBudget"
+                class="form-control"
+                type="number"
+                [(ngModel)]="userPreferences.maxBudget"
+                name="maxBudget"
+                placeholder="Max budget"
+                required
+              />
             </div>
           </div>
-          
+
           <div class="form-group checkbox-group">
             <label class="checkbox-label">
               <input type="checkbox" [(ngModel)]="userPreferences.car" name="car" />
               <span class="checkbox-text">I own a car</span>
             </label>
           </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="userPreferences.pets" name="pets" />
+              <span class="checkbox-text">I have pets</span>
+            </label>
+          </div>
         </section>
-        
+
         <!-- Important Places Section -->
         <section class="form-section card">
           <h2 class="section-title">Important Places</h2>
           <p class="section-description">Add locations that matter to you (work, school, etc.)</p>
-          
+
           <div class="places-list">
-            <div *ngFor="let place of userPreferences.places; let i = index" class="place-item card">
+            <div
+              *ngFor="let place of userPreferences.places; let i = index"
+              class="place-item card"
+            >
               <div class="place-header">
-                <h3>Place #{{i+1}}</h3>
-                <button type="button" class="btn-icon remove-place" (click)="removePlace(i)" title="Remove Place">
+                <h3>Place #{{ i + 1 }}</h3>
+                <button
+                  type="button"
+                  class="btn-icon remove-place"
+                  (click)="removePlace(i)"
+                  title="Remove Place"
+                >
                   <i class="material-icons">close</i>
                 </button>
               </div>
-              
+
               <div class="form-group">
                 <label for="placeName-{{ i }}">Place Name</label>
                 <input
@@ -64,7 +102,7 @@
                   required
                 />
               </div>
-              
+
               <div class="form-group">
                 <label for="address-{{ i }}">Address</label>
                 <div class="address-input-container">
@@ -78,13 +116,16 @@
                     (blur)="hideSuggestions(i)"
                   />
                   <ul *ngIf="showSuggestions[i]" class="address-suggestions">
-                    <li *ngFor="let suggestion of placeSuggestions[i]" (click)="selectAddress(suggestion, i)">
+                    <li
+                      *ngFor="let suggestion of placeSuggestions[i]"
+                      (click)="selectAddress(suggestion, i)"
+                    >
                       {{ suggestion.place_name }}
                     </li>
                   </ul>
                 </div>
               </div>
-              
+
               <div class="form-group">
                 <label for="weight-{{ i }}">Importance (1-10)</label>
                 <input
@@ -97,182 +138,238 @@
                   name="weight-{{ i }}"
                   required
                 />
-                <div class="range-value">{{place.weight}}</div>
+                <div class="range-value">{{ place.weight }}</div>
               </div>
             </div>
           </div>
-          
+
           <button type="button" class="btn btn-secondary add-place-btn" (click)="addPlace()">
             <i class="material-icons">add_location</i>
             Add New Place
           </button>
         </section>
-        
+
         <!-- Apartment Features Section -->
         <section class="form-section card">
           <h2 class="section-title">Apartment Features</h2>
-          
+
           <div class="form-row">
             <div class="form-group">
               <label for="numBedrooms">Min. Bedrooms</label>
-              <input id="numBedrooms" class="form-control" type="number" min="0" [(ngModel)]="userPreferences.numBedroomMin" name="numBedrooms" placeholder="Min bedrooms" />
+              <input
+                id="numBedrooms"
+                class="form-control"
+                type="number"
+                min="0"
+                [(ngModel)]="userPreferences.numBedroomMin"
+                name="numBedrooms"
+                placeholder="Min bedrooms"
+              />
             </div>
-            
+
             <div class="form-group">
               <label for="numBathrooms">Min. Bathrooms</label>
-              <input id="numBathrooms" class="form-control" type="number" min="0" [(ngModel)]="userPreferences.numBathroomMin" name="numBathrooms" placeholder="Min bathrooms" />
+              <input
+                id="numBathrooms"
+                class="form-control"
+                type="number"
+                min="0"
+                [(ngModel)]="userPreferences.numBathroomMin"
+                name="numBathrooms"
+                placeholder="Min bathrooms"
+              />
             </div>
           </div>
-          
+
           <div class="form-row">
             <div class="form-group">
               <label for="minAvailableDate">Earliest Move-in Date</label>
-              <input id="minAvailableDate" class="form-control" type="date" [(ngModel)]="userPreferences.minAvailableDate" name="minAvailableDate" />
+              <input
+                id="minAvailableDate"
+                class="form-control"
+                type="date"
+                [(ngModel)]="userPreferences.minAvailableDate"
+                name="minAvailableDate"
+              />
             </div>
-            
+
             <div class="form-group">
               <label for="maxAvailableDate">Latest Move-in Date</label>
-              <input id="maxAvailableDate" class="form-control" type="date" [(ngModel)]="userPreferences.maxAvailableDate" name="maxAvailableDate" />
+              <input
+                id="maxAvailableDate"
+                class="form-control"
+                type="date"
+                [(ngModel)]="userPreferences.maxAvailableDate"
+                name="maxAvailableDate"
+              />
             </div>
           </div>
-          
+
           <div class="features-grid">
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.airConditioning" name="airConditioning" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.airConditioning"
+                  name="airConditioning"
+                />
                 <span class="checkbox-text">Air Conditioning</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="userPreferences.furnished" name="furnished" />
                 <span class="checkbox-text">Furnished</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.utilitiesIncluded" name="utilitiesIncluded" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.utilitiesIncluded"
+                  name="utilitiesIncluded"
+                />
                 <span class="checkbox-text">Utilities Included</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="userPreferences.dishwasher" name="dishwasher" />
                 <span class="checkbox-text">Dishwasher</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.stainlessSteelAppliances" name="stainlessSteelAppliances" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.stainlessSteelAppliances"
+                  name="stainlessSteelAppliances"
+                />
                 <span class="checkbox-text">Stainless Steel Appliances</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="userPreferences.patio" name="patio" />
                 <span class="checkbox-text">Patio</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="userPreferences.balcony" name="balcony" />
                 <span class="checkbox-text">Balcony</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.refrigerator" name="refrigerator" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.refrigerator"
+                  name="refrigerator"
+                />
                 <span class="checkbox-text">Refrigerator</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.petsAllowed" name="petsAllowed" />
-                <span class="checkbox-text">I have pets</span>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.petsAllowed"
+                  name="petsAllowed"
+                />
+                <span class="checkbox-text">Pets Allowed</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.smokingAllowed" name="smokingAllowed" />
-                <span class="checkbox-text">I smoke</span>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.smokingAllowed"
+                  name="smokingAllowed"
+                />
+                <span class="checkbox-text">Smoking Allowed</span>
               </label>
             </div>
-            
+
             <div class="form-group checkbox-group">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="userPreferences.gymIncluded" name="gymIncluded" />
+                <input
+                  type="checkbox"
+                  [(ngModel)]="userPreferences.gymIncluded"
+                  name="gymIncluded"
+                />
                 <span class="checkbox-text">Gym Included</span>
               </label>
             </div>
           </div>
         </section>
-        
+
         <!-- Neighborhood Preferences Section -->
         <section class="form-section card">
           <h2 class="section-title">Neighborhood Preferences</h2>
-          
+
           <div class="form-group">
             <label for="publicTransportationProximity">Public Transportation Proximity</label>
             <div class="range-container">
-              <input 
-                id="publicTransportationProximity" 
-                class="form-control range-input" 
-                type="range" 
-                min="0" 
-                max="10" 
-                [(ngModel)]="userPreferences.publicTransportationProximity" 
-                name="publicTransportationProximity" 
+              <input
+                id="publicTransportationProximity"
+                class="form-control range-input"
+                type="range"
+                min="0"
+                max="10"
+                [(ngModel)]="userPreferences.publicTransportationProximity"
+                name="publicTransportationProximity"
               />
-              <div class="range-value">{{userPreferences.publicTransportationProximity}}</div>
+              <div class="range-value">{{ userPreferences.publicTransportationProximity }}</div>
             </div>
             <div class="range-labels">
               <span>Not Important</span>
               <span>Very Important</span>
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="parking">Parking Availability</label>
             <div class="range-container">
-              <input 
-                id="parking" 
-                class="form-control range-input" 
-                type="range" 
-                min="0" 
-                max="10" 
-                [(ngModel)]="userPreferences.parking" 
-                name="parking" 
+              <input
+                id="parking"
+                class="form-control range-input"
+                type="range"
+                min="0"
+                max="10"
+                [(ngModel)]="userPreferences.parking"
+                name="parking"
               />
-              <div class="range-value">{{userPreferences.parking}}</div>
+              <div class="range-value">{{ userPreferences.parking }}</div>
             </div>
             <div class="range-labels">
               <span>Not Important</span>
               <span>Very Important</span>
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="groceryStoreProximity">Grocery Store Proximity</label>
             <div class="range-container">
-              <input 
-                id="groceryStoreProximity" 
-                class="form-control range-input" 
-                type="range" 
-                min="0" 
-                max="10" 
-                [(ngModel)]="userPreferences.groceryStoreProximity" 
-                name="groceryStoreProximity" 
+              <input
+                id="groceryStoreProximity"
+                class="form-control range-input"
+                type="range"
+                min="0"
+                max="10"
+                [(ngModel)]="userPreferences.groceryStoreProximity"
+                name="groceryStoreProximity"
               />
-              <div class="range-value">{{userPreferences.groceryStoreProximity}}</div>
+              <div class="range-value">{{ userPreferences.groceryStoreProximity }}</div>
             </div>
             <div class="range-labels">
               <span>Not Important</span>
@@ -281,13 +378,21 @@
           </div>
         </section>
       </div>
-      
+
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary save-btn">
+        <!-- Show Update button if we have existing preferences -->
+        <button *ngIf="isExistingPreferences" type="submit" class="btn btn-primary save-btn">
           <i class="material-icons">save</i>
           Update Preferences
         </button>
-        <button type="button" class="btn btn-secondary" (click)="setPreferences()">
+
+        <!-- Show Create button if we don't have existing preferences -->
+        <button
+          *ngIf="!isExistingPreferences"
+          type="button"
+          class="btn btn-secondary"
+          (click)="setPreferences()"
+        >
           <i class="material-icons">add_circle</i>
           Create New Preferences
         </button>

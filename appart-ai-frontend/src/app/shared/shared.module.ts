@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { LandingHeaderComponent } from '../pages/landing/landing-header/landing-header.component';
 import { AuthButtonComponent } from '../pages/landing/landing-header/components/auth-button/auth-button.component';
+import { UniversalDialogComponent } from './components/universal-dialog/universal-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { AuthButtonComponent } from '../pages/landing/landing-header/components/
     ConfirmationDialogComponent,
     LandingHeaderComponent,
     AuthButtonComponent,
+    UniversalDialogComponent,
   ],
   imports: [CommonModule, MaterialModule, MatProgressSpinnerModule, MatIconModule],
   exports: [
@@ -26,6 +28,8 @@ import { AuthButtonComponent } from '../pages/landing/landing-header/components/
     RecommendationCircleComponent,
     LandingHeaderComponent,
     AuthButtonComponent,
+    UniversalDialogComponent,
+    ConfirmationDialogComponent,
   ],
 })
 export class SharedModule {}

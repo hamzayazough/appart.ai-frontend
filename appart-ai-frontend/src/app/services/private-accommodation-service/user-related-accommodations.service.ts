@@ -45,15 +45,11 @@ export class UserRelatedAccommodationsService {
   ): Observable<AccommodationMatchingDTO[]> {
     const url = `${this.baseUrl}/in-bounding-box/matching/${userId}?minLat=${encodeURIComponent(minLat)}&minLong=${encodeURIComponent(minLong)}&maxLat=${encodeURIComponent(maxLat)}&maxLong=${encodeURIComponent(maxLong)}`;
 
-    console.log('Constructed URL:', url);
-
     return this.getAuthHeaders().pipe(
       switchMap((headers) => {
-        console.log('Received headers:', headers);
         return this.http.get<AccommodationMatchingDTO[]>(url, { headers });
       }),
       map((response) => {
-        console.log('Received response:', response);
         return response || [];
       }),
       catchError((error) => {
@@ -130,7 +126,7 @@ export class UserRelatedAccommodationsService {
     );
   }
 
-  private handleError(error): Observable<never> {
+  private handleError(error: any): Observable<never> {
     console.error('Une erreur est survenue:', error);
     return throwError(() => new Error('Une erreur est survenue; veuillez réessayer plus tard.'));
   }

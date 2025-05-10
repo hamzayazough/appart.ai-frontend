@@ -52,6 +52,7 @@ import { RoommateSearchingComponent } from './pages/roomates-research/roomates-p
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { AccommodationDialogComponent } from './pages/matching-map-page/accommodation-dialog/accommodation-dialog.component';
+import { AccessRestrictionDialogComponent } from './pages/landing/landing-header/components/access-restriction-dialog/access-restriction-dialog.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -76,6 +77,7 @@ import { AccommodationDialogComponent } from './pages/matching-map-page/accommod
         RegistrationPageComponent,
         LoginDialogComponent,
         AccommodationDialogComponent,
+        AccessRestrictionDialogComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

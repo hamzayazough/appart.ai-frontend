@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { PointLike } from 'mapbox-gl';
 import { parseGeoJson } from '../../shared/utils/geoJson.util';
 import { AccommodationsService } from '../../services/accomodations/accomodations.service';
-import { PinClass } from '../map/map-page/pinClass';
+import { PinClass } from '../../intefaces/pinClass';
 import { MapSidebarComponent } from '../map/map-sidebar/map-sidebar.component';
 import { combineLatest, filter, Subject, takeUntil } from 'rxjs';
 import { AuthenticationService } from '../../services/auth/authentication.service';
@@ -16,7 +16,7 @@ import { AccommodationDialogComponent } from './accommodation-dialog/accommodati
   templateUrl: './matching-map-page.component.html',
   styleUrl: './matching-map-page.component.scss',
 })
-export class MatchingMapPageComponent implements OnInit, OnDestroy {
+export class MatchingMapPageComponent implements OnDestroy {
   @ViewChild('sidebar') sidebar!: MapSidebarComponent;
   public map?: mapboxgl.Map;
   public apartments: AccommodationMatchingDTO[] = [];
@@ -53,17 +53,12 @@ export class MatchingMapPageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {}
 
-  ngOnInit(): void {
-    console.log('MatchingMapPageComponent constructor called');
-    console.log(this.sidebar);
-  }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  onMarkerClick(event) {
+  onMarkerClick(event: any) {
     event.originalEvent.stopPropagation();
 
     const feature = event.features[0];
@@ -156,7 +151,6 @@ export class MatchingMapPageComponent implements OnInit, OnDestroy {
   }
 
   private getAccommodationsInBoundingBox(bbox: [PointLike, PointLike]) {
-    console.log('getAccommodationsInBoundingBox called:', bbox);
     let swLng, swLat, neLng, neLat;
 
     if (Array.isArray(bbox[0])) {
@@ -171,13 +165,10 @@ export class MatchingMapPageComponent implements OnInit, OnDestroy {
       neLat = ne.y;
     }
 
-    console.log('User is authenticated, calling accommodation');
     this.accommodationService
       .getAccommodationsInBoundingBoxWithMatching(this.userId, swLng, swLat, neLng, neLat)
       .subscribe((accommodations: AccommodationMatchingDTO[]) => {
-        console.log('accommodations:', accommodations);
         this.apartments = accommodations;
-
         this.updatePinFeatures();
       });
   }
@@ -224,7 +215,6 @@ export class MatchingMapPageComponent implements OnInit, OnDestroy {
           this.userId = user.id;
         }
         this.getAccommodationsInBoundingBox(bbox);
-        console.log('We are calling getAccommodations:', isAuthenticated);
       });
   }
 }
