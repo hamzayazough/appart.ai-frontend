@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Accommodation } from '../../intefaces/accommodation.interface';
+import { AccommodationMatchingDetailsDTO } from '../../intefaces/accommodation.interface';
 import { ActivatedRoute } from '@angular/router';
 import { AccommodationsService } from '../../services/accomodations/accomodations.service';
 import { Image, ImageUrl } from '../../intefaces/image.interface';
@@ -11,29 +11,37 @@ import { ContactLandLordComponent } from '../accommodation-management-page/dialo
 import { AuthenticationService } from '../../services/auth/authentication.service';
 import { Subject, takeUntil } from 'rxjs';
 import { LoginDialogComponent } from '../../dialogs/login-dialog/login-dialog.component';
+import { Title, Meta } from '@angular/platform-browser';
+import { DialogService } from '../../services/dialog-service/dialog.service';
 
 @Component({
   selector: 'app-accommodation-page',
   templateUrl: './accommodation-page.component.html',
-  styleUrl: './accommodation-page.component.scss'
+  styleUrl: './accommodation-page.component.scss',
 })
 export class AccommodationPageComponent implements OnInit, OnDestroy {
   accommodationId!: string;
-  accommodation!: Accommodation;
+  accommodation!: AccommodationMatchingDetailsDTO;
   public numPeopleInterested = 0;
   private user: AppUser = {} as AppUser;
   public isInUserPublicInterests = false;
   public isInUserPrivateInterests = false;
   private unsubscribe$ = new Subject<void>();
-  private isUserAuthenticated: boolean = false;
-  
+  private isUserAuthenticated = false;
+
+  public images: Image[] = [];
+  public currentImageIndex = 0;
+  private autoSlideInterval: any = null;
 
   constructor(
     private route: ActivatedRoute,
     private accommodationsService: AccommodationsService,
     private authService: AuthenticationService,
     private snack: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private titleService: Title,
+    private metaService: Meta,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -41,8 +49,50 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopAutoSlide();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  public prevImage(event: Event): void {
+    event.stopPropagation();
+    this.stopAutoSlide();
+    this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length;
+  }
+
+  public nextImage(event: Event): void {
+    event.stopPropagation();
+    this.stopAutoSlide();
+    this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+  }
+
+  public setCurrentImage(index: number, event: Event): void {
+    event.stopPropagation();
+    this.stopAutoSlide();
+    this.currentImageIndex = index;
+  }
+
+  public getPrevIndex(): number {
+    return (this.currentImageIndex - 1 + this.images.length) % this.images.length;
+  }
+
+  public getNextIndex(): number {
+    return (this.currentImageIndex + 1) % this.images.length;
+  }
+
+  private startAutoSlide(): void {
+    if (this.images.length <= 1) return;
+
+    this.autoSlideInterval = setInterval(() => {
+      this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+    }, 5000);
+  }
+
+  private stopAutoSlide(): void {
+    if (this.autoSlideInterval) {
+      clearInterval(this.autoSlideInterval);
+      this.autoSlideInterval = null;
+    }
   }
 
   public convertToImage(imageUrl: ImageUrl[]): Image[] {
@@ -55,67 +105,103 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
   }
 
   public showInterestedPeople(): void {
+    if (!this.isUserAuthenticated) {
+      this.openLoginDialog();
+      return;
+    }
+
     this.accommodationsService.getInterestedPeople(this.accommodationId).subscribe(
       (interestedUsers: AppUser[]) => {
         this.dialog.open(InterestedPeopleDialogComponent, {
           data: {
             interestedPeople: interestedUsers,
           },
+          width: '500px',
+          maxWidth: '90vw',
         });
       },
       (error) => {
         console.error('Error fetching interested people', error);
-      });
+        this.snack.open('Could not load interested people', 'Close', {
+          duration: 3000,
+        });
+      }
+    );
   }
-
 
   public addToFavorites(accommodationId: string): void {
     if (!this.isUserAuthenticated) {
       this.openLoginDialog();
       return;
     }
-    console.log(this.authService.isAuthenticated$);
-    if(this.isInUserPrivateInterests) return;
+
+    if (this.isInUserPrivateInterests) return;
+
     this.accommodationsService.addToFavorites(accommodationId, this.user.id).subscribe(
       (numInterested) => {
-        this.accommodation.numInterestedPublic = numInterested;
+        this.accommodation.accommodation.numInterestedPrivate = numInterested;
         this.setNumPeopleInterested();
         this.isInUserPublicInterests = false;
         this.isInUserPrivateInterests = true;
-        this.snack.open('Apartment added to your favorites privately', 'Close', {
+        this.snack.open('Added to your favorites', 'Close', {
           duration: 3000,
+          panelClass: 'success-snackbar',
         });
       },
       (error) => {
-        console.error('Error adding accommodation to favorites', error);
+        console.error('Error adding to favorites', error);
+        this.snack.open('Could not add to favorites', 'Close', {
+          duration: 3000,
+        });
       }
     );
   }
 
-
   public expressMyInterestPublicly(accommodationId: string): void {
     if (!this.isUserAuthenticated) {
-        this.openLoginDialog();
-        return;
+      this.openLoginDialog();
+      return;
     }
 
-    if(this.isInUserPublicInterests) return;
-    this.accommodationsService.expressMyInterest(accommodationId, this.user.id).subscribe(
-        (numInterested) => {
-          this.accommodation.numInterestedPublic = numInterested;
+    if (this.isInUserPublicInterests) {
+      this.accommodationsService.expressMyInterest(accommodationId, this.user.id).subscribe(
+        (numInterested: number) => {
+          this.accommodation.accommodation.numInterestedPublic = numInterested;
           this.setNumPeopleInterested();
-          this.isInUserPublicInterests = true;
-          this.isInUserPrivateInterests = false;
-          this.snack.open('Everybody can see that you are interested', 'Close', {
-              duration: 3000,
+          this.isInUserPublicInterests = false;
+          this.snack.open('Interest removed', 'Close', {
+            duration: 3000,
           });
         },
-        (error) => {
-          alert('Error expressing interest'); 
-          console.error('Error expressing interest', error);
+        (error: any) => {
+          console.error('Error removing interest', error);
+          this.snack.open('Could not remove interest', 'Close', {
+            duration: 3000,
+          });
         }
+      );
+      return;
+    }
+
+    this.accommodationsService.expressMyInterest(accommodationId, this.user.id).subscribe(
+      (numInterested: number) => {
+        this.accommodation.accommodation.numInterestedPublic = numInterested;
+        this.setNumPeopleInterested();
+        this.isInUserPublicInterests = true;
+        this.isInUserPrivateInterests = false;
+        this.snack.open('Interest expressed publicly', 'Close', {
+          duration: 3000,
+          panelClass: 'success-snackbar',
+        });
+      },
+      (error: any) => {
+        console.error('Error expressing interest', error);
+        this.snack.open('Could not express interest', 'Close', {
+          duration: 3000,
+        });
+      }
     );
-}
+  }
 
   public incrementViews(accommodationId: string): void {
     if (!this.isUserAuthenticated) {
@@ -123,7 +209,7 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
     }
     this.accommodationsService.incrementViews(accommodationId, this.user.id).subscribe(
       (numViews) => {
-        this.accommodation.numViews = numViews;
+        this.accommodation.accommodation.numViews = numViews;
       },
       (error) => {
         console.error('Error incrementing views', error);
@@ -131,25 +217,55 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  // TODO: change this in the case where the accommodation got web scrapped and dont have an associated landlord
   public contactLandlord(): void {
+    if (!this.isUserAuthenticated) {
+      this.openLoginDialog();
+      return;
+    }
+
     const landlordInfo: LandlordInfo = {
-      landlordName: this.accommodation.ownerName,
-      landlordEmail: this.accommodation.ownerEmail,
-      landlordPhone: this.accommodation.ownerPhone,
+      landlordName: this.accommodation.accommodation.ownerName,
+      landlordEmail: this.accommodation.accommodation.ownerEmail,
+      landlordPhone: this.accommodation.accommodation.ownerPhone,
     };
+
     this.dialog.open(ContactLandLordComponent, {
       data: landlordInfo,
+      width: '500px',
+      maxWidth: '90vw',
     });
-  
-    
+  }
+
+  public getPercentage(value: number): number {
+    return Math.round(value * 100);
+  }
+
+  public getTransportIcon(mode: string): string {
+    switch (mode.toLowerCase()) {
+      case 'walking':
+        return 'directions_walk';
+      case 'transit':
+      case 'bus':
+        return 'directions_bus';
+      case 'subway':
+      case 'train':
+        return 'train';
+      case 'bicycling':
+      case 'cycling':
+        return 'directions_bike';
+      case 'driving':
+      case 'car':
+        return 'directions_car';
+      default:
+        return 'directions';
+    }
   }
 
   private getUserInterest(): void {
-
     if (!this.isUserAuthenticated) {
       return;
     }
+
     this.accommodationsService.getUserInterest(this.accommodationId, this.user.id).subscribe(
       (interest) => {
         switch (interest) {
@@ -174,39 +290,71 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   private setNumPeopleInterested(): void {
-    this.numPeopleInterested = this.accommodation.numInterestedPublic ;
+    this.numPeopleInterested = this.accommodation.accommodation.numInterestedPublic;
   }
 
   private openLoginDialog(): void {
     this.dialog.open(LoginDialogComponent, {
       data: {
-        message: 'Please login to show your interest',
+        message: 'Please login to continue',
       },
-      width: '50%',
+      width: '400px',
+      maxWidth: '90vw',
     });
   }
 
   private initializeData(): void {
     this.subscribeToAuthentication();
-    this.setUpAccommodation();
-
   }
 
   private setUpAccommodation(): void {
+    if (!this.user || !this.user.id) {
+      this.dialogService.showError('Please login or register to continue', 'User not found');
+      return;
+    }
     this.accommodationId = this.route.snapshot.paramMap.get('accommodationId') || '';
     if (this.accommodationId) {
-      this.accommodationsService.getAccommodationById(this.accommodationId).subscribe(
-        (data: Accommodation) => {
+      this.accommodationsService.getAccommodationById(this.accommodationId, this.user.id).subscribe(
+        (data: AccommodationMatchingDetailsDTO) => {
           this.accommodation = data;
           this.setNumPeopleInterested();
           this.getUserInterest();
           this.incrementViews(this.accommodationId);
+          this.updateMetaTags();
+
+          this.images = this.convertToImage(this.accommodation.accommodation.imageUrls || []);
+
+          if (this.images.length > 1) {
+            this.startAutoSlide();
+          }
         },
         (error) => {
           console.error('Error fetching accommodation', error);
+          this.snack.open('Could not load accommodation details', 'Close', {
+            duration: 3000,
+          });
         }
       );
+    }
+  }
+
+  private updateMetaTags(): void {
+    if (!this.accommodation) return;
+
+    this.titleService.setTitle(`${this.accommodation.accommodation.title} | RoomMatch`);
+
+    this.metaService.updateTag({
+      name: 'description',
+      content: this.accommodation.accommodation.description.substring(0, 160),
+    });
+
+    if (this.accommodation.accommodation.imageUrls.length > 0) {
+      this.metaService.updateTag({
+        property: 'og:image',
+        content: this.accommodation.accommodation.imageUrls[0].imageUrl,
+      });
     }
   }
 
@@ -219,12 +367,11 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
           const user = this.authService.getStoredUser();
           if (user) {
             this.user = user;
-          }
-          else {
+            this.setUpAccommodation();
+          } else {
             this.authService.handleUnAuthorizedUser();
           }
         }
       });
   }
-  
 }

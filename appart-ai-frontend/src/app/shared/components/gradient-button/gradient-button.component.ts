@@ -8,7 +8,7 @@ import { EventEmitter } from 'node:stream';
   styleUrl: './gradient-button.component.scss',
 })
 export class GradientButtonComponent {
-  @Input() message: string = 'Se connecter';
+  @Input() message = 'Se connecter';
   @Input() styleOnHover = false;
   @Input() height = 50;
   @Input() width = 100;

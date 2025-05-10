@@ -9,12 +9,14 @@ import { Subject } from 'rxjs';
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
 })
-export class LandingPageComponent implements OnInit, OnDestroy{
+export class LandingPageComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   private userId: string | undefined = undefined;
 
-  constructor(private router: Router, private authService: AuthenticationService
-  ) {  }
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.subscribeToLoggedUser();
@@ -45,7 +47,6 @@ export class LandingPageComponent implements OnInit, OnDestroy{
   ];
 
   public onGetStartedClick(): void {
-    console.log("here");
     if (this.userId) {
       this.router.navigate([`/map/authenticated`]);
     } else {

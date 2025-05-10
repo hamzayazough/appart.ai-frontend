@@ -35,5 +35,4 @@ export class ApartmentCardComponent {
       src: image.imageUrl,
     }));
   }
-  
 }

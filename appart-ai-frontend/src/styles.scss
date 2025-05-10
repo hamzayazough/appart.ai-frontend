@@ -11,25 +11,68 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$appart-ai-frontend-primary: mat.define-palette(mat.$indigo-palette);
-$appart-ai-frontend-accent: mat.define-palette(
-  mat.$pink-palette,
-  A200,
-  A100,
-  A400
-);
 
-// The warn palette is optional (defaults to red).
-$appart-ai-frontend-warn: mat.define-palette(mat.$red-palette);
+// Custom color palette for appart.ai
+$appart-ai-primary: mat.define-palette((
+  50: #e0f7f4,
+  100: #b3ebe3,
+  200: #80ded0,
+  300: #4dd0bd,
+  400: #26c6af,
+  500: #00bca1, // Primary teal color
+  600: #00ab99,
+  700: #00978f,
+  800: #008485,
+  900: #006373,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+));
+
+$appart-ai-accent: mat.define-palette((
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+));
+
+$appart-ai-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$appart-ai-frontend-theme: mat.define-light-theme(
+$appart-ai-theme: mat.define-light-theme(
   (
     color: (
-      primary: $appart-ai-frontend-primary,
-      accent: $appart-ai-frontend-accent,
-      warn: $appart-ai-frontend-warn,
+      primary: $appart-ai-primary,
+      accent: $appart-ai-accent,
+      warn: $appart-ai-warn,
     ),
     typography: mat.define-typography-config(),
     density: 0,
@@ -39,11 +82,122 @@ $appart-ai-frontend-theme: mat.define-light-theme(
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($appart-ai-frontend-theme);
+@include mat.all-component-themes($appart-ai-theme);
 
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --primary-color: #00bca1;
+  --primary-color-gradient: mat.define-palette((
+    50: #e0f7f4,
+    100: #b3ebe3,
+    200: #80ded0,
+    300: #4dd0bd,
+    400: #26c6af,
+    500: #00bca1,
+    600: #00ab99,
+    700: #00978f,
+    800: #008485,
+    900: #006373,
+    contrast: (
+      50: rgba(0, 0, 0, 0.87),
+      100: rgba(0, 0, 0, 0.87),
+      200: rgba(0, 0, 0, 0.87),
+      300: rgba(0, 0, 0, 0.87),
+      400: rgba(0, 0, 0, 0.87),
+      500: white,
+      600: white,
+      700: white,
+      800: white,
+      900: white,
+    )
+  ));
+  --primary-dark: #008485;
+  --primary-light: #4dd0bd;
+  --accent-color: #4caf50;
+  --accent-light: #81c784;
+  --background-color: #e6f2e6;
+  --text-color: #121212;
+  --text-light: #666666;
+  --white: #ffffff;
+  --gray-light: #f5f5f5;
+  --gray: #e0e0e0;
+  --gray-dark: #9e9e9e;
+  
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
+  
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-sm: 4px;
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  --transition: all 0.3s ease;
+  
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2rem;
+  --font-size-xxxl: 2.5rem;
+  
+  --touch-target-size: 44px;
+}
+
+@media (max-width: 991px) {
+  :root {
+    --spacing-lg: 20px;
+    --spacing-xl: 28px;
+    --spacing-xxl: 40px;
+    
+    --font-size-xl: 1.375rem;
+    --font-size-xxl: 1.75rem;
+    --font-size-xxxl: 2.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-xxl: 32px;
+    
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-xxl: 1.5rem;
+    --font-size-xxxl: 1.875rem;
+  }
+}
+
 body {
   margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: "Poppins", sans-serif;
+  font-size: var(--font-size-md);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 .dm-serif-display-regular {
@@ -75,15 +229,31 @@ body {
 }
 
 .small {
-  font-size: 40px;
+  font-size: var(--font-size-lg);
+  
+  @media (min-width: 768px) {
+    font-size: 40px;
+  }
 }
 
 .big {
-  font-size: 2rem;
+  font-size: var(--font-size-xl);
+  
+  @media (min-width: 768px) {
+    font-size: 2rem;
+  }
 }
 
 .huge {
-  font-size: 5rem;
+  font-size: var(--font-size-xxl);
+  
+  @media (min-width: 768px) {
+    font-size: 3rem;
+  }
+  
+  @media (min-width: 992px) {
+    font-size: 5rem;
+  }
 }
 
 h1.no-margin {
@@ -107,9 +277,137 @@ html,
 body {
   height: 100%;
 }
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #e6f2e6;
 
+.btn {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  outline: none;
+  min-height: var(--touch-target-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--gray);
+  color: var(--text-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--gray-dark);
+}
+
+.card {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.section-title {
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  font-size: var(--font-size-xl);
+}
+
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+button, 
+a, 
+input[type="checkbox"], 
+input[type="radio"] {
+  min-height: var(--touch-target-size);
+  min-width: var(--touch-target-size);
+}
+
+input[type="checkbox"], 
+input[type="radio"] {
+  height: 20px;
+  width: 20px;
+}
+
+.container {
+  width: 100%;
+  padding-right: var(--spacing-md);
+  padding-left: var(--spacing-md);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: var(--container-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: var(--container-md);
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: var(--container-lg);
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: var(--container-xl);
+  }
+}
+
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+@media (min-width: 576px) {
+  .d-sm-none {
+    display: none !important;
+  }
+  .d-sm-block {
+    display: block !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .d-md-none {
+    display: none !important;
+  }
+  .d-md-block {
+    display: block !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .d-lg-none {
+    display: none !important;
+  }
+  .d-lg-block {
+    display: block !important;
+  }
 }

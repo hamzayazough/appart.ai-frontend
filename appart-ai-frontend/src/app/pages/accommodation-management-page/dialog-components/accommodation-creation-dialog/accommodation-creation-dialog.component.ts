@@ -19,7 +19,7 @@ export class AccommodationCreationDialogComponent implements OnInit, OnDestroy {
   public selectedFiles: File[] = [];
   public imagePreviews: string[] = [];
   public actualAccommodationImages: ImageUrl[] = [];
-  private accommodationId: string = "";
+  private accommodationId = "";
   private accommodationOfferDate: Date | undefined;
   private unsubscribe$ = new Subject<void>();
 

@@ -6,10 +6,10 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 @Component({
   selector: 'app-accommodation-map',
   templateUrl: './accommodation-map.component.html',
-  styleUrls: ['./accommodation-map.component.scss']
+  styleUrls: ['./accommodation-map.component.scss'],
 })
 export class AccommodationMapComponent implements OnInit {
-  @Input() accommodation?: Accommodation; 
+  @Input() accommodation?: Accommodation;
   map: Map = {} as Map;
   draw: MapboxDraw = {} as MapboxDraw;
 
@@ -20,7 +20,6 @@ export class AccommodationMapComponent implements OnInit {
   }
 
   onMapLoaded(map: Map): void {
-    console.log('Map loaded:', map);
     this.map = map;
 
     if (this.accommodation) {
@@ -34,7 +33,6 @@ export class AccommodationMapComponent implements OnInit {
     this.map.addControl(navigationControl, 'top-right');
   }
 
-
   addDrawTools(): void {
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
@@ -45,8 +43,6 @@ export class AccommodationMapComponent implements OnInit {
       defaultMode: 'draw_polygon',
     });
     this.map.addControl(this.draw, 'top-left');
-
-    console.log('Draw controls added');
 
     this.map.on('draw.create', this.onDrawCreate.bind(this));
     this.map.on('draw.update', this.onDrawUpdate.bind(this));
@@ -70,7 +66,6 @@ export class AccommodationMapComponent implements OnInit {
     const data = this.draw.getAll();
     if (data.features.length > 0) {
       const coordinates = data.features[0].geometry;
-      console.log('Polygon created with coordinates:', coordinates);
     }
   }
 
@@ -78,7 +73,6 @@ export class AccommodationMapComponent implements OnInit {
     const data = this.draw.getAll();
     if (data.features.length > 0) {
       const coordinates = data.features[0].geometry;
-      console.log('Polygon updated with coordinates:', coordinates);
     }
   }
 

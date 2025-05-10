@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IntervalUtil } from '../../utils/interval.util';
 import { race, Subject, take, takeUntil, timer } from 'rxjs';
 import { Image } from '../../../intefaces/image.interface';
@@ -8,7 +8,7 @@ import { Image } from '../../../intefaces/image.interface';
   templateUrl: './image-slider.component.html',
   styleUrl: './image-slider.component.scss',
 })
-export class ImageSliderComponent {
+export class ImageSliderComponent implements OnInit, OnDestroy {
   @Input() images: Image[] = [];
   @Input() delayBetweenSwitches = 0;
   @Input() height = 600;
@@ -50,8 +50,6 @@ export class ImageSliderComponent {
   }
 
   ngOnInit() {
-    this.images.forEach((image, index) => {
-    });
     this.startAutoSwitch();
   }
 
