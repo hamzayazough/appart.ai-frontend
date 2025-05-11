@@ -26,7 +26,7 @@
           "options": {
             "outputPath": "dist/appart-ai-frontend",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -41,11 +41,8 @@
               "mapbox-gl/dist/mapbox-gl.css"
             ],
             "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": false,
-            "ssr": false,
             "customWebpackConfig": {
-            "path": "./webpack.config.js"
+              "path": "./webpack.config.js"
             }
           },
           "configurations": {
@@ -53,7 +50,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/app/environments/environment.ts",
-                  "with":    "src/app/environments/environment.prod.ts"
+                  "with": "src/app/environments/environment.prod.ts"
                 }
               ],
               "budgets": [
