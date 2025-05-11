@@ -1,0 +1,25 @@
+<app-landing-header [selected]="selectedHeader"></app-landing-header>
+
+@if (!hasChildRoute) {
+  <div class="roommates-page-container">
+    <div class="header">
+      <h1>Find Your Perfect Roommate</h1>
+    </div>
+
+    <div class="options-container">
+      <div class="option-card" (click)="searchRoommates()">
+        <img src="./../../../../assets/images/roommate-icon.png" alt="Search Roommates" />
+        <h2>Search for Roommates</h2>
+        <p>Browse roommate requests and find the perfect match for you.</p>
+      </div>
+
+      <div class="option-card" (click)="goToMyRequest()">
+        <img src="./../../../../assets/images/my-roommate-post.png" alt="My Request" />
+        <h2>My Roommate Request</h2>
+        <p>View or edit the request you’ve already submitted.</p>
+      </div>
+    </div>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}

@@ -1,32 +1,39 @@
-import { Component, Input, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { DOCUMENT } from '@angular/common';
-import { AuthenticationService } from '../../../../../services/auth/authentication.service';
+import { combineLatest, filter, Subject, takeUntil } from 'rxjs';
+import { TokenService } from '../../../../../services/token-service/token.service';
 
 @Component({
   selector: 'app-auth-button',
   templateUrl: './auth-button.component.html',
   styleUrl: './auth-button.component.scss'
 })
-export class AuthButtonComponent implements OnInit {
+export class AuthButtonComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
 
-  @Input() message: string = 'Se connecter';
-  constructor(@Inject(DOCUMENT) public document: Document, public auth: AuthService, private authenticateService: AuthenticationService) {}
+  constructor(
+    @Inject(DOCUMENT) public document: Document,
+    public auth: AuthService,
+    private tokenService: TokenService
+  ) {}
+
   ngOnInit(): void {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      if (isAuthenticated) {
-        this.auth.idTokenClaims$.subscribe(claims => {
-          if(claims){
-          const token = claims.__raw;
-          this.authenticateService.setToken(token);
-          }
-        });
-      }
-    });
-    this.auth.user$.subscribe(user => {
-      if (user){
-        this.authenticateService.user = user;
-      }
-    });
+    combineLatest([this.auth.isAuthenticated$, this.tokenService.getToken$()])
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        filter(([isAuthenticated, token]) => isAuthenticated && !!token)
+      )
+      .subscribe();
+
+    this.auth.user$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe();
+
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

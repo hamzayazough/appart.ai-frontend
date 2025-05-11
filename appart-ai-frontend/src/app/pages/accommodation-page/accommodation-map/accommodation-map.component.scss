@@ -1,0 +1,20 @@
+.map-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+mgl-map {
+  width: 100%;
+  height: 100%;
+}
+
+h2, h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}

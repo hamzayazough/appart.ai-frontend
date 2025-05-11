@@ -1,40 +1,64 @@
-<div class="flex row end container">
+<div class="container" [class.mobile-open]="mobileMenuOpen">
   <p class="dm-serif-display-regular-italic small">appart.ai</p>
-  <div class="header-group">
+  
+  <button class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  
+  <div class="header-group" [class.mobile-active]="mobileMenuOpen">
     <a
       class="poppins-thin header-item"
       [ngClass]="{ selected: selected === selectedHeader.home }"
       (click)="goToHomePage()"
-      ><app-gradient-button [styleOnHover]="true">Home</app-gradient-button></a
     >
+      <div class="custom-button">
+        <span class="icon"><i class="fas fa-home"></i></span>
+        <span class="text">Home</span>
+      </div>
+    </a>
 
     <a
       class="poppins-thin header-item"
       [ngClass]="{ selected: selected === selectedHeader.browse }"
-      (click)="selected = selectedHeader.browse"
-      ><app-gradient-button [styleOnHover]="true"
-        >Browse</app-gradient-button
-      ></a
+      (click)="onBrowseClick()"
     >
-
+      <div class="custom-button">
+        <span class="icon"><i class="fas fa-search"></i></span>
+        <span class="text">Browse</span>
+      </div>
+    </a>
+  
     <a
       class="poppins-thin header-item"
-      [ngClass]="{ selected: selected === selectedHeader.aboutUs }"
-      (click)="selected = selectedHeader.aboutUs"
-      ><app-gradient-button [styleOnHover]="true" [width]="150"
-        >About us</app-gradient-button
-      ></a
+      [ngClass]="{ selected: selected === selectedHeader.roommates }"
+      (click)="selected = selectedHeader.roommates; closeMobileMenu()"  
+      href="/r"
     >
+      <div class="custom-button">
+        <span class="icon"><i class="fas fa-user-friends"></i></span>
+        <span class="text">Find Roommates</span>
+      </div>
+    </a>
 
     <a
       class="poppins-thin header-item"
       [ngClass]="{ selected: selected === selectedHeader.myProfile }"
       (click)="goToProfile()"
-      ><app-gradient-button [styleOnHover]="true" [width]="200"
-        >My profile</app-gradient-button
-      ></a
     >
+      <div class="custom-button">
+        <span class="icon"><i class="fas fa-user"></i></span>
+        <span class="text">My Profile</span>
+      </div>
+    </a>
+    
+    <div class="mobile-auth">
+      <app-auth-button></app-auth-button>
+    </div>
   </div>
 
-  <app-auth-button></app-auth-button>
+  <div class="desktop-auth">
+    <app-auth-button></app-auth-button>
+  </div>
 </div>

@@ -1,60 +1,87 @@
 .container {
-  background-color: #cecece;
-  width: calc(100% - 2 * 1rem);
+  background-color: #f8f9fa;
+  width: calc(100% - 2rem);
   margin: 1rem;
-  height: 20rem;
-  border-radius: 30px;
-  padding-top: 10px;
+  height: auto;
+  border-radius: 20px;
+  padding: 1rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
 }
 
 .header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 1rem;
-  width: 90%;
-}
+  margin-bottom: 1rem;
 
-:last-child {
-  margin-left: auto;
+  .header-data {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #666;
+    }
+  }
+
+  .bookmark {
+    margin-left: auto;
+    font-size: 1.5rem;
+    color: #888;
+  }
 }
 
 .card-content {
   display: flex;
-  flex-direction: row;
-  justify-content: space;
+  justify-content: space-between;
+
+  .pros-cons-content {
+    width: 45%;
+
+    h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 0.3rem 0;
+      }
+    }
+  }
 }
 
-.pros-cons-content {
+.card-footer {
+  margin-top: 1rem;
   display: flex;
-  flex-direction: column;
-  margin: 1rem;
-}
+  justify-content: space-between;
 
-.header-data {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  justify-content: center;
-  margin: 10px;
-
-  .poppins-black-title {
-    white-space: nowrap;   
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-    display: inline-block;
+  .detail-label {
+    font-weight: bold;
+    margin-right: 0.5rem;
   }
 }
 
 .green {
-  color: #02c39a;
+  color: #28a745;
 }
 
 .red {
-  color: #ff6464;
-}
-
-.bookmark {
-  justify-self: flex-end;
+  color: #dc3545;
 }

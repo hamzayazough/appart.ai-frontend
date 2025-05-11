@@ -1,7 +1,7 @@
 // interfaces related to user
 
 export interface AppUser {
-    id?: string,
+    id: string,
     auth0Id: string,
     email: string,
     phone?: string,
@@ -17,4 +17,10 @@ export interface UserInfo {
     username: string,
     firstName: string,
     lastName: string
+}
+
+export interface LandlordInfo {
+    landlordName: string;
+    landlordEmail: string;
+    landlordPhone: string;
 }

@@ -1,16 +1,15 @@
 <div class="container" [style.height.px]="height" [style.width.px]="width">
-  <div class="slider-container" *ngIf="images.length && images.length > 0">
+  <div class="slider-container" *ngIf="images && images.length > 0">
     <div
       class="slider-item"
       *ngFor="let image of images; let i = index"
       [ngClass]="{
         active: i === activeImageIndex,
-        prev: images.length > 1 && i === (activeImageIndex - 1 + this.images.length) % this.images.length,
-        next: images.length > 1 && i === (activeImageIndex + 1) % this.images.length,
-        hideleft: images.length > 1 && i === (activeImageIndex - 2 + this.images.length) % this.images.length,
-        hideright: images.length > 1 && i === (activeImageIndex + 2) % this.images.length
+        prev: images.length > 1 && i === (activeImageIndex - 1 + images.length) % images.length,
+        next: images.length > 1 && i === (activeImageIndex + 1) % images.length,
+        hideleft: images.length > 1 && i === (activeImageIndex - 2 + images.length) % images.length,
+        hideright: images.length > 1 && i === (activeImageIndex + 2) % images.length
       }"
-      (click)="stopAutoSwitch()"
     >
       <img
         [src]="image.src"
@@ -20,5 +19,38 @@
         (panleft)="stopAutoSwitch(); showNext(i)"
       />
     </div>
+    
+    <div 
+      *ngIf="images.length > 1"
+      class="slider-nav prev-btn"
+      (click)="stopAutoSwitch(); showPrevious(activeImageIndex)"
+    >
+    </div>
+    
+    <div 
+      *ngIf="images.length > 1"
+      class="slider-nav next-btn"
+      (click)="stopAutoSwitch(); showNext(activeImageIndex)"
+    >
+    </div>
+    
+    <div class="slider-controls" *ngIf="images.length > 1">
+      <div 
+        *ngFor="let image of images; let i = index"
+        class="slider-dot"
+        [ngClass]="{ active: i === activeImageIndex }"
+        (click)="stopAutoSwitch(); activeImageIndex = i"
+      ></div>
+    </div>
+  </div>
+  
+  <div 
+    *ngIf="!images || images.length === 0"
+    class="no-images"
+    [style.height.px]="height"
+    [style.width.px]="width"
+  >
+    <mat-icon>image</mat-icon>
+    <p>No images available</p>
   </div>
 </div>

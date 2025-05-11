@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class MapBoxService {
 
-  private baseUrl: string = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
+  private baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
   private accessToken: string = accessToken;
 
   constructor(private http: HttpClient) { }

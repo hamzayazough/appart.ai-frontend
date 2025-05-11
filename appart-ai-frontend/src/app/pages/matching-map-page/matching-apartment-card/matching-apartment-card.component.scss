@@ -1,0 +1,213 @@
+.container {
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  margin-top: 10px;
+  padding: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  width: calc(100% - 16px);
+  margin-left: 10px;
+  margin-right: 10px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.score-container {
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.header-content {
+  flex: 1;
+  
+  .title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #121212;
+  }
+  
+  .address {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.card-content {
+  display: flex;
+  gap: 24px;
+}
+
+.image-section {
+  width: 50%;
+  flex-shrink: 0;
+  
+  .image-container {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    
+    .apartment-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .image-navigation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      
+      .nav-button {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.3);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        mat-icon {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+.details-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 4px;
+  
+  .price {
+    font-size: 22px;
+    font-weight: 600;
+    color: #00bca1;
+    margin: 0 0 20px 0;
+    text-align: left;
+  }
+  
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      font-size: 14px;
+      
+      .bullet {
+        margin-right: 8px;
+        font-size: 18px;
+        line-height: 1;
+      }
+      
+      &.positive {
+        color: #00bca1;
+        
+        .bullet {
+          color: #00bca1;
+        }
+      }
+      
+      &.negative {
+        color: #f44336;
+        
+        .bullet {
+          color: #f44336;
+        }
+      }
+      
+      &.neutral {
+        color: #666;
+        
+        .bullet {
+          color: #666;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    width: calc(100% - 8px);
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+  
+  .card-header {
+    margin-bottom: 20px;
+  }
+  
+  .header-content {
+    .title {
+      font-size: 18px;
+    }
+    
+    .address {
+      font-size: 13px;
+    }
+  }
+  
+  .card-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .image-section {
+    width: 100%;
+    
+    .image-container {
+      height: 160px;
+    }
+  }
+  
+  .details-section {
+    .price {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .features-list {
+      gap: 8px;
+      
+      .feature-item {
+        font-size: 13px;
+      }
+    }
+  }
+}

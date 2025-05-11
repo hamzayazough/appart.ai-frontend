@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Access Restricted</h2>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">Close</button>
+  <ng-container *ngIf="!data.isLoggedIn">
+    <button mat-raised-button color="primary" (click)="onLogin()">Log In</button>
+  </ng-container>
+  <ng-container *ngIf="data.isLoggedIn && data.feature !== 'profile'">
+    <button mat-raised-button color="primary" (click)="onCompletePreferences()">
+      Complete Preferences
+    </button>
+  </ng-container>
+</mat-dialog-actions>

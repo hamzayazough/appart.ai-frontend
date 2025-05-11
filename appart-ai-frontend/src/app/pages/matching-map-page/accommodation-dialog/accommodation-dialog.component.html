@@ -1,0 +1,66 @@
+<div class="accommodation-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>{{ data.accommodation.accommodation.title }}</h2>
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <div class="dialog-summary">
+      <div class="score-container">
+        <app-recommendation-circle [value]="formattedScore" [size]="80">
+        </app-recommendation-circle>
+        <div class="score-label">Match Score</div>
+      </div>
+
+      <div class="summary-details">
+        <p class="address">{{ data.accommodation.accommodation.address.placeName }}</p>
+        <p class="price">${{ data.accommodation.accommodation.price }}</p>
+
+        <div class="features">
+          <span class="feature">
+            <mat-icon>hotel</mat-icon>
+            {{ data.accommodation.accommodation.bedrooms }} Bed{{
+              data.accommodation.accommodation.bedrooms !== 1 ? 's' : ''
+            }}
+          </span>
+          <span class="feature">
+            <mat-icon>bathtub</mat-icon>
+            {{ data.accommodation.accommodation.bathrooms }} Bath{{
+              data.accommodation.accommodation.bathrooms !== 1 ? 's' : ''
+            }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros" *ngIf="data.accommodation.matching.pros?.length">
+        <h3>Pros</h3>
+        <ul>
+          <li *ngFor="let pro of data.accommodation.matching.pros">{{ pro }}</li>
+        </ul>
+      </div>
+
+      <div class="cons" *ngIf="data.accommodation.matching.cons?.length">
+        <h3>Cons</h3>
+        <ul>
+          <li *ngFor="let con of data.accommodation.matching.cons">{{ con }}</li>
+        </ul>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Close</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [routerLink]="['/accommodation', data.accommodation.accommodation.id]"
+      (click)="close()"
+    >
+      View Details
+    </button>
+  </mat-dialog-actions>
+</div>

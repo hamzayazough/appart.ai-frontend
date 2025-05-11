@@ -1,7 +1,8 @@
-import { Address } from "./adress.interface";
-import { Image } from "./image.interface";
+import { Address } from './adress.interface';
+import { Image, ImageUrl } from './image.interface';
+import { UserAccommodationMatching } from './matching.interface';
 
-export interface AccommodationCreation {
+export interface Accommodation {
   id: string;
   title: string;
   description: string;
@@ -10,19 +11,20 @@ export interface AccommodationCreation {
   numBathrooms: number;
   squareFootage: number;
   phone: string;
-  offerDate: string;
+  offerDate?: Date;
   numViews: number;
   numInterestedPrivate: number;
   numInterestedPublic: number;
   address: Address;
   ownerId: string;
-    
+  ownerName: string;
+  ownerEmail: string;
+  ownerPhone: string;
+
   floorNumber?: number;
   availabilityStatus: string;
   availableFrom: string;
   leaseDuration?: number;
-  images: File[];
-
   airConditioning: boolean;
   furnished: boolean;
   utilitiesIncluded: boolean;
@@ -36,56 +38,34 @@ export interface AccommodationCreation {
   gym: boolean;
   parkingIncluded: boolean;
   roommateAccepted: boolean;
+  imageUrls: ImageUrl[];
+
+  //nw:
+  detailsLink?: string;
+  constructionDate?: number; //year
+  ownerCellphone?: string;
+  hasPool?: boolean;
+  hasElevator?: boolean;
+  hasGarage?: boolean;
 }
 
-export interface Accommodation {
-    id: string;
-    title: string;
-    description: string;
-    rentPrice: number;
-    numBeds: number;
-    numBathrooms: number;
-    squareFootage: number;
-    phone: string;
-    offerDate: string;
-    numViews: number;
-    numInterestedPrivate: number;
-    numInterestedPublic: number;
-    address: Address;
-    ownerId: string;
-      
-    floorNumber?: number;
-    availabilityStatus: string;
-    availableFrom: string;
-    leaseDuration?: number;  
-    airConditioning: boolean;
-    furnished: boolean;
-    utilitiesIncluded: boolean;
-    dishwasher: boolean;
-    stainlessSteelAppliances: boolean;
-    patio: boolean;
-    balcony: boolean;
-    refrigerator: boolean;
-    petsAllowed: boolean;
-    smokingAllowed: boolean;
-    gym: boolean;
-    parkingIncluded: boolean;
-    roommateAccepted: boolean;
-    imageUrls: Image[];
-  }
+export interface AccommodationMatchingDTO {
+  matching: UserAccommodationMatching;
+  accommodation: AccommodationBaseDTO;
+}
 
-  export interface AccommodationMatchingDTO {
-    pros: string[];
-    cons: string[];
-    score: number;
-    value: AccommodationBaseDTO;
-  }
-  export interface AccommodationBaseDTO {
-    id: string;
-    title: string;
-    bedrooms: number;
-    bathrooms: number;
-    price: number;
-    address: Address;
-    imageUrls: Image[];
-  }
+export interface AccommodationMatchingDetailsDTO {
+  accommodation: Accommodation;
+  matching: UserAccommodationMatching;
+}
+
+export interface AccommodationBaseDTO {
+  id: string;
+  title: string;
+  bedrooms: number;
+  bathrooms: number;
+  squareFootage?: number;
+  price: number;
+  address: Address;
+  imageUrls: ImageUrl[];
+}

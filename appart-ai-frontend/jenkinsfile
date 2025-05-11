@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        BRANCH = "${env.BRANCH_NAME}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+                        steps {
+                script {
+                    def serverName = ''
+                    if (BRANCH == 'main') {
+                        serverName = 'mydomain.com www.mydomain.com' // TODO: donner notre vrai dommaine quand on l'aura
+                    } else if (BRANCH == 'dev') {
+                        serverName = 'devDomain.com' // TODO: donner aussi
+                    } else {
+                        serverName = 'localhost'
+                    }
+
+                    sh """
+                    sed "s/{{SERVER_NAME}}/${serverName}/" nginx.conf.template > nginx.conf
+                    """
+
+                    sh 'docker build -t my-app .'
+                }
+            }
+        }
+         stage('Run Docker Container') {
+            steps {
+                script {
+                    // Stop and remove any existing container
+                    sh 'docker stop my-app-container || true && docker rm my-app-container || true'
+
+                    // Run the new container
+                    sh 'docker run -d -p 80:80 --name my-app-container my-app'
+                }
+            }
+        }
+    }
+}
