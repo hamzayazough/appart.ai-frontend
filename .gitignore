@@ -42,4 +42,4 @@ testem.log
 Thumbs.db
 
 #tokens
-maps.ts
+.env
