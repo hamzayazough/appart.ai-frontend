@@ -13,6 +13,7 @@ import { CreateRoommateRequestComponent } from './pages/roomates-research/roomat
 import { authGuard } from './auth.guard';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { MatchingMapPageComponent } from './pages/matching-map-page/matching-map-page.component';
+import { AccommodationCreationDialogComponent } from './pages/accommodation-management-page/dialog-components/accommodation-creation-dialog/accommodation-creation-dialog.component';
 
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: 'account/:id/accommodations-manager',
     component: AccommodationManagementPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'account/:id/accommodations-manager/:accommodationId',
+    component: AccommodationCreationDialogComponent,
     canActivate: [authGuard],
   },
   {

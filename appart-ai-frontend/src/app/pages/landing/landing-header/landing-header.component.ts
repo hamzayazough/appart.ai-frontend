@@ -43,7 +43,6 @@ export class LandingHeaderComponent {
 
   public toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
-    // Prevent scrolling when menu is open
     document.body.style.overflow = this.mobileMenuOpen ? 'hidden' : '';
   }
 
@@ -52,7 +51,6 @@ export class LandingHeaderComponent {
       this.router.navigate([`/account/${this.userId}`]);
       this.closeMobileMenu();
     } else {
-      // Handle case when user is not logged in
       this.openAccessRestrictionDialog('profile', 'Please log in to access your profile.');
     }
   }
@@ -125,7 +123,7 @@ export class LandingHeaderComponent {
           this.userPreferences = preferences;
         },
         error: (error) => {
-          console.error('Error loading user preferences:', error);
+          console.log('error fetching user preferences', error);
         },
       });
     }

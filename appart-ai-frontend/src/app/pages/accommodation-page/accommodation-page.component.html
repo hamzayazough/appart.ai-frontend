@@ -222,11 +222,11 @@
             <div class="commute-stats">
               <div class="stat">
                 <mat-icon>schedule</mat-icon>
-                <span>{{ path.duration | number: '1.0-0' }} min</span>
+                <span>{{ path.duration / 60 | number: '1.0-0' }} min</span>
               </div>
               <div class="stat">
                 <mat-icon>straighten</mat-icon>
-                <span>{{ path.distance | number: '1.1-1' }} km</span>
+                <span>{{ path.distance / 1000 | number: '1.1-1' }} km</span>
               </div>
             </div>
 

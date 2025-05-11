@@ -1,9 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import {
-  BrowserModule,
-  HammerModule,
-  provideClientHydration,
-} from '@angular/platform-browser';
+import { BrowserModule, HammerModule, provideClientHydration } from '@angular/platform-browser';
 
 import { AuthModule } from '@auth0/auth0-angular';
 import { AppRoutingModule } from './app-routing.module';
@@ -53,65 +49,81 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
 import { LoginDialogComponent } from './dialogs/login-dialog/login-dialog.component';
 import { AccommodationDialogComponent } from './pages/matching-map-page/accommodation-dialog/accommodation-dialog.component';
 import { AccessRestrictionDialogComponent } from './pages/landing/landing-header/components/access-restriction-dialog/access-restriction-dialog.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
-@NgModule({ declarations: [
-        AppComponent,
-        LandingPageComponent,
-        AccountPageComponent,
-        AccountPersonalInfoComponent,
-        AccountContactsComponent,
-        ConversationsPageComponent,
-        AccommodationManagementPageComponent,
-        AccommodationCreationDialogComponent,
-        AddressAutocompleteComponent,
-        AccommodationPageComponent,
-        InterestedPeopleDialogComponent,
-        AccommodationMapComponent,
-        AccountPreferencesComponent,
-        MySavedAccommodationsComponent,
-        SuccessDialogComponent,
-        ContactLandLordComponent,
-        RoommatesPageComponent,
-        CreateRoommateRequestComponent,
-        RoommateSearchingComponent,
-        RegistrationPageComponent,
-        LoginDialogComponent,
-        AccommodationDialogComponent,
-        AccessRestrictionDialogComponent,
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        SharedModule,
-        HammerModule,
-        MaterialModule,
-        MatFormFieldModule,
-        MatSnackBarModule,
-        MatCardModule,
-        MatDialogModule,
-        MatInputModule,
-        FormsModule,
-        CommonModule,
-        MatButtonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatIconModule,
-        MatCheckboxModule,
-        MatOptionModule,
-        MatGridListModule,
-        MatDividerModule,
-        MapModule,
-        MatPaginatorModule,
-        AuthModule.forRoot({
-            domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
-            clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
-            authorizationParams: {
-                redirect_uri: window.location.origin,
-                audience: 'https://dev-8cn4ee7fnjylxcsz.us.auth0.com/api/v2/',
-            },
-        }),
-        MatSidenavModule,
-        NgxMapboxGLModule.withConfig({
-            accessToken: accessToken,
-        })], providers: [provideClientHydration(), provideAnimationsAsync(), provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({
+  declarations: [
+    AppComponent,
+    LandingPageComponent,
+    AccountPageComponent,
+    AccountPersonalInfoComponent,
+    AccountContactsComponent,
+    ConversationsPageComponent,
+    AccommodationManagementPageComponent,
+    AccommodationCreationDialogComponent,
+    AddressAutocompleteComponent,
+    AccommodationPageComponent,
+    InterestedPeopleDialogComponent,
+    AccommodationMapComponent,
+    AccountPreferencesComponent,
+    MySavedAccommodationsComponent,
+    SuccessDialogComponent,
+    ContactLandLordComponent,
+    RoommatesPageComponent,
+    CreateRoommateRequestComponent,
+    RoommateSearchingComponent,
+    RegistrationPageComponent,
+    LoginDialogComponent,
+    AccommodationDialogComponent,
+    AccessRestrictionDialogComponent,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    HammerModule,
+    MaterialModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule,
+    CommonModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatOptionModule,
+    MatGridListModule,
+    MatDividerModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MapModule,
+    MatPaginatorModule,
+    AuthModule.forRoot({
+      domain: 'dev-8cn4ee7fnjylxcsz.us.auth0.com',
+      clientId: 'RLU5dSYynQfFsVWfKtnoBmgpjqug8mEw',
+      authorizationParams: {
+        redirect_uri: window.location.origin,
+        audience: 'https://dev-8cn4ee7fnjylxcsz.us.auth0.com/api/v2/',
+      },
+    }),
+    MatSidenavModule,
+    NgxMapboxGLModule.withConfig({
+      accessToken: accessToken,
+    }),
+  ],
+  providers: [
+    provideClientHydration(),
+    provideAnimationsAsync(),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideNativeDateAdapter(),
+  ],
+})
 export class AppModule {}

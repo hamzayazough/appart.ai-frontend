@@ -266,10 +266,6 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
           },
           error: (error) => {
             console.error('Error searching for place:', error);
-            this.dialogService.showError(
-              'Failed to search for location. Please try again.',
-              'Search Error'
-            );
           },
         });
       });

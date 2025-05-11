@@ -1,11 +1,11 @@
 <div class="contact-dialog">
-    <h2 class="contact-title">Contact Landlord: {{ data.landlordName }}</h2>
-    <div class="contact-info">
-        <button mat-button class="contact-button" (click)="contactByPhone()">
-            📞 Phone: {{ data.landlordPhone }}
-        </button>
-        <button mat-button class="contact-button" (click)="contactByEmail()">
-            ✉️ Email: {{ data.landlordEmail }}
-        </button>
-    </div>
+  <h2 class="contact-title poppins-black-subtitle">Contact Landlord: {{ data.landlordName }}</h2>
+  <div class="contact-info">
+    <button mat-button class="contact-button" (click)="contactByPhone()">
+      <mat-icon>phone</mat-icon> &nbsp; {{ data.landlordPhone }}
+    </button>
+    <button mat-button class="contact-button" (click)="contactByEmail()">
+      <mat-icon>email</mat-icon> &nbsp; {{ data.landlordEmail }}
+    </button>
+  </div>
 </div>

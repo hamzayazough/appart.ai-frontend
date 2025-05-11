@@ -1,126 +1,300 @@
-<h2 mat-dialog-title>{{ data.isNew ? 'Add Accommodation' : 'Edit Accommodation' }}</h2>
+<app-landing-header></app-landing-header>
+<div class="parent">
+  <div class="page-header">
+    <h1 class="poppins-black-title">{{ pageTitle }}</h1>
+  </div>
 
-<mat-dialog-content [formGroup]="accommodationForm">
-  <section>
-    <mat-form-field>
-      <mat-label>Title</mat-label>
-      <input matInput formControlName="title">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Rent Price</mat-label>
-      <input matInput type="number" formControlName="rentPrice">
-    </mat-form-field>
-  </section>
-
-  <section class="description-section">
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Number of Beds</mat-label>
-      <input matInput type="number" formControlName="numBeds">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Number of Bathrooms</mat-label>
-      <input matInput type="number" formControlName="numBathrooms">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Square Footage</mat-label>
-      <input matInput type="number" formControlName="squareFootage">
-    </mat-form-field>
-  </section>
-
-  <mat-divider></mat-divider>
-
-  <section class="availability-section">
-    <mat-form-field>
-      <mat-label>Available From</mat-label>
-      <input matInput type="date" formControlName="availableFrom">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Lease Duration (months)</mat-label>
-      <input matInput type="number" formControlName="leaseDuration">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Floor Number</mat-label>
-      <input matInput type="number" formControlName="floorNumber">
-    </mat-form-field>
-  </section>
-
-  <mat-divider></mat-divider>
-
-  <section class="upload-section"> 
-    <mat-label>Upload Images</mat-label>
-    <input type="file" (change)="onFileSelected($event)" multiple>
-  
-    <div class="image-preview-container">
-  
-      <div *ngFor="let img of actualAccommodationImages" class="image-preview">
-        <img [src]="img.imageUrl" [alt]="img.imageAlt || 'Accommodation image'" width="100" height="100">
-        <button mat-icon-button color="warn" (click)="removeExistingImage(img)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-  
-      <div *ngFor="let img of imagePreviews" class="image-preview">
-        <img [src]="img" alt="Accommodation image" width="100" height="100">
-        <button mat-icon-button color="warn" (click)="removeImage(img)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-  
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress" [style.width.%]="formProgress"></div>
     </div>
-  </section>
-  
+  </div>
 
-  <mat-divider></mat-divider>
-
-  <section>
-    <h3>Address</h3>
-    <app-address-autocomplete 
-      [initialPlaceName]="getPlaceName()" 
-      [initialApartmentNumber]="getApartmentNumber()"
-      (addressSelected)="onAddressSelected($event)">
-    </app-address-autocomplete>
-  </section>
-  
-
-  <mat-divider></mat-divider>
-
-  <section class="features-section">
-    <h3>Features</h3>
-    <div class="features-grid">
-      <mat-checkbox formControlName="airConditioning">Air Conditioning</mat-checkbox>
-      <mat-checkbox formControlName="dishwasher">Dishwasher</mat-checkbox>
-      <mat-checkbox formControlName="stainlessSteelAppliances">Stainless Steel Appliances</mat-checkbox>
-      <mat-checkbox formControlName="patio">Patio</mat-checkbox>
-      <mat-checkbox formControlName="balcony">Balcony</mat-checkbox>
-      <mat-checkbox formControlName="refrigerator">Refrigerator</mat-checkbox>
-      <mat-checkbox formControlName="petsAllowed">Pets Allowed</mat-checkbox>
-      <mat-checkbox formControlName="smokingAllowed">Smoking Allowed</mat-checkbox>
-      <mat-checkbox formControlName="gym">Gym</mat-checkbox>
-      <mat-checkbox formControlName="parkingIncluded">Parking Included</mat-checkbox>
-      <mat-checkbox formControlName="roommateAccepted">Roommate Accepted</mat-checkbox>
+  <div class="steps-container">
+    <div
+      *ngFor="let step of formSteps; let i = index"
+      [class.active]="currentStep === i"
+      [class.completed]="step.completed"
+      class="step"
+    >
+      <div class="step-icon">
+        <mat-icon>{{ step.icon }}</mat-icon>
+      </div>
+      <div class="step-title">{{ step.title }}</div>
     </div>
-  </section>
+  </div>
 
-  <mat-divider></mat-divider>
+  <div class="form-container" [formGroup]="accommodationForm">
+    <div class="step-content" *ngIf="currentStep === 0">
+      <section>
+        <h3>Basic Property Information</h3>
+        <p>Let's start with the essential details about your property.</p>
 
-  <section class="additional-info-section">
-    <h3>Additional Information</h3>
-    <mat-checkbox formControlName="furnished">Furnished</mat-checkbox>
-    <mat-checkbox formControlName="utilitiesIncluded">Utilities Included</mat-checkbox>
-  </section>
-</mat-dialog-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Property Title</mat-label>
+          <input matInput formControlName="title" placeholder="e.g. Cozy Downtown Apartment" />
+          <mat-icon matSuffix>title</mat-icon>
+          <mat-error *ngIf="accommodationForm.get('title')?.hasError('required')"
+            >Title is required</mat-error
+          >
+        </mat-form-field>
 
-<mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="save()">Save</button>
-</mat-dialog-actions>
+        <mat-form-field appearance="outline">
+          <mat-label>Monthly Rent Price</mat-label>
+          <input matInput type="number" formControlName="rentPrice" placeholder="e.g. 1200" />
+          <span matPrefix>$&nbsp;</span>
+          <mat-icon matSuffix>attach_money</mat-icon>
+          <mat-error *ngIf="accommodationForm.get('rentPrice')?.hasError('required')"
+            >Rent price is required</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Availability Status</mat-label>
+          <mat-select formControlName="availabilityStatus">
+            <mat-option value="Available">Available</mat-option>
+            <mat-option value="Pending">Pending</mat-option>
+            <mat-option value="Rented">Rented</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>event_available</mat-icon>
+        </mat-form-field>
+      </section>
+    </div>
+
+    <div class="step-content" *ngIf="currentStep === 1">
+      <section>
+        <h3>Property Details</h3>
+        <p>Tell us more about your property's features and availability.</p>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            rows="4"
+            placeholder="Describe your property..."
+          ></textarea>
+          <mat-error *ngIf="accommodationForm.get('description')?.hasError('required')"
+            >Description is required</mat-error
+          >
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Number of Beds</mat-label>
+            <input matInput type="number" formControlName="numBeds" />
+            <mat-icon matSuffix>bed</mat-icon>
+            <mat-error *ngIf="accommodationForm.get('numBeds')?.hasError('required')"
+              >Number of beds is required</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Number of Bathrooms</mat-label>
+            <input matInput type="number" formControlName="numBathrooms" />
+            <mat-icon matSuffix>bathtub</mat-icon>
+            <mat-error *ngIf="accommodationForm.get('numBathrooms')?.hasError('required')"
+              >Number of bathrooms is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Square Footage</mat-label>
+            <input matInput type="number" formControlName="squareFootage" />
+            <span matSuffix>sq ft</span>
+            <mat-icon matSuffix>square_foot</mat-icon>
+            <mat-error *ngIf="accommodationForm.get('squareFootage')?.hasError('required')"
+              >Square footage is required</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Floor Number</mat-label>
+            <input matInput type="number" formControlName="floorNumber" />
+            <mat-icon matSuffix>layers</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Available From</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="availableFrom" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="accommodationForm.get('availableFrom')?.hasError('required')"
+              >Available date is required</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Lease Duration (months)</mat-label>
+            <input matInput type="number" formControlName="leaseDuration" />
+            <mat-icon matSuffix>date_range</mat-icon>
+            <mat-error *ngIf="accommodationForm.get('leaseDuration')?.hasError('required')"
+              >Lease duration is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </section>
+    </div>
+
+    <div class="step-content" *ngIf="currentStep === 2">
+      <section class="upload-section">
+        <h3>Property Images</h3>
+        <p>Upload photos of your property to attract potential tenants.</p>
+
+        <label class="file-upload-btn">
+          <mat-icon>cloud_upload</mat-icon>
+          Upload Images
+          <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" />
+        </label>
+
+        <div class="image-preview-container">
+          <div
+            *ngIf="actualAccommodationImages.length === 0 && imagePreviews.length === 0"
+            class="no-images"
+          >
+            <mat-icon>image</mat-icon>
+            <span>No images uploaded yet</span>
+            <p>Upload images to showcase your property</p>
+          </div>
+
+          <div *ngFor="let img of actualAccommodationImages" class="image-preview">
+            <img [src]="img.imageUrl" [alt]="img.imageAlt || 'Property image'" />
+            <button mat-icon-button color="warn" (click)="removeExistingImage(img)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <div *ngFor="let img of imagePreviews" class="image-preview">
+            <img [src]="img" alt="Property image" />
+            <button mat-icon-button color="warn" (click)="removeImage(img)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="step-content" *ngIf="currentStep === 3">
+      <section>
+        <h3>Property Location</h3>
+        <p>Enter the address details for your property.</p>
+
+        <app-address-autocomplete
+          [initialPlaceName]="getPlaceName()"
+          [initialApartmentNumber]="getApartmentNumber()"
+          (addressSelected)="onAddressSelected($event)"
+        >
+        </app-address-autocomplete>
+      </section>
+    </div>
+
+    <div class="step-content" *ngIf="currentStep === 4">
+      <section>
+        <h3>Property Features</h3>
+        <p>Select the amenities and features available in your property.</p>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <mat-icon>ac_unit</mat-icon>
+            <span>Air Conditioning</span>
+            <mat-checkbox formControlName="airConditioning"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>countertops</mat-icon>
+            <span>Dishwasher</span>
+            <mat-checkbox formControlName="dishwasher"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>kitchen</mat-icon>
+            <span>Stainless Steel Appliances</span>
+            <mat-checkbox formControlName="stainlessSteelAppliances"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>deck</mat-icon>
+            <span>Patio</span>
+            <mat-checkbox formControlName="patio"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>balcony</mat-icon>
+            <span>Balcony</span>
+            <mat-checkbox formControlName="balcony"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>kitchen</mat-icon>
+            <span>Refrigerator</span>
+            <mat-checkbox formControlName="refrigerator"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>pets</mat-icon>
+            <span>Pets Allowed</span>
+            <mat-checkbox formControlName="petsAllowed"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>smoking_rooms</mat-icon>
+            <span>Smoking Allowed</span>
+            <mat-checkbox formControlName="smokingAllowed"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>fitness_center</mat-icon>
+            <span>Gym</span>
+            <mat-checkbox formControlName="gym"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>local_parking</mat-icon>
+            <span>Parking Included</span>
+            <mat-checkbox formControlName="parkingIncluded"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>people</mat-icon>
+            <span>Roommate Accepted</span>
+            <mat-checkbox formControlName="roommateAccepted"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>chair</mat-icon>
+            <span>Furnished</span>
+            <mat-checkbox formControlName="furnished"></mat-checkbox>
+          </div>
+          <div class="feature-item">
+            <mat-icon>power</mat-icon>
+            <span>Utilities Included</span>
+            <mat-checkbox formControlName="utilitiesIncluded"></mat-checkbox>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="step-navigation">
+      <button *ngIf="currentStep > 0" class="back-btn" (click)="prevStep()">
+        <mat-icon>arrow_back</mat-icon> Previous
+      </button>
+
+      <button *ngIf="currentStep === 0" class="cancel-btn" (click)="cancel()">Cancel</button>
+
+      <button
+        *ngIf="currentStep < formSteps.length - 1"
+        class="next-btn"
+        (click)="nextStep()"
+        [disabled]="!isStepValid(currentStep)"
+      >
+        Next <mat-icon>arrow_forward</mat-icon>
+      </button>
+
+      <button
+        *ngIf="currentStep === formSteps.length - 1"
+        class="save-btn"
+        (click)="save()"
+        [disabled]="!accommodationForm.valid"
+      >
+        <mat-icon>save</mat-icon> Save Property
+      </button>
+    </div>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <mat-spinner class="loading-spinner" color="primary"></mat-spinner>
+  </div>
+</div>
