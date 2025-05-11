@@ -5,13 +5,15 @@ import { LandlordInfo } from '../../../../intefaces/user.interface';
 @Component({
   selector: 'app-contact-land-lord',
   templateUrl: './contact-land-lord.component.html',
-  styleUrl: './contact-land-lord.component.scss'
+  styleUrl: './contact-land-lord.component.scss',
 })
 export class ContactLandLordComponent {
   constructor(
     public dialogRef: MatDialogRef<ContactLandLordComponent>,
     @Inject(MAT_DIALOG_DATA) public data: LandlordInfo
-  ) {}
+  ) {
+    console.log('Landlord Info:', data);
+  }
 
   contactByPhone(): void {
     window.location.href = `tel:${this.data.landlordPhone}`;

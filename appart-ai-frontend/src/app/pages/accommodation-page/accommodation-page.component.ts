@@ -222,11 +222,13 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
       this.openLoginDialog();
       return;
     }
-
+    console.log('Contacting landlord:', this.accommodation.accommodation);
     const landlordInfo: LandlordInfo = {
       landlordName: this.accommodation.accommodation.ownerName,
       landlordEmail: this.accommodation.accommodation.ownerEmail,
-      landlordPhone: this.accommodation.accommodation.ownerPhone,
+      landlordPhone:
+        this.accommodation.accommodation.ownerCellphone ||
+        this.accommodation.accommodation.ownerPhone,
     };
 
     this.dialog.open(ContactLandLordComponent, {
@@ -258,6 +260,16 @@ export class AccommodationPageComponent implements OnInit, OnDestroy {
         return 'directions_car';
       default:
         return 'directions';
+    }
+  }
+
+  public viewDetails(): void {
+    if (this.accommodation.accommodation.detailsLink) {
+      window.open(this.accommodation.accommodation.detailsLink, '_blank');
+    } else {
+      this.snack.open('No external details link available', 'Close', {
+        duration: 3000,
+      });
     }
   }
 

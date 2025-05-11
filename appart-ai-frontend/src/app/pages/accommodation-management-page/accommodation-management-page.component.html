@@ -2,39 +2,91 @@
   <app-landing-header [selected]="selectedHeader"></app-landing-header>
 
   <div class="page-title">
-    <h1>My properties</h1>
+    <h1 class="poppins-black-title">My Properties</h1>
   </div>
+
   <div class="accommodation-list" *ngIf="accommodations.length > 0; else noAccommodation">
-    <mat-grid-list cols="2" rowHeight="2:1" gutterSize="15px">
-      <mat-grid-tile *ngFor="let accommodation of accommodations" class="accommodation-card">
-        <mat-card (click)="viewAccommodation(accommodation)">
-          <mat-card-header>
-            <img mat-card-avatar *ngIf="accommodation.imageUrls && accommodation.imageUrls.length > 0" 
-                 [src]="accommodation.imageUrls[0].imageUrl" alt="{{ accommodation.title }}">
-            <div class="title-subtitle">
-              <mat-card-title>{{ accommodation.title }}</mat-card-title>
-              <mat-card-subtitle>{{ accommodation.address.placeName }}, {{ accommodation.rentPrice | currency }}</mat-card-subtitle>
+    <div class="property-grid">
+      <div *ngFor="let accommodation of accommodations" class="property-card">
+        <div class="property-header">
+          <div class="property-image">
+            <div
+              class="image-placeholder"
+              *ngIf="!accommodation.imageUrls || accommodation.imageUrls.length === 0"
+            >
+              <mat-icon>home</mat-icon>
             </div>
-          </mat-card-header>
-          <mat-card-content>
-            <p>{{ accommodation.description }}</p>
-            <p><strong>Beds:</strong> {{ accommodation.numBeds }} | <strong>Bathrooms:</strong> {{ accommodation.numBathrooms }}</p>
-            <p><strong>Views:</strong> {{ accommodation.numViews }} | <strong>Interested Public:</strong> {{ accommodation.numInterestedPublic }}</p>
-          </mat-card-content>
-          <mat-card-actions class="actions">
-            <button mat-stroked-button color="accent" (click)="editAccommodation(accommodation)">Edit</button>
-            <button mat-stroked-button color="warn" (click)="deleteAccommodation(accommodation.id)">Delete</button>
-          </mat-card-actions>
-        </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+            <img
+              *ngIf="accommodation.imageUrls && accommodation.imageUrls.length > 0"
+              [src]="accommodation.imageUrls[0].imageUrl"
+              alt="{{ accommodation.title }}"
+            />
+          </div>
+          <div class="property-title">
+            <h2>{{ accommodation.title }}</h2>
+            <div class="property-location">
+              <span class="location-dot"></span>
+              {{ accommodation.address.placeName | slice: 0 : 30
+              }}{{ accommodation.address.placeName.length > 30 ? '...' : '' }},
+              {{ accommodation.rentPrice | currency }}
+            </div>
+          </div>
+        </div>
+
+        <div class="property-description">
+          <p>
+            {{ accommodation.description | slice: 0 : 120
+            }}{{ accommodation.description.length > 120 ? '...' : '' }}
+          </p>
+        </div>
+
+        <div class="property-details">
+          <div class="detail-row">
+            <span class="detail-label">Beds:</span> {{ accommodation.numBeds }} |
+            <span class="detail-label">Bathrooms:</span> {{ accommodation.numBathrooms }} |
+            <span class="detail-label">Area:</span> {{ accommodation.squareFootage }} sq ft
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Views:</span> {{ accommodation.numViews || 0 }} |
+            <span class="detail-label">Interested:</span>
+            {{ accommodation.numInterestedPublic || 0 }}
+          </div>
+        </div>
+
+        <div class="property-actions">
+          <button
+            class="edit-button"
+            (click)="editAccommodation(accommodation); $event.stopPropagation()"
+          >
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+          <button
+            class="delete-button"
+            (click)="deleteAccommodation(accommodation.id); $event.stopPropagation()"
+          >
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add a centered, prominent Add button -->
+    <div class="add-btn-container">
+      <button class="add-btn-large" (click)="addAccommodation()">
+        <mat-icon>add</mat-icon> Add New Accommodation
+      </button>
+    </div>
   </div>
 
   <ng-template #noAccommodation>
     <div class="no-accommodation">
-      <p>You have not added any accommodation yet.</p>
+      <div class="empty-icon">
+        <mat-icon>home_work</mat-icon>
+      </div>
+      <p class="poppins-thin">You haven't added any properties yet.</p>
+      <button class="add-btn-large" (click)="addAccommodation()">
+        <mat-icon>add</mat-icon> Add Your First Property
+      </button>
     </div>
   </ng-template>
-
-  <button mat-raised-button color="primary" class="add-btn" (click)="addAccommodation()">Add New Accommodation</button>
 </div>
