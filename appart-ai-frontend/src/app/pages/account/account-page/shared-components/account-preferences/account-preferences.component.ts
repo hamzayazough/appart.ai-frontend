@@ -19,6 +19,7 @@ import { DialogService } from '../../../../../services/dialog-service/dialog.ser
 })
 export class AccountPreferencesComponent implements OnInit, OnDestroy {
   public userPreferences: UserPreferences = this.initializeEmptyPreferences();
+  public currentYear = new Date().getFullYear();
   public placeControls: FormControl[] = [];
   public placeSuggestions: any[][] = [];
   public showSuggestions: boolean[] = [];
@@ -69,6 +70,11 @@ export class AccountPreferencesComponent implements OnInit, OnDestroy {
       parking: 5,
       groceryStoreProximity: 5,
       places: [],
+      pool: false,
+      elevator: false,
+      garage: false,
+      minimalConstructionDate: 0,
+      minimalLandArea: 0,
     };
   }
 

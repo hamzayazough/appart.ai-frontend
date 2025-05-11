@@ -39,6 +39,14 @@ export interface Accommodation {
   parkingIncluded: boolean;
   roommateAccepted: boolean;
   imageUrls: ImageUrl[];
+
+  //nw:
+  detailsLink?: string;
+  constructionDate?: number; //year
+  ownerCellphone?: string;
+  hasPool?: boolean;
+  hasElevator?: boolean;
+  hasGarage?: boolean;
 }
 
 export interface AccommodationMatchingDTO {

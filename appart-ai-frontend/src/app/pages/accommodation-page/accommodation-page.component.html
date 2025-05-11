@@ -134,6 +134,11 @@
         <mat-icon>calendar_today</mat-icon>
         <strong>Available From:</strong> {{ accommodation.accommodation.availableFrom | date }}
       </div>
+      <!-- New property: Construction Date -->
+      <div class="detail" *ngIf="accommodation.accommodation.constructionDate">
+        <mat-icon>domain</mat-icon>
+        <strong>Construction Year:</strong> {{ accommodation.accommodation.constructionDate }}
+      </div>
     </div>
 
     <!-- Description Section -->
@@ -285,6 +290,14 @@
             <li *ngIf="accommodation.accommodation.roommateAccepted">
               <mat-icon>people</mat-icon> Roommate Accepted
             </li>
+            <!-- New properties -->
+            <li *ngIf="accommodation.accommodation.hasPool"><mat-icon>pool</mat-icon> Pool</li>
+            <li *ngIf="accommodation.accommodation.hasElevator">
+              <mat-icon>elevator</mat-icon> Elevator
+            </li>
+            <li *ngIf="accommodation.accommodation.hasGarage">
+              <mat-icon>garage</mat-icon> Garage
+            </li>
           </ul>
         </div>
       </div>
@@ -332,6 +345,14 @@
             <li *ngIf="!accommodation.accommodation.roommateAccepted">
               <mat-icon>people</mat-icon> Roommate Not Accepted
             </li>
+            <!-- New properties -->
+            <li *ngIf="!accommodation.accommodation.hasPool"><mat-icon>pool</mat-icon> No Pool</li>
+            <li *ngIf="!accommodation.accommodation.hasElevator">
+              <mat-icon>elevator</mat-icon> No Elevator
+            </li>
+            <li *ngIf="!accommodation.accommodation.hasGarage">
+              <mat-icon>garage</mat-icon> No Garage
+            </li>
           </ul>
         </div>
       </div>
@@ -350,6 +371,17 @@
     <div class="accommodation-actions">
       <button mat-raised-button color="primary" (click)="contactLandlord()">
         <mat-icon>email</mat-icon> Contact Landlord
+      </button>
+
+      <!-- New button for external details link -->
+      <button
+        *ngIf="accommodation.accommodation.detailsLink"
+        mat-raised-button
+        color="accent"
+        (click)="viewDetails()"
+        class="details-btn"
+      >
+        <mat-icon>open_in_new</mat-icon> View External Details
       </button>
     </div>
 

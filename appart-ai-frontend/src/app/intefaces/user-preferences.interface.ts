@@ -1,4 +1,4 @@
-import { Place } from "./place.interface";
+import { Place } from './place.interface';
 
 export interface UserPreferences {
   occupation: string;
@@ -25,4 +25,11 @@ export interface UserPreferences {
   petsAllowed: boolean;
   smokingAllowed: boolean;
   gymIncluded: boolean;
+
+  // nw:
+  pool: boolean;
+  elevator: boolean;
+  garage: boolean;
+  minimalConstructionDate: number; // year
+  minimalLandArea: number;
 }
